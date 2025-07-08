@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 17:07:13 by skuor             #+#    #+#             */
-/*   Updated: 2024/12/04 12:06:24 by skuor            ###   ########.fr       */
+/*   Updated: 2025/05/05 11:34:52 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,3 @@ void	*ft_memset(void *s, int c, size_t n)
 	}
 	return (s);
 }
-/*
-#include <stdio.h>
-int	main()
-{
-	char	str[] = "bojojdwndwen";
-	int	i;
-	size_t	t;
-
-	i = '5';
-	t = 4;
-	printf("%p\n", str);
-	ft_memset(str, i, t);
-	printf("%p\n", str);
-	return 0;
-
-}
-*/

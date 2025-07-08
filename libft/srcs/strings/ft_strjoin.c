@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:22:27 by skuor             #+#    #+#             */
-/*   Updated: 2024/11/28 09:56:48 by skuor            ###   ########.fr       */
+/*   Updated: 2025/05/05 10:37:04 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,3 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	str[i + j] = '\0';
 	return (str);
 }
-/*
-int	main()
-{
-	char	s1[] = "lorem ipsum";
-	char	s2[] = "dolor sit amet";
-
-	printf("%s\n", ft_strjoin(s1, s2));
-	return 0;
-}
-*/

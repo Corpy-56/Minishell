@@ -6,17 +6,26 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 14:52:16 by skuor             #+#    #+#             */
-/*   Updated: 2024/11/28 09:06:16 by skuor            ###   ########.fr       */
+/*   Updated: 2025/05/06 18:21:00 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+static int	is_overflowing(long nbr, int neg)
+{
+	if (neg && nbr > 2147483648)
+		return (1);
+	else if (!neg && nbr > 2147483647)
+		return (1);
+	return (0);
+}
+
 int	ft_atoi(const char *str)
 {
-	int	i;
-	int	neg;
-	int	res;
+	int		i;
+	int		neg;
+	long	res;
 
 	i = 0;
 	neg = 1;
@@ -31,17 +40,9 @@ int	ft_atoi(const char *str)
 	{
 		res = res * 10;
 		res = res + str[i] - 48;
+		if (is_overflowing(res, neg))
+			return (0);
 		i++;
 	}
 	return (res * neg);
 }
-/*
-int	main()
-{
-	char	str[] = "\e475";
-
-	printf("%d\n", atoi(str));
-	printf("%d\n", ft_atoi(str));
-	return 0; 
-}
-*/

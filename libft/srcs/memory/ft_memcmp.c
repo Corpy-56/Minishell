@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 10:27:42 by skuor             #+#    #+#             */
-/*   Updated: 2024/11/28 14:49:31 by skuor            ###   ########.fr       */
+/*   Updated: 2025/05/06 11:52:23 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,3 @@ int	ft_memcmp(const void *s1, const void *s2, size_t n)
 	}
 	return (str1[t] - str2[t]);
 }
-/*
-#include <string.h>
-int	main()
-{
-	char	s1[] = "\xff\0\0\xaa\0\xde\xffMACOSX\xff";
-	char	s2[] = "\xff\0\0\xaa\0\xde\x00MBS";
-	size_t	n;
-
-	n = 0;
-	printf("%d\n", memcmp(s1, s2, n));
-	printf("%d\n", ft_memcmp(s1, s2, n));
-	return 0;
-}
-*/

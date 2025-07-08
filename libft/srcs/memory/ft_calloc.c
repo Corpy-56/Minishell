@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 12:04:33 by skuor             #+#    #+#             */
-/*   Updated: 2025/02/12 11:06:52 by skuor            ###   ########.fr       */
+/*   Updated: 2025/05/05 10:36:59 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,3 @@ void	*ft_calloc(size_t type, size_t nbr)
 	}
 	return (res);
 }
-/*
-int	main()
-{
-	int	n = 8539;
-	int	*array;
-
-	array = (int *)ft_calloc(n, sizeof(int));
-	return 0;
-}
-*/

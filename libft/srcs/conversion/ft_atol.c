@@ -1,32 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_atoll.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/13 12:36:49 by skuor             #+#    #+#             */
-/*   Updated: 2025/05/05 11:34:38 by skuor            ###   ########.fr       */
+/*   Created: 2025/05/06 18:21:20 by skuor             #+#    #+#             */
+/*   Updated: 2025/05/07 12:43:30 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h" 
+#include "libft.h"
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+long	ft_atol(const char *str)
 {
-	size_t	t;
-	char	*d;
-	char	*s;
+	int			i;
+	int			neg;
+	long		res;
 
-	t = 0;
-	d = (char *)dest;
-	s = (char *)src;
-	if (d == 0 && s == 0)
-		return (dest);
-	while (t != n)
+	i = 0;
+	neg = 1;
+	res = 0;
+	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
+		i++;
+	if (str[i] == '+' || str[i] == '-')
 	{
-		d[t] = s[t];
-		t++;
+		if (str[i] == '-')
+		{
+			neg = -1;
+			i++;
+		}
 	}
-	return (dest);
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		res = res * 10 + (str[i] - '0');
+		i++;
+	}
+	return (res * neg);
 }

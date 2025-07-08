@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 14:57:04 by skuor             #+#    #+#             */
-/*   Updated: 2024/12/04 12:05:49 by skuor            ###   ########.fr       */
+/*   Updated: 2025/05/05 11:34:28 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,3 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	}
 	return (dest);
 }
-/*
-#include <stdio.h>
-#include <string.h>
-int	main()
-{
-	char	src[] = "";
-	char	dest[] = "";
-	size_t	t;
-
-	t = 5;
-	printf("Avant : %s\n", dest);
-	ft_memmove(dest, src, t);
-//	memmove(dest, src, t);
-	printf("Apres : %s\n", dest);
-	return 0;
-}
-*/

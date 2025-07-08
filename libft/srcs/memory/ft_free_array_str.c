@@ -1,32 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   ft_free_array_str.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/13 12:36:49 by skuor             #+#    #+#             */
-/*   Updated: 2025/05/05 11:34:38 by skuor            ###   ########.fr       */
+/*   Created: 2025/05/05 11:32:53 by skuor             #+#    #+#             */
+/*   Updated: 2025/05/20 11:43:10 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h" 
+#include "libft.h"
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+void	free_array(char **array)
 {
-	size_t	t;
-	char	*d;
-	char	*s;
+	int	i;
 
-	t = 0;
-	d = (char *)dest;
-	s = (char *)src;
-	if (d == 0 && s == 0)
-		return (dest);
-	while (t != n)
+	if (!array)
+		return ;
+	i = 0;
+	while (array[i])
 	{
-		d[t] = s[t];
-		t++;
+		free(array[i]);
+		i++;
 	}
-	return (dest);
+	free(array);
 }
