@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include "libft.h"
 
 //il faut compiler avec cc main.c -lreadline
 
@@ -25,12 +26,24 @@ int main(void)
 	while(1)
 	{
 		rl = readline("Minishell > ");
-		if (rl[0] == 'p' && rl[1] == 'w' &&rl[2] == 'd')
+		ft_tokenisation();
+		if(ft_strncmp(rl, "pwd", 4) == 0)
 		{
 			pwd = getcwd(NULL, 0);
 			printf("%s\n", pwd);
 		}
-    	printf("%s\n", rl);
+		if (ft_strncmp(rl, "env", 4) == 0)
+		{
+			int i;
+
+			i = 0;
+			while(__environ[i])
+			{
+				printf("%s\n", __environ[i]);
+				i++;
+			}
+		}
 	}
     return (0);
 }
+//les commandes peuvent rater il faut quelle retourne une valeur 
