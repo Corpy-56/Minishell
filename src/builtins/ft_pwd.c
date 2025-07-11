@@ -1,32 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/11 11:09:42 by skuor            ###   ########.fr       */
+/*   Created: 2025/07/11 11:04:02 by skuor             #+#    #+#             */
+/*   Updated: 2025/07/11 11:06:33 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//il faut compiler avec cc main.c -lreadline
-
-int	main(void)
+int	ft_pwd(char *rl)
 {
-	char	*rl;
-	char	**args;
+	char	*pwd;
 
-	args = NULL;
-	while (1)
+	if (ft_strncmp(rl, "pwd", 4) == 0)
 	{
-		rl = readline("Minishell > ");
-//		ft_tokenisation();
-		ft_pwd(rl);
-		ft_env(rl);
-		ft_exit(rl, args);
+		pwd = getcwd(NULL, 0);
+		printf("%s\n", pwd);
 	}
 	return (0);
 }

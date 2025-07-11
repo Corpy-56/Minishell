@@ -1,32 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/11 11:09:42 by skuor            ###   ########.fr       */
+/*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
+/*   Updated: 2025/07/11 11:08:39 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
-//il faut compiler avec cc main.c -lreadline
+# include "libft.h"
+# include <stdio.h>
+# include <unistd.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
-int	main(void)
-{
-	char	*rl;
-	char	**args;
+//builtins
+int	ft_exit(char *rl, char **args);
+int	ft_pwd(char *rl);
+int	ft_env(char *rl);
 
-	args = NULL;
-	while (1)
-	{
-		rl = readline("Minishell > ");
-//		ft_tokenisation();
-		ft_pwd(rl);
-		ft_env(rl);
-		ft_exit(rl, args);
-	}
-	return (0);
-}
+//main
+int	main(void);
+
+
+#endif

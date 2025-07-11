@@ -6,7 +6,7 @@
 #    By: skuor <skuor@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/08 16:18:45 by skuor             #+#    #+#              #
-#    Updated: 2025/07/08 17:50:15 by skuor            ###   ########.fr        #
+#    Updated: 2025/07/11 11:10:01 by skuor            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,11 +18,14 @@ CFLAGS = -Wall -Wextra -Werror
 SRC_DIR = ./src/
 OBJ_DIR = ./objects/
 INC_DIR = ./includes/
+BLTINS_DIR = $(SRC_DIR)builtins/
 LIBFT_DIR = ./libft/
 
 SRC_FILES = main.c 
+BLTINS_FILES = ft_exit.c ft_pwd.c ft_env.c
 
-OBJ = $(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o))
+OBJ = 	$(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o)) \
+		$(addprefix $(OBJ_DIR), $(BLTINS_FILES:.c=.o))
 
 INC_H = -I $(INC_DIR) -I $(LIBFT_DIR)/includes/
 
@@ -36,6 +39,9 @@ $(NAME): $(OBJ)
 	@$(CC) $(CFLAGS) $(INC_H) -lreadline $(OBJ) -L$(LIBFT_DIR) -lft -o $(NAME)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJ_DIR)
+	@$(CC) $(CFLAGS) $(INC_H) -c -o $@ $<
+
+$(OBJ_DIR)%.o: $(BLTINS_DIR)%.c | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) $(INC_H) -c -o $@ $<
 
 clean:

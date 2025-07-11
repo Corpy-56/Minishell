@@ -1,32 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/11 11:09:42 by skuor            ###   ########.fr       */
+/*   Created: 2025/07/11 11:07:01 by skuor             #+#    #+#             */
+/*   Updated: 2025/07/11 11:08:27 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//il faut compiler avec cc main.c -lreadline
-
-int	main(void)
+int	ft_env(char *rl)
 {
-	char	*rl;
-	char	**args;
+	int	i;
 
-	args = NULL;
-	while (1)
+	i = 0;
+	if (ft_strncmp(rl, "env", 4) == 0)
 	{
-		rl = readline("Minishell > ");
-//		ft_tokenisation();
-		ft_pwd(rl);
-		ft_env(rl);
-		ft_exit(rl, args);
+		while (__environ[i])
+		{
+			printf("%s\n", __environ[i]);
+			i++;
+		}
 	}
 	return (0);
 }

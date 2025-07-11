@@ -1,32 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/11 11:09:42 by skuor            ###   ########.fr       */
+/*   Created: 2025/07/10 14:01:37 by skuor             #+#    #+#             */
+/*   Updated: 2025/07/11 11:26:36 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//il faut compiler avec cc main.c -lreadline
-
-int	main(void)
+int	ft_exit(char *rl, char **args)
 {
-	char	*rl;
-	char	**args;
 
-	args = NULL;
-	while (1)
+	if (ft_strncmp(rl, "exit", 4) == 0)
 	{
-		rl = readline("Minishell > ");
-//		ft_tokenisation();
-		ft_pwd(rl);
-		ft_env(rl);
-		ft_exit(rl, args);
+		printf("exit\n");
+		exit(EXIT_SUCCESS);
+		if (!isdigit(*args[1]))
+		{
+			printf("bash: exit: %s: numeric argument required\n", args[1]);
+			exit(EXIT_SUCCESS);
+		}
 	}
 	return (0);
 }
+
+
