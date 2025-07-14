@@ -1,34 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/14 22:41:41 by skuor            ###   ########.fr       */
+/*   Created: 2025/07/14 21:35:08 by skuor             #+#    #+#             */
+/*   Updated: 2025/07/14 22:40:53 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//il faut compiler avec cc main.c -lreadline
-
-int	main(void)
+int	ft_cd(char *rl, char **args)
 {
-	char	*rl;
-	char	**args;
+	//int	i;
+	char *pwd;
+	(void)args;
 
-	args = NULL;
-	while (1)
+	//i = 1;
+	if (ft_strncmp(rl, "cd", 3) == 0)
 	{
-		rl = readline("Minishell > ");
-//		ft_tokenisation();
-		ft_pwd(rl);
-		ft_env(rl);
-		ft_exit(rl, args);
-		ft_echo(rl, args);
-		ft_cd(rl, args);
+		pwd = getcwd(NULL, 0);
+		printf("%s\n", pwd);
+		if (args[1])
+		{
+			chdir("/home/sarah/Documents");
+			pwd = getcwd(NULL, 0);
+			printf("%s\n", pwd);
+		}
 	}
 	return (0);
 }

@@ -1,34 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/14 22:41:41 by skuor            ###   ########.fr       */
+/*   Created: 2025/07/14 19:34:55 by skuor             #+#    #+#             */
+/*   Updated: 2025/07/14 21:55:24 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//il faut compiler avec cc main.c -lreadline
-
-int	main(void)
+int	ft_echo(char *rl, char **args)
 {
-	char	*rl;
-	char	**args;
+	int	i;
+	int	no_newline;
 
-	args = NULL;
-	while (1)
+	i = 1;
+	no_newline = 0;
+	if (ft_strncmp(rl, "echo", 5) == 0)
 	{
-		rl = readline("Minishell > ");
-//		ft_tokenisation();
-		ft_pwd(rl);
-		ft_env(rl);
-		ft_exit(rl, args);
-		ft_echo(rl, args);
-		ft_cd(rl, args);
+		if (args[1] && ft_strncmp(args[1], "-n", 3) == 0)
+		{
+			no_newline = 1;
+			i = 2;
+		}
+		while (args[i])
+		{
+			printf("%s", args[i]);
+			if (args[i + 1])
+				printf(" ");
+			i++;
+		}
+		if (!no_newline)
+			printf("\n");
 	}
 	return (0);
 }

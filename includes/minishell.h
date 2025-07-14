@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/11 11:08:39 by skuor            ###   ########.fr       */
+/*   Updated: 2025/07/14 22:14:00 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 int	ft_exit(char *rl, char **args);
 int	ft_pwd(char *rl);
 int	ft_env(char *rl);
+int	ft_echo(char *rl, char **args);
+int	ft_cd(char *rl, char **args);
 
 //main
 int	main(void);

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 09:27:53 by skuor             #+#    #+#             */
-/*   Updated: 2025/02/12 09:59:26 by skuor            ###   ########.fr       */
+/*   Updated: 2025/07/14 19:45:58 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	ft_puthexptr(unsigned long int nb)
 		ft_puthexptr(nb / 16);
 		ft_puthexptr(nb % 16);
 	}
-	if (nb >= 0 && nb <= 9)
+	if (nb <= 9)
 		ft_putchar(nb + 48);
 	if (nb >= 10 && nb <= 15)
 		ft_putchar(nb + 87);
