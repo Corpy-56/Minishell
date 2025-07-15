@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/15 11:34:13 by skuor            ###   ########.fr       */
+/*   Updated: 2025/07/15 17:11:46 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,34 @@
 
 //il faut compiler avec cc main.c -lreadline
 
-int	main(void)
+/* int	main(int argc, char **argv, char **env)
 {
 	char	*rl;
-	char	**args;
+	//t_tokens	**args;
+	t_shell	*stru;
 
-	args = NULL;
+	(void)argc;
+	(void)argv;
+	//args = ft_tokenisation(rl, args);
+	stru = malloc(sizeof(t_shell));
+	if (stru == NULL)
+		return (0);
+	stru->environ = ft_duplicate_env(env);
 	while (1)
 	{
 		rl = readline("Minishell > ");
-//		ft_tokenisation();
+		if (!rl)
+			exit(0);//besoin dune fonction pour free
+		add_history(rl);
+		stru->tokens = ft_tokenisation(rl, stru->tokens);
 		ft_pwd(rl);
 		ft_env(rl);
-		ft_exit(rl, args);
-		ft_echo(rl, args);
-		ft_cd(rl, args);
+		ft_exit(rl, stru->tokens);
+		ft_echo(rl, stru->tokens); 
+		ft_cd(rl, stru->tokens);
 	}
 	return (0);
-}
+} */
 
 /* int	main(void)
 {
@@ -44,3 +54,50 @@ int	main(void)
 	printf("after chdrir: %s\n", pwd);
 	return (0);
 } */
+
+int main(int argc, char **argv, char **env)
+{
+	char *rl;
+//	char *pwd;
+	t_shell	*stru;
+	t_tokens *tmp;
+
+	(void)argc;
+	(void)argv;
+	stru = malloc(sizeof(t_shell));
+	if (stru == NULL)
+		return (0);
+	tmp = stru->tokens;
+	stru->environ = ft_duplicate_env(env);
+	while (1)
+	{
+		rl = readline("Minishell > ");
+		if (!rl)
+			exit(0);//besoin dune fonction pour free
+		add_history(rl);
+		stru->tokens = ft_tokenisation(rl, stru->tokens);
+		if (!stru->tokens)
+		{
+			free(rl);
+			continue ;
+		}
+		stru->tokens->args = args_from_tokens(stru->tokens);
+		while (tmp != NULL)
+		{
+			printf("%s\n", tmp->str);
+			tmp = tmp->next;
+		}
+		if (ft_strncmp(stru->tokens->args[0], "pwd", 4) == 0)
+			ft_pwd(stru->tokens->args);
+		else if (ft_strncmp(stru->tokens->args[0], "cd", 3) == 0)
+			ft_cd(stru->tokens->args);
+		else if (ft_strncmp(stru->tokens->args[0], "echo", 5) == 0)
+			ft_echo(stru->tokens->args);
+		else if (ft_strncmp(rl, "env", 4) == 0)
+			ft_env(stru);
+		else if (ft_strncmp(stru->tokens->args[0], "exit", 5) == 0)
+			ft_exit(stru->tokens->args);
+	}
+	//rl_clear_history (); // pas oublier dans le exit et controle C 
+    return (0);
+}

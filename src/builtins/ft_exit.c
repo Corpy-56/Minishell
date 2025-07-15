@@ -6,24 +6,20 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:01:37 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/11 11:26:36 by skuor            ###   ########.fr       */
+/*   Updated: 2025/07/15 16:29:24 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_exit(char *rl, char **args)
+int	ft_exit(char **args)
 {
-
-	if (ft_strncmp(rl, "exit", 4) == 0)
+	printf("exit\n");
+	exit(EXIT_SUCCESS);
+	if (!isdigit(*args[1]))
 	{
-		printf("exit\n");
+		printf("bash: exit: %s: numeric argument required\n", args[1]);
 		exit(EXIT_SUCCESS);
-		if (!isdigit(*args[1]))
-		{
-			printf("bash: exit: %s: numeric argument required\n", args[1]);
-			exit(EXIT_SUCCESS);
-		}
 	}
 	return (0);
 }

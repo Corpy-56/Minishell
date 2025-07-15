@@ -6,20 +6,18 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:04:02 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/14 22:03:13 by skuor            ###   ########.fr       */
+/*   Updated: 2025/07/15 17:22:00 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_pwd(char *rl)
+int	ft_pwd(char **args)
 {
 	char	*pwd;
 
-	if (ft_strncmp(rl, "pwd", 4) == 0)
-	{
-		pwd = getcwd(NULL, 0);
-		printf("%s\n", pwd);
-	}
+	pwd = getcwd(NULL, 0);
+	printf("%s\n", pwd);
+	if (args[1])
 	return (0);
 }

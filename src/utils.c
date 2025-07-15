@@ -1,39 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_cd.c                                            :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/14 21:35:08 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/15 16:28:04 by skuor            ###   ########.fr       */
+/*   Created: 2025/07/15 12:21:04 by skuor             #+#    #+#             */
+/*   Updated: 2025/07/15 14:11:07 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_cd(char **args)
+int	ft_error(int i, char *str)
 {
-	char	*pwd;
-	char	*home;
-
-	// pwd = getcwd(NULL, 0);
-	// printf("%s\n", pwd);
-	if (args[1] && ft_strncmp(args[1], "..", 3) == 0)
-	{
-		chdir("..");
-		pwd = getcwd(NULL, 0);
-		printf("%s\n", pwd);
-	}
-	else
-	{
-		home = getenv("HOME");
-		if (!home)
-			return (0);
-		chdir(home);
-		pwd = getcwd(NULL, 0);
-		printf("%s\n", pwd);
-	}
+	i = 0;
+	i++;
+	printf("%d", i);
+	write(2, "Error\n", 7);
+	write(2, &str, ft_strlen(str));
+	//exit(EXIT_FAILURE);
 	return (0);
 }
 
+int	white_space(char *str, int i)
+{
+	while (str[i] != '\0' && (str[i] == 32 || str[i] == 9))
+		i++;
+	if (str[i] != 32 && str[i] != 9 && str[i] != '\0')
+		return (i);
+	else if (str[i] == '\0')
+		return (-1);
+	return (0);
+}

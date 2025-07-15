@@ -6,7 +6,7 @@
 #    By: skuor <skuor@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/08 16:18:45 by skuor             #+#    #+#              #
-#    Updated: 2025/07/14 21:46:39 by skuor            ###   ########.fr        #
+#    Updated: 2025/07/15 12:22:24 by skuor            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ INC_DIR = ./includes/
 BLTINS_DIR = $(SRC_DIR)builtins/
 LIBFT_DIR = ./libft/
 
-SRC_FILES = main.c 
+SRC_FILES = main.c ft_tokenisation.c environ.c utils.c
 BLTINS_FILES = ft_exit.c ft_pwd.c ft_env.c ft_echo.c ft_cd.c
 
 OBJ = 	$(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o)) \

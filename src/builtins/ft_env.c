@@ -6,24 +6,21 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:07:01 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/11 11:08:27 by skuor            ###   ########.fr       */
+/*   Updated: 2025/07/15 16:31:22 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_env(char *rl)
+int	ft_env(t_shell *stru)
 {
 	int	i;
 
 	i = 0;
-	if (ft_strncmp(rl, "env", 4) == 0)
+	while (stru->environ != NULL)
 	{
-		while (__environ[i])
-		{
-			printf("%s\n", __environ[i]);
-			i++;
-		}
+		printf("%s\n", stru->environ->str);
+		stru->environ = stru->environ->next;
 	}
 	return (0);
 }
