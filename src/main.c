@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/14 22:41:41 by skuor            ###   ########.fr       */
+/*   Updated: 2025/07/15 11:34:13 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,3 +32,15 @@ int	main(void)
 	}
 	return (0);
 }
+
+/* int	main(void)
+{
+	char	*pwd;
+
+	pwd = getcwd(NULL, 0);
+	printf("before chdir: %s\n", pwd);
+	chdir("..");
+	pwd = getcwd(NULL, 0);
+	printf("after chdrir: %s\n", pwd);
+	return (0);
+} */

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 21:35:08 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/14 22:40:53 by skuor            ###   ########.fr       */
+/*   Updated: 2025/07/15 11:33:37 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ int	ft_cd(char *rl, char **args)
 	{
 		pwd = getcwd(NULL, 0);
 		printf("%s\n", pwd);
-		if (args[1])
+		if (args[1] && ft_strncmp(args[1], "..", 3) == 0)
 		{
-			chdir("/home/sarah/Documents");
+			chdir("..");
 			pwd = getcwd(NULL, 0);
 			printf("%s\n", pwd);
 		}
