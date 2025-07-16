@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 18:34:20 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/12 12:35:04 by agouin           ###   ########.fr       */
+/*   Updated: 2025/07/16 15:58:46 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ typedef struct s_cmd
 {
 	char	*cmd;
 	char	**args;
-	int		out_put;
-	int		int_put;
-	int		heredoc;
+	int		fd_out_put;
+	int		fd_int_put;
+	char	*heredoc;
 	struct s_cmd	*next;
 }t_cmd;
 
@@ -40,7 +40,6 @@ typedef struct s_env
 typedef struct s_tokens
 {
 	char	*str;
-	int		type_i;
 	struct s_tokens *next;	
 }t_tokens;
 

@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:07:35 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/12 15:14:40 by agouin           ###   ########.fr       */
+/*   Updated: 2025/07/16 10:31:28 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ int	ft_one_token(char *rl, int i, t_tokens *token)
 	{
 		if (rl[i] == '\'')
 		{
-			i++;
 			while (rl[++i] != '\0' && rl[i] != '\'')
 				token->str = ft_strjoin_char(token->str, rl[i]);
 		}
@@ -93,49 +92,6 @@ int	ft_one_token(char *rl, int i, t_tokens *token)
 	}
 	return (i);
 }
-
-int	ft_test_commande(char *str)
-{
-	if (ft_strncmp(str, "ls", 2) == 0 || ft_strncmp(str, "cat", 3) == 0
-		|| ft_strncmp(str, "grep", 4) == 0 || ft_strncmp(str, "wc", 2) == 0 
-		|| ft_strncmp(str, "head", 4) == 0 || ft_strncmp(str, "tail", 4) == 0 
-		|| ft_strncmp(str, "date", 4) == 0 || ft_strncmp(str, "sleep", 5) == 0
-		|| ft_strncmp(str, "echo", 4) == 0 || ft_strncmp(str, "cd", 2) == 0
-		|| ft_strncmp(str, "pwd", 3) == 0 || ft_strncmp(str, "export", 6) == 0
-		|| ft_strncmp(str, "unset", 5) == 0 || ft_strncmp(str, "env", 3) == 0
-		|| ft_strncmp(str, "exit", 4));
-			return (0);
-	return (1);
-}
-
-void	ft_type_token(t_tokens *a_debut)// verifier que ca marche bien 
-{
-	t_tokens	*p_actuel;
-	int i;
-
-	i = 0;
-	p_actuel = a_debut;
-	while (p_actuel)
-	{
-		if (ft_strncmp(p_actuel->str, "|", 1) == 0)
-			p_actuel->type_i = 5;
-		else if (ft_strncmp(p_actuel->str, "<<", 2) == 0)
-			p_actuel->type_i = 4;
-		else if (ft_strncmp(p_actuel->str, "<", 1) == 0)
-			p_actuel->type_i = 3;
-		else if (ft_strncmp(p_actuel->str, ">>", 2) == 0)
-			p_actuel->type_i = 2;
-		else if (ft_strncmp(p_actuel->str, ">", 1) == 0)
-			p_actuel->type_i = 1;
-		else if (ft_test_commande(p_actuel->str) == 0)
-			p_actuel->type_i = 6;
-		else if (p_actuel->str[0] == "-" && p_actuel->str[1] != "-" && p_actuel->str[1] != "\0")
-			p_actuel->type_i = 7;
-		else
-			p_actuel->type_i = 0;
-		p_actuel = p_actuel->next;
-	}	
-}// apres une redirection cest le nom dun fichier pour > et >>
 
 t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
 {
@@ -177,7 +133,7 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
 		}
 		i++;
 	}
-	ft_type_token(a_debut);
+	//ft_type_token(a_debut);
 	return (a_debut);
 }
 
