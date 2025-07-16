@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/15 17:11:46 by skuor            ###   ########.fr       */
+/*   Updated: 2025/07/16 17:02:24 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,12 @@
 int main(int argc, char **argv, char **env)
 {
 	char *rl;
-//	char *pwd;
 	t_shell	*stru;
 	t_tokens *tmp;
 
 	(void)argc;
 	(void)argv;
-	stru = malloc(sizeof(t_shell));
+	stru = ft_calloc(1, sizeof(t_shell));
 	if (stru == NULL)
 		return (0);
 	tmp = stru->tokens;
@@ -74,18 +73,17 @@ int main(int argc, char **argv, char **env)
 		rl = readline("Minishell > ");
 		if (!rl)
 			exit(0);//besoin dune fonction pour free
-		add_history(rl);
+		if (*rl)
+			add_history(rl);
 		stru->tokens = ft_tokenisation(rl, stru->tokens);
+		free(rl);
 		if (!stru->tokens)
-		{
-			free(rl);
 			continue ;
-		}
 		stru->tokens->args = args_from_tokens(stru->tokens);
 		while (tmp != NULL)
 		{
 			printf("%s\n", tmp->str);
-			tmp = tmp->next;
+			tmp = stru->tokens; //je stocke mes tokens dans tmp que je renouvelle a chaque fois
 		}
 		if (ft_strncmp(stru->tokens->args[0], "pwd", 4) == 0)
 			ft_pwd(stru->tokens->args);
@@ -97,7 +95,11 @@ int main(int argc, char **argv, char **env)
 			ft_env(stru);
 		else if (ft_strncmp(stru->tokens->args[0], "exit", 5) == 0)
 			ft_exit(stru->tokens->args);
+		// free_args(stru->tokens->args);
+		// free_tokens(stru->tokens);
+		// free(rl);
 	}
-	//rl_clear_history (); // pas oublier dans le exit et controle C 
+	rl_clear_history (); // pas oublier dans le exit et controle C 
     return (0);
 }
+

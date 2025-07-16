@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/15 17:01:54 by skuor            ###   ########.fr       */
+/*   Updated: 2025/07/16 16:17:04 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ int			main(int argc, char **argv, char **env);
 //utils
 int			ft_error(int i, char *str);
 int			white_space(char *str, int i);
+void		free_args(char **args);
+void		free_tokens(t_tokens *token);
 
 //tokenisation
 int			count_tokens(t_tokens *token);

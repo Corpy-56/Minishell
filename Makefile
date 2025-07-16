@@ -6,7 +6,7 @@
 #    By: skuor <skuor@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/08 16:18:45 by skuor             #+#    #+#              #
-#    Updated: 2025/07/15 12:22:24 by skuor            ###   ########.fr        #
+#    Updated: 2025/07/16 17:00:02 by skuor            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 
 CC = cc 
 MAKE = make
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g3
 SRC_DIR = ./src/
 OBJ_DIR = ./objects/
 INC_DIR = ./includes/
