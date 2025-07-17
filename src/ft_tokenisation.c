@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:07:35 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/16 17:07:44 by skuor            ###   ########.fr       */
+/*   Updated: 2025/07/17 11:58:34 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
 			token->str = NULL;
 		if (rl[i] != 9 && rl[i] != 32 && rl[i])
 			i = ft_one_token(rl, i, token);
-		if (rl[i] == 9 || rl[i] == 32 || (rl[i + 1] && rl[i + 1] == '\0'))
+		if (rl[i] == 9 || rl[i] == 32 || (rl[i + 1] == '\0'))
 		{
 			if (token->str != NULL)
 			{

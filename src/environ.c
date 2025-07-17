@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environ.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:52:31 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/11 11:48:34 by agouin           ###   ########.fr       */
+/*   Updated: 2025/07/17 11:57:43 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_env	*ft_duplicate_env(char **env)
 	i = 0;
 	while (env[i])
 	{
-		environ = malloc(sizeof(t_env));
+		environ = ft_calloc(1, sizeof(t_env));
 		if (environ == NULL)
 			return (NULL);
 		environ->i = i;

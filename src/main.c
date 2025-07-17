@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/16 17:02:24 by skuor            ###   ########.fr       */
+/*   Updated: 2025/07/17 10:07:40 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int main(int argc, char **argv, char **env)
 		if (*rl)
 			add_history(rl);
 		stru->tokens = ft_tokenisation(rl, stru->tokens);
-		free(rl);
+		//free(rl);
 		if (!stru->tokens)
 			continue ;
 		stru->tokens->args = args_from_tokens(stru->tokens);
@@ -97,7 +97,7 @@ int main(int argc, char **argv, char **env)
 			ft_exit(stru->tokens->args);
 		// free_args(stru->tokens->args);
 		// free_tokens(stru->tokens);
-		// free(rl);
+		free(rl);
 	}
 	rl_clear_history (); // pas oublier dans le exit et controle C 
     return (0);
