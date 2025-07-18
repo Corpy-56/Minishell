@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:07:35 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/16 10:31:28 by agouin           ###   ########.fr       */
+/*   Updated: 2025/07/18 16:24:29 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@ char	*ft_strjoin_char(char *str, const char c)
 
 	if (str == NULL)
 	{
-		joined = malloc(2);
+		joined = ft_calloc(2, 1);
 		if (joined == NULL)
 			return (NULL);
 		joined[0] = c;
 		joined[1] = '\0';
 		return (joined);
 	}
-	joined = malloc(ft_strlen(str) + 2);
+	joined = ft_calloc(ft_strlen(str) + 2, 1);
 	if (joined == NULL)
 	{
 		free(str);
@@ -67,7 +67,7 @@ void	ft_quote(char *rl, int i)
 		i++;
 	}
 	if (quote1 != 0)
-		ft_error(1, "");
+		ft_error(1, "");// faire un autre message derreur ?? 
 }
 
 int	ft_one_token(char *rl, int i, t_tokens *token)
@@ -76,17 +76,17 @@ int	ft_one_token(char *rl, int i, t_tokens *token)
 	{
 		if (rl[i] == '\'')
 		{
-			while (rl[++i] != '\0' && rl[i] != '\'')
-				token->str = ft_strjoin_char(token->str, rl[i]);
+			while (rl[i] != '\0' && rl[i] != 32 && rl[i] != 9)
+				token->str = ft_strjoin_char(token->str, rl[i++]);
 		}
 		else if (rl[i] == '\"')
 		{
-			while (rl[++i] != '\0' && rl[i] != '\"')
-				token->str = ft_strjoin_char(token->str, rl[i]);
+			while (rl[i] != '\0' && rl[i] != 32 && rl[i] != 9)
+				token->str = ft_strjoin_char(token->str, rl[i++]);
 		}
 		else if (rl[i] != 9 && rl[i] != 32 && rl[i])
 			token->str = ft_strjoin_char(token->str, rl[i]);
-		else if (rl[i] == 9 || rl[i] == 32 || rl[i] == '\0')
+		if (rl[i] == 9 || rl[i] == 32 || rl[i] == '\0')
 			return (i);
 		i++;
 	}
@@ -107,14 +107,14 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
 	i = white_space(rl, i);
 	while(rl[i] && i != -1)
 	{
-		token = malloc(sizeof(t_tokens));
+		token = ft_calloc(sizeof(t_tokens), 1);
 		if (token == NULL)
 			return (NULL);// faire une vrai sorti
 		if (i == 0 || rl[i - 1] == 9 || rl[i - 1] == 32)
 			token->str = NULL;
 		if (rl[i] != 9 && rl[i] != 32 && rl[i])
 			i = ft_one_token(rl, i, token);
-		if (rl[i] == 9 || rl[i] == 32 || rl[i + 1] == '\0')
+		if (rl[i] == 9 || rl[i] == 32 || rl[i + 1] == '\0' || rl[i] == '\0')
 		{
 			if (token->str != NULL)
 			{
@@ -133,7 +133,6 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
 		}
 		i++;
 	}
-	//ft_type_token(a_debut);
 	return (a_debut);
 }
 
