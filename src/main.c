@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/19 12:13:41 by agouin           ###   ########.fr       */
+/*   Updated: 2025/07/22 12:20:02 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	ft_error(int i, char *str)
 	i = 0;
 	//write(2, "Error\n", 7);
 	write(2, str, (ft_strlen(str)));
-	write(2, "\n", 1);
+//	write(2, "\n", 1);
 	//clear tout ca permettrait de faire un \n ??
 	//exit(EXIT_FAILURE);
 	return (-1);
@@ -173,6 +173,7 @@ void	ft_type_token(t_cmd *commande, t_tokens *b_debut)// verifier que ca marche 
 		////	//if (p_actuel->next->str != NULL)
 		////	//	commande->heredoc = ft_strdup(p_actuel->next->str);
 		////}
+	//	printf("%s", p_actuel->str);
 		if (ft_strncmp(p_actuel->str, ">>", 2) == 0)
 		{
 			if (commande->fd_int_put != -2)
@@ -182,7 +183,7 @@ void	ft_type_token(t_cmd *commande, t_tokens *b_debut)// verifier que ca marche 
 			else if (p_actuel->next->str != NULL)
 				commande->fd_int_put = open(p_actuel->next->str, O_CREAT | O_WRONLY, 0777);
 			if (commande->fd_int_put == -1)
-				ft_error(1, "Permission denied") ;
+				ft_error(1, "Permission denied\n") ;
 			printf("%d", commande->fd_int_put);
 		}
 		else if (ft_strncmp(p_actuel->str, "<", 1) == 0)// remplace automatiquement celui que je veyx pas
@@ -194,7 +195,7 @@ void	ft_type_token(t_cmd *commande, t_tokens *b_debut)// verifier que ca marche 
 			else if (p_actuel->next->str != NULL)
 				commande->fd_int_put = open(p_actuel->next->str, O_CREAT | O_WRONLY, 0777);
 			if (commande->fd_int_put == -1)
-				ft_error(1, "Permission denied") ;
+				ft_error(1, "Permission denied\n") ;
 			printf("%d", commande->fd_int_put);
 		}
 		////else if (ft_strncmp(p_actuel->str, ">>", 2) == 0)
@@ -257,24 +258,24 @@ int	ft_valid_syntax(t_tokens *token)//gerer aussi les | et ;
 
 	p_actuel = token;
 	if (ft_strncmp(p_actuel->str, "|", 1) == 0)
-		return (ft_error(1, "syntax error near unexpected token `|'"));
+		return (ft_error(1, "syntax error near unexpected token `|'\n"));
 	while(p_actuel != NULL)
 	{
 		if (p_actuel->next == NULL && ft_strncmp(p_actuel->str, "|", 1) == 0)
-			return (ft_error(1, "syntax error near unexpected token `|'"));
+			return (ft_error(1, "syntax error near unexpected token '|'\n"));
 		else if (ft_strncmp(p_actuel->str, ">>>", 4) == 0 || ft_strncmp(p_actuel->str, "<<<", 4) == 0)
-			return (ft_error(1, "syntax error near unexpected token"));
+			return (ft_error(1, "syntax error near unexpected token\n"));
 		else if (ft_strncmp(p_actuel->str, ">>>>", 4) == 0 || ft_strncmp(p_actuel->str, "<<<<", 4) == 0)
-			return (ft_error(1, "syntax error near unexpected token"));
-		else if (ft_strncmp(p_actuel->str, ">>", 2) == 0 || ft_strncmp(p_actuel->str, "<<", 2) == 0)
+			return (ft_error(1, "syntax error near unexpected token\n"));
+		else if (ft_strncmp(p_actuel->str, ">>", 2) == 0 || ft_strncmp(p_actuel->str, "<<", 2) == 0 ||ft_strncmp(p_actuel->str, ">", 1) == 0 || ft_strncmp(p_actuel->str, "<", 1) == 0)
 		{
 			if (p_actuel->next == NULL && ft_next_redirection(p_actuel->str) == 1)
-				return (ft_error(1, "syntax error near unexpected token"));
+				return (ft_error(1, "syntax error near unexpected token\n"));
 		}
 		else if (ft_strncmp(p_actuel->str, ">", 1) == 0 || ft_strncmp(p_actuel->str, "<", 1) == 0)
 		{
 			if (p_actuel->next == NULL && ft_next_redirection(p_actuel->str) == 1)
-				return (ft_error(1, "syntax error near unexpected token"));
+				return (ft_error(1, "syntax error near unexpected token\n"));
 		}
 		p_actuel = p_actuel->next;
 	}
@@ -296,7 +297,7 @@ int main(void)
 			exit(0);//besoin dune fonction pour free 
 		add_history(rl);
 		stru->tokens = ft_tokenisation(rl, stru->tokens);
-		if (ft_valid_syntax(stru->tokens) == 0)
+		if (ft_valid_syntax(stru->tokens) != -1)
 			ft_type_token(stru->commande, stru->tokens);
 	}
 	rl_clear_history ();
