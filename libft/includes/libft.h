@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 13:44:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/05/07 10:59:04 by skuor            ###   ########.fr       */
+/*   Updated: 2025/07/23 13:49:59 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fcntl.h>
 # include <stdarg.h>
 # include <stdbool.h>
+# include <limits.h>
 
 # include "checks.h"
 # include "conversion.h"

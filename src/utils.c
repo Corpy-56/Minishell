@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:21:04 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/16 16:16:46 by skuor            ###   ########.fr       */
+/*   Updated: 2025/07/21 11:36:27 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,12 @@ void	free_args(char **args)
 	free(args);
 }
 
-void	free_tokens(t_tokens *token)
-{
-	while (token)
-	{
-		free(token);
-		token = token->next;
-	}
-	free(token);
-}
+// void	free_tokens(t_tokens *token)
+// {
+// 	while (token)
+// 	{
+// 		free(token);
+// 		token = token->next;
+// 	}
+// 	free(token);
+// }

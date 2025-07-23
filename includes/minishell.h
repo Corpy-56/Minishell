@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/16 16:17:04 by skuor            ###   ########.fr       */
+/*   Updated: 2025/07/23 14:09:25 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include "tokenisation.h"
 # include <stdio.h>
 # include <unistd.h>
+# include <stdbool.h>
+# include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
