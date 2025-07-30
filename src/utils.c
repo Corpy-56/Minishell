@@ -6,21 +6,19 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:21:04 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/21 11:36:27 by skuor            ###   ########.fr       */
+/*   Updated: 2025/07/30 15:06:08 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_error(int i, char *str)
+int	ft_error(int i, char *str, char *str2)
 {
 	i = 0;
-	i++;
-	printf("%d", i);
-	write(2, "Error\n", 7);
-	write(2, &str, ft_strlen(str));
-	//exit(EXIT_FAILURE);
-	return (0);
+	if (str2 != NULL)
+		write(2, str2, (ft_strlen(str)));
+	write(2, str, (ft_strlen(str)));
+	return (-1);
 }
 
 int	white_space(char *str, int i)
@@ -47,12 +45,15 @@ void	free_args(char **args)
 	free(args);
 }
 
-// void	free_tokens(t_tokens *token)
-// {
-// 	while (token)
-// 	{
-// 		free(token);
-// 		token = token->next;
-// 	}
-// 	free(token);
-// }
+void	free_tokens(t_tokens *token)
+{
+	t_tokens	*next;
+	
+	while (token)
+	{
+		free(token->str);
+		next = token->next;
+		free(token);
+		token = next;
+	}
+}

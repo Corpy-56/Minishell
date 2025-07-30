@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/17 10:07:40 by skuor            ###   ########.fr       */
+/*   Updated: 2025/07/30 16:17:53 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,12 @@ int main(int argc, char **argv, char **env)
 			ft_env(stru);
 		else if (ft_strncmp(stru->tokens->args[0], "exit", 5) == 0)
 			ft_exit(stru->tokens->args);
-		// free_args(stru->tokens->args);
-		// free_tokens(stru->tokens);
+		else if (ft_strncmp(stru->tokens->args[0], "unset", 5) == 0)
+			ft_unset(stru->tokens->args);
 		free(rl);
 	}
+	//free_args(stru->tokens->args);
+	free_tokens(stru->tokens);
 	rl_clear_history (); // pas oublier dans le exit et controle C 
     return (0);
 }
