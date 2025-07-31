@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:21:04 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/30 15:06:08 by skuor            ###   ########.fr       */
+/*   Updated: 2025/07/31 15:43:20 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	free_args(char **args)
 void	free_tokens(t_tokens *token)
 {
 	t_tokens	*next;
-	
+
 	while (token)
 	{
 		free(token->str);
