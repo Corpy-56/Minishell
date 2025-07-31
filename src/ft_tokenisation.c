@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:07:35 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/25 15:57:42 by agouin           ###   ########.fr       */
+/*   Updated: 2025/07/31 17:54:20 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,11 +92,8 @@ char	*ft_tokenisation_quote(char *rl, char *temp, int i)
 	if (rl[i] == '\"' || rl[i] == '\'')
 	{
 		quote = rl[i++];
-		temp = ft_strjoin_char(temp, quote);
 		while (rl[i] && rl[i] != quote)
 			temp = ft_strjoin_char(temp, rl[i++]);
-		if (rl[i++] == quote)
-			temp = ft_strjoin_char(temp, quote);
 	}
 	else if ((rl[i] == '<' || rl[i] == '>'))
 	{
@@ -134,13 +131,13 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
 			|| rl[i] == '>' || rl[i] == '|')
 		{
 			temp = ft_tokenisation_quote(rl, temp, i);
+			if (rl[i] == '\"' || rl[i] == '\'')
+				i = i + 2;
 			i = ft_strlen(temp) + i;
 		}
 		else
 		{
-			while (rl[i] && rl[i] != 32 && rl[i] != 9 && rl[i] != '<'
-				&& rl[i] != '>' && rl[i] != '|' && rl[i] != '\''
-				&& rl[i] != '\"')
+			while (rl[i] && rl[i] != 32 && rl[i] != 9)
 				temp = ft_strjoin_char(temp, rl[i++]);
 		}
 		if (temp)

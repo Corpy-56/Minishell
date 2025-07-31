@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/25 16:02:31 by agouin           ###   ########.fr       */
+/*   Updated: 2025/07/31 18:00:02 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,6 @@ int main(int argc, char **argv, char **env)
 		//}
 	}
 	rl_clear_history ();
-    return (0);
+	return (0);
 }
 
