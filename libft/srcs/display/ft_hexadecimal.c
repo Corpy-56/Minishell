@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 15:14:00 by skuor             #+#    #+#             */
-/*   Updated: 2025/02/12 09:59:17 by skuor            ###   ########.fr       */
+/*   Updated: 2025/07/14 19:45:46 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	ft_puthex(unsigned int nb, char s)
 		ft_puthex(nb / 16, s);
 		ft_puthex(nb % 16, s);
 	}
-	if (nb >= 0 && nb <= 9)
+	if (nb <= 9)
 		ft_putchar(nb + 48);
 	if (nb >= 10 && nb <= 15 && s == 'x')
 		ft_putchar(nb + 87);

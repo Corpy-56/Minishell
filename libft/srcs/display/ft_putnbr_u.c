@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:01:34 by skuor             #+#    #+#             */
-/*   Updated: 2025/02/12 09:59:43 by skuor            ###   ########.fr       */
+/*   Updated: 2025/07/14 19:46:10 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_unsigned_putnbr(unsigned int nb)
 {
-	if (nb >= 0 && nb <= 9)
+	if (nb <= 9)
 		ft_putchar(nb + 48);
 	if (nb > 9)
 	{

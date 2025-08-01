@@ -1,40 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atol.c                                          :+:      :+:    :+:   */
+/*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/06 18:21:20 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/23 14:08:40 by skuor            ###   ########.fr       */
+/*   Created: 2025/07/14 19:34:55 by skuor             #+#    #+#             */
+/*   Updated: 2025/07/31 17:52:14 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-long	ft_atol(const char *str)
+
+
+int	ft_echo(char **args)
 {
-	int			i;
-	int			neg;
-	long		res;
+	int	i;
+	int	no_newline;
 
-	i = 0;
-	neg = 1;
-	res = 0;
-	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
-		i++;
-	if (str[i] == '+' || str[i] == '-')
+	i = 1;
+	no_newline = 0;
+	if (args[1] && ft_strncmp(args[1], "-n", 3) == 0)
 	{
-		if (str[i] == '-')
-		{
-			neg = -1;
-			i++;
-		}
+		no_newline = 1;
+		i = 2;
 	}
-	while (str[i] >= '0' && str[i] <= '9')
+	while (args[i])
 	{
-		res = res * 10 + (str[i] - '0');
+		printf("%s", args[i]);
+		if (args[i + 1])
+			printf(" ");
 		i++;
 	}
-	return (res * neg);
+	if (!no_newline)
+		printf("\n");
+	return (0);
 }
