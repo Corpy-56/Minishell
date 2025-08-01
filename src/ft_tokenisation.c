@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tokenisation.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:07:35 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/30 15:08:58 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/01 17:49:50 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*ft_strjoin_char(char *str, const char c)
 	return (joined);
 }
 
-void	ft_quote(char *rl, int i)
+int	ft_quote(char *rl, int i)
 {
 	int	quote1;
 
@@ -67,7 +67,8 @@ void	ft_quote(char *rl, int i)
 		i++;
 	}
 	if (quote1 != 0)
-		ft_error(1, "", NULL);// faire un autre message derreur ?? 
+		return (ft_error(1, "minishell: syntax error with open quotes\n", NULL));// faire un autre message derreur ??
+	return (0);
 }
 
 t_tokens	*ft_creat_token(char *temp)
@@ -92,11 +93,8 @@ char	*ft_tokenisation_quote(char *rl, char *temp, int i)
 	if (rl[i] == '\"' || rl[i] == '\'')
 	{
 		quote = rl[i++];
-		temp = ft_strjoin_char(temp, quote);
 		while (rl[i] && rl[i] != quote)
 			temp = ft_strjoin_char(temp, rl[i++]);
-		if (rl[i++] == quote)
-			temp = ft_strjoin_char(temp, quote);
 	}
 	else if ((rl[i] == '<' || rl[i] == '>'))
 	{
@@ -123,7 +121,8 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
 	a_debut = NULL;
 	token = NULL;
 	temp = NULL;
-	ft_quote(rl, i);
+	if (ft_quote(rl, i) == -1)
+		return (NULL);
 	while (rl[i])
 	{
 		while (rl[i] == 32 || rl[i] == 9)
@@ -134,13 +133,13 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
 			|| rl[i] == '>' || rl[i] == '|')
 		{
 			temp = ft_tokenisation_quote(rl, temp, i);
+			if (rl[i] == '\"' || rl[i] == '\'')
+				i = i + 2;
 			i = ft_strlen(temp) + i;
 		}
 		else
 		{
-			while (rl[i] && rl[i] != 32 && rl[i] != 9 && rl[i] != '<'
-				&& rl[i] != '>' && rl[i] != '|' && rl[i] != '\''
-				&& rl[i] != '\"')
+			while (rl[i] && rl[i] != 32 && rl[i] != 9)
 				temp = ft_strjoin_char(temp, rl[i++]);
 		}
 		if (temp)
