@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/31 18:11:39 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/05 16:57:51 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,8 @@ int main(int argc, char **argv, char **env)
 	char *rl;
 	t_shell	*stru;
 	t_tokens *tmp;
+	//int	exit_status = 0;
+	//t_tokens	expanded_var;
 
 	(void)argc;
 	(void)argv;
@@ -205,6 +207,13 @@ int main(int argc, char **argv, char **env)
 		if (!stru->tokens)
 			continue ;
 		stru->tokens->args = args_from_tokens(stru->tokens);
+		// tmp = stru->tokens; //je stocke mes tokens dans tmp que je renouvelle a chaque fois
+		// while (tmp != NULL)
+		// {
+		// 	expanded_var = expand_var(tmp, exit_status);
+		// 	printf("%s\n", expanded_var.str);
+		// 	tmp = tmp->next;
+		// }
 		while (tmp != NULL)
 		{
 			printf("%s\n", tmp->str);

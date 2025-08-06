@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:01:37 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/30 15:12:46 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/01 17:51:16 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	str_to_long(const char *str, long *out)
 	int			i;
 	long		neg;
 	long		res;
-	long 		digit;
+	long		digit;
 
 	i = 0;
 	neg = 1;
