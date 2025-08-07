@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/08/06 14:51:30 by agouin           ###   ########.fr       */
+/*   Updated: 2025/08/07 10:26:59 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	ft_nb_tokens(t_tokens *p_actuel)
 	return (i);
 }
 
-t_cmd	*lexer_cmd(t_cmd *commande, t_tokens *p_actuel)// apres il faudra tester si on peut lexecuter
+t_cmd	*lexer_cmd(t_cmd *commande, t_tokens *p_actuel)
 {
 	int	i;
 	int	j;
@@ -114,6 +114,7 @@ t_cmd	*lexer_cmd(t_cmd *commande, t_tokens *p_actuel)// apres il faudra tester s
 	}
 	return (commande);
 }
+
 
 t_cmd	*ft_creat_token2(void)
 {

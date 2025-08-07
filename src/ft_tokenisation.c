@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:07:35 by agouin            #+#    #+#             */
-/*   Updated: 2025/08/01 17:49:50 by agouin           ###   ########.fr       */
+/*   Updated: 2025/08/07 10:30:12 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
 		}
 		else
 		{
-			while (rl[i] && rl[i] != 32 && rl[i] != 9)
+			while (rl[i] && rl[i] != 32 && rl[i] != 9 && rl[i] != '|')
 				temp = ft_strjoin_char(temp, rl[i++]);
 		}
 		if (temp)
