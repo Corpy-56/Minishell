@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenisation.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/31 18:09:26 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/05 15:06:46 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ typedef struct s_cmd
 	int				fd_out_put1;
 	int				fd_out_put2;
 	int				fd_int_put;
-	char			*heredoc;
+	char			**heredoc;
 	struct s_cmd	*next;
 }t_cmd;
 
