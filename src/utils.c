@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:21:04 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/31 15:43:20 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/05 12:00:38 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 int	ft_error(int i, char *str, char *str2)
 {
-	i = 0;
+	(void)i;
+	//i = 0;
 	if (str2 != NULL)
 		write(2, str2, (ft_strlen(str)));
 	write(2, str, (ft_strlen(str)));

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:07:35 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/30 15:08:58 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/05 12:07:13 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ char	*ft_tokenisation_quote(char *rl, char *temp, int i)
 	return (temp);
 }
 
-t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
+/* t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
 {
 	int			i;
 	char		*temp;
@@ -155,6 +155,73 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
 			fin = token;
 		}
 	}
+	return (a_debut);
+} */
+
+int	ft_one_token(char *rl, int i, t_tokens *token)
+{
+	while (rl[i])
+	{
+		if (rl[i] == '\'')
+		{
+			while (rl[++i] != '\0' && rl[i] != '\'')
+				token->str = ft_strjoin_char(token->str, rl[i]);
+		}
+		else if (rl[i] == '\"')
+		{
+			while (rl[++i] != '\0' && rl[i] != '\"')
+				token->str = ft_strjoin_char(token->str, rl[i]);
+		}
+		else if (rl[i] != 9 && rl[i] != 32 && rl[i])
+			token->str = ft_strjoin_char(token->str, rl[i]);
+		else if (rl[i] == 9 || rl[i] == 32 || rl[i] == '\0')
+			return (i);
+		i++;
+	}
+	return (i);
+}
+
+t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
+{
+	t_tokens	*a_debut;
+	t_tokens	*fin;
+	int	i;
+
+	i = 0;
+	//token = NULL;
+	a_debut = NULL;
+	fin = NULL;
+	i = white_space(rl, i);
+	ft_quote(rl, i);
+	while (rl[i] && i != -1)
+	{
+		token = malloc(sizeof(t_tokens));
+		if (!token)
+			return (NULL);// faire une vrai sorti
+		if (i == 0 || rl[i - 1] == 9 || rl[i - 1] == 32)
+			token->str = NULL;
+		if (rl[i] != 9 && rl[i] != 32 && rl[i])
+			i = ft_one_token(rl, i, token);
+		if (rl[i] == 9 || rl[i] == 32 || (rl[i + 1] == '\0'))
+		{
+			if (token->str != NULL)
+			{
+				token->next = NULL;	
+				if (a_debut == NULL)
+				{
+					a_debut = token;
+					fin = token;
+				}
+				else
+				{
+					fin->next = token;
+					fin = token;
+				}
+			}
+		}
+		i++;
+	}
+	//ft_type_token(a_debut);
 	return (a_debut);
 }
 

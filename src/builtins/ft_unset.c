@@ -6,13 +6,13 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 16:14:05 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/31 17:46:08 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/09 12:42:12 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	check_valid_var(char *str)
+/* int	check_valid_var(char *str)
 {
 	int	i;
 
@@ -26,7 +26,7 @@ static int	check_valid_var(char *str)
 		i++;
 	}
 	return (0);
-}
+} */
 
 void	remove_var(t_shell *stru, char *var)
 {
