@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/31 18:11:39 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/09 15:22:18 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,13 @@ void	ft_printf_tab(char **args)
 void	ft_type_token(t_cmd *commande, t_tokens *b_debut)
 {
 	t_tokens	*p_actuel;
-	int	i;
-	t_tokens	*a_debut;
-	t_tokens	*fin;
+	// int	i;
+	// t_tokens	*a_debut;
+	// t_tokens	*fin;
 	
-	i = 0;
-	a_debut = NULL;
-	fin = NULL;
+	// i = 0;
+	// a_debut = NULL;
+	// fin = NULL;
 	commande = ft_calloc(sizeof(t_cmd), 1);
 	if (commande == NULL)
 		return ;// faire une vrai sorti
@@ -188,11 +188,12 @@ int main(int argc, char **argv, char **env)
 
 	(void)argc;
 	(void)argv;
+	//(void)env;
 	stru = ft_calloc(1, sizeof(t_shell));
 	if (stru == NULL)
 		return (0);
 	tmp = stru->tokens;
-	//stru->environ = ft_duplicate_env(env);
+	stru->environ = ft_duplicate_env(env);
 	while (1)
 	{
 		rl = readline("Minishell > ");
@@ -217,11 +218,13 @@ int main(int argc, char **argv, char **env)
 		else if (ft_strncmp(stru->tokens->args[0], "echo", 5) == 0)
 			ft_echo(stru->tokens->args);
 		else if (ft_strncmp(rl, "env", 4) == 0)
-			ft_env(stru, env);
+			ft_env(stru);
 		else if (ft_strncmp(stru->tokens->args[0], "exit", 5) == 0)
 			ft_exit(stru->tokens->args);
 		else if (ft_strncmp(stru->tokens->args[0], "unset", 5) == 0)
 			ft_unset(stru, stru->tokens->args);
+		else if (ft_strncmp(stru->tokens->args[0], "export", 5) == 0)
+			ft_export(stru->tokens->args, stru->environ);
 		// else
 		// 	printf("bash: %s: command not found\n", stru->tokens->args[0]);
 		free(rl);

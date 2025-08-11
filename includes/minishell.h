@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/31 17:46:25 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/09 15:21:48 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,13 @@
 //builtins
 int			ft_exit(char **args);
 int			ft_pwd(char **args);
-int			ft_env(t_shell *stru, char **env);
+int			ft_env(t_shell *stru);
+//int		ft_env(t_shell *stru, char **env);
 int			ft_echo(char **args);
 int			ft_cd(char **args);
 int			ft_unset(t_shell *stru, char **args);
+//int			ft_export(char **args);
+int			ft_export(char **args, t_env *env);
 
 //main
 int			main(int argc, char **argv, char **env);
@@ -47,5 +50,6 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token);
 //environ
 t_env		*ft_duplicate_env(char **env);
 
+int	check_valid_var(char *str);
 
 #endif
