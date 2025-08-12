@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/08/09 15:22:18 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/12 15:51:40 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,7 @@ int main(int argc, char **argv, char **env)
 	char *rl;
 	t_shell	*stru;
 	t_tokens *tmp;
+	t_env	*local = NULL;
 
 	(void)argc;
 	(void)argv;
@@ -194,6 +195,7 @@ int main(int argc, char **argv, char **env)
 		return (0);
 	tmp = stru->tokens;
 	stru->environ = ft_duplicate_env(env);
+
 	while (1)
 	{
 		rl = readline("Minishell > ");
@@ -225,6 +227,8 @@ int main(int argc, char **argv, char **env)
 			ft_unset(stru, stru->tokens->args);
 		else if (ft_strncmp(stru->tokens->args[0], "export", 5) == 0)
 			ft_export(stru->tokens->args, stru->environ);
+		else
+			create_local_var(stru->tokens->args, local);
 		// else
 		// 	printf("bash: %s: command not found\n", stru->tokens->args[0]);
 		free(rl);

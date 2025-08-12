@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:07:01 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/08 16:32:58 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/11 15:35:19 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_env	*ft_duplicate_env(char **env)
 
 int	ft_env(t_shell *stru)
 {
-	t_shell *env_temp;
+	t_shell	*env_temp;
 
 	env_temp = stru;
 	while (env_temp->environ != NULL)
