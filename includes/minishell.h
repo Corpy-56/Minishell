@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/12 15:35:09 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/13 15:46:52 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int			ft_error(int i, char *str, char *str2);
 int			white_space(char *str, int i);
 void		free_args(char **args);
 void		free_tokens(t_tokens *token);
+bool		is_assignement(char *str);
+
 
 //utils_var
 void		parse_args(char *args, char **name, char **value);
@@ -59,7 +61,10 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token);
 t_env		*ft_duplicate_env(char **env);
 
 //variables
-int			create_local_var(char **args, t_env *local);
+t_env		*create_local_var(char **args, t_env *local);
+char		*expand_var(char *args, t_env *env, t_env *local);
+
+
 
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 12:32:05 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/12 15:34:58 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/13 18:29:19 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,3 +88,31 @@ void	update_value(t_env *var, char *name, char *new_value)
 	free(tmp_str);
 }
 
+int	no_equal_sign(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '=')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void	mark_exported(t_env *node)
+{
+	char	*new_str;
+
+	if (node == NULL)
+		return ;
+	if (no_equal_sign(node->str))
+	{	
+		new_str = ft_strjoin(node->str, "=");
+		free(node->str);
+		node->str = new_str;
+	}
+	node->i = 1;
+}

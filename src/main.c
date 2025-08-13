@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/08/12 15:51:40 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/13 17:40:13 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,8 @@ int main(int argc, char **argv, char **env)
 	t_shell	*stru;
 	t_tokens *tmp;
 	t_env	*local = NULL;
+	 int	i;
+	
 
 	(void)argc;
 	(void)argv;
@@ -195,7 +197,7 @@ int main(int argc, char **argv, char **env)
 		return (0);
 	tmp = stru->tokens;
 	stru->environ = ft_duplicate_env(env);
-
+	
 	while (1)
 	{
 		rl = readline("Minishell > ");
@@ -213,6 +215,22 @@ int main(int argc, char **argv, char **env)
 			printf("%s\n", tmp->str);
 			tmp = stru->tokens; //je stocke mes tokens dans tmp que je renouvelle a chaque fois
 		}
+		// tmp = stru->tokens;
+		// while (tmp)
+		// {
+		// 	printf("%s\n", tmp->str);
+		// 	tmp = tmp->next;
+		// }
+		if (is_assignement(stru->tokens->args[0]))
+			local = create_local_var(stru->tokens->args, local);
+		i = 0;
+		while (stru->tokens->args[i])
+		{
+			char *expanded = expand_var(stru->tokens->args[i], stru->environ, local);
+			free(stru->tokens->args[i]);
+			stru->tokens->args[i] = expanded;
+			i++;
+		}
 		if (ft_strncmp(stru->tokens->args[0], "pwd", 4) == 0)
 			ft_pwd(stru->tokens->args);
 		else if (ft_strncmp(stru->tokens->args[0], "cd", 3) == 0)
@@ -227,8 +245,8 @@ int main(int argc, char **argv, char **env)
 			ft_unset(stru, stru->tokens->args);
 		else if (ft_strncmp(stru->tokens->args[0], "export", 5) == 0)
 			ft_export(stru->tokens->args, stru->environ);
-		else
-			create_local_var(stru->tokens->args, local);
+		// else
+		// 	local = create_local_var(stru->tokens->args, local);
 		// else
 		// 	printf("bash: %s: command not found\n", stru->tokens->args[0]);
 		free(rl);
@@ -242,5 +260,6 @@ int main(int argc, char **argv, char **env)
 	free_tokens(stru->tokens);
 	rl_clear_history (); // pas oublier dans le exit et controle C 
     return (0);
+	
 }
 

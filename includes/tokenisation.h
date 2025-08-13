@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/31 18:09:26 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/13 18:39:34 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,15 @@ typedef struct s_cmd
 	int				fd_int_put;
 	char			*heredoc;
 	struct s_cmd	*next;
-}t_cmd;
+}					t_cmd;
 
 typedef struct s_env
 {
 	char			*str; //KEY=value
 	int				i;
+	char			*name;
+	char			*value;
+	int				exported;
 	struct s_env	*next;
 }					t_env;
 

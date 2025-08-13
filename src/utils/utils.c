@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:21:04 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/05 12:00:38 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/13 15:46:33 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,3 +58,16 @@ void	free_tokens(t_tokens *token)
 		token = next;
 	}
 }
+
+bool	is_assignement(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str == NULL)
+		return (false);
+	if (str[i] == '=' && str[0] != '=')
+		return (true);
+	return (false);
+}
+
