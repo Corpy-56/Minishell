@@ -6,7 +6,7 @@
 #    By: skuor <skuor@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/19 10:10:18 by skuor             #+#    #+#              #
-#    Updated: 2025/08/12 18:58:58 by skuor            ###   ########.fr        #
+#    Updated: 2025/08/14 14:06:07 by skuor            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,7 @@ MEMORY_FILES =	ft_bzero.c ft_memset.c ft_memcpy.c ft_memmove.c ft_memchr.c ft_ca
 STRINGS_FILES =	ft_split.c ft_striteri.c ft_strlcpy.c ft_strncmp.c ft_strtrim.c \
 				ft_strchr.c ft_strjoin.c ft_strlen.c ft_strnstr.c ft_substr.c \
 				ft_strdup.c ft_strlcat.c ft_strmapi.c ft_strrchr.c get_next_line.c \
-				ft_array_dup.c ft_strjoin_free.c \
+				ft_array_dup.c ft_strjoin_free.c ft_strcmp.c \
 
 
 OBJ = $(addprefix $(OBJ_DIR), $(CHECKS_FILES:.c=.o)) \

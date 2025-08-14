@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 11:51:21 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/13 18:44:28 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/14 18:17:14 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,38 +57,42 @@ t_env	*add_to_env(t_env *env, char *name, char *value, int exported)
 {
 	t_env	*last;
 	t_env	*new_var;
-	char	*full_str;
 	char	*tmp_str;
 
-	last = env;
-	new_var->name = ft_strdup(name);
-	new_var->value = ft_strdup(value);
-	if (value)
-	{
-		tmp_str = ft_strjoin(name, "=");
-		full_str = ft_strjoin(tmp_str, value);
-	}
-	else
-		full_str = ft_strdup(name);
 	new_var = ft_calloc(sizeof(t_env), 1);
 	if (!new_var)
 		return (env);
-	new_var->str = full_str;
+	new_var->name = ft_strdup(name);
+	if (value)
+		new_var->value = ft_strdup(value);
+	else
+		new_var->value = NULL;
+	if (value)
+	{
+		tmp_str = ft_strjoin(name, "=");
+		new_var->str = ft_strjoin(tmp_str, value);
+		free(tmp_str);
+	}
+	else
+		new_var->str = ft_strdup(name);
+	new_var->exported = exported;
 	new_var->next = NULL;
 	if (!env)
 		return (new_var);
+	last = env;
 	while (last->next)
 		last = last->next;
 	last->next = new_var;
 	return (env);
 }
 
-int	ft_export(char **args, t_env *env)
+int	ft_export(char **args, t_env *env, t_env *local)
 {
 	int		i;
 	char	*name;
 	char	*value;
 	t_env	*var;
+	//(void)local;
 
 	name = NULL;
 	if (!args[1])
@@ -107,11 +111,26 @@ int	ft_export(char **args, t_env *env)
 			free(value);
 			return (1);
 		}
-		var = find_in_env(env, name);
+		var = find_var(env, name);
 		if (var)
-			update_value(var, name, value);
+		{
+			if (value)
+				update_value(var, value);
+			mark_exported(var);
+		}
 		else
-			add_to_env(env, name, value);
+		{
+			var = find_var(local, name);
+			if (var)
+			{
+				mark_exported(var);
+				move_var_to_env(&env, &local, var);
+				if (value)
+					update_value(var, value);
+			}
+			else
+				add_to_env(env, name, value, 1);
+		}
 		free(name);
 	//	free(value);
 		i++;

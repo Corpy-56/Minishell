@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/08/13 17:40:13 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/14 19:10:52 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,8 +221,8 @@ int main(int argc, char **argv, char **env)
 		// 	printf("%s\n", tmp->str);
 		// 	tmp = tmp->next;
 		// }
-		if (is_assignement(stru->tokens->args[0]))
-			local = create_local_var(stru->tokens->args, local);
+		//if (!is_assignement(stru->tokens->args[1]))
+		//	local = create_local_var(stru->tokens->args, local);
 		i = 0;
 		while (stru->tokens->args[i])
 		{
@@ -244,7 +244,7 @@ int main(int argc, char **argv, char **env)
 		else if (ft_strncmp(stru->tokens->args[0], "unset", 5) == 0)
 			ft_unset(stru, stru->tokens->args);
 		else if (ft_strncmp(stru->tokens->args[0], "export", 5) == 0)
-			ft_export(stru->tokens->args, stru->environ);
+			ft_export(stru->tokens->args, stru->environ, local);
 		// else
 		// 	local = create_local_var(stru->tokens->args, local);
 		// else

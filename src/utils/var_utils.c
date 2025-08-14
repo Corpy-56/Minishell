@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 12:32:05 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/13 18:29:19 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/14 19:02:27 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	check_valid_var(char *str)
 	return (1);
 }
 
-t_env	*find_in_env(t_env *env, char *name)
+t_env	*find_var(t_env *env, char *name)
 {
 	t_env	*current;
 	size_t	name_len;
@@ -74,7 +74,18 @@ t_env	*find_in_env(t_env *env, char *name)
 	return (NULL);
 }
 
-void	update_value(t_env *var, char *name, char *new_value)
+/* t_env	*find_in_env(t_env *env, char *name)
+{
+	while (env)
+	{
+		if (ft_strcmp(env->name, name) == 0)
+			return (env);
+		env = env->next;
+	}
+	return (NULL);
+} */
+
+/* void	update_value(t_env *var, char *name, char *new_value)
 {
 	t_env	*node;
 	char	*tmp_str;
@@ -86,23 +97,38 @@ void	update_value(t_env *var, char *name, char *new_value)
 	free(var->str);
 	node->str = ft_strjoin(tmp_str, new_value);
 	free(tmp_str);
-}
+} */
 
-int	no_equal_sign(char *str)
+void	update_value(t_env *var, char *new_value)
 {
-	int	i;
+	char	*tmp_str;
 
-	i = 0;
-	while (str[i])
+	free(var->value);
+	if (new_value)
+		var->value = ft_strdup(new_value);
+	else
+		var->value = NULL;
+	free(var->str);
+	if (var->value)
 	{
-		if (str[i] == '=')
-			return (1);
-		i++;
+		tmp_str = ft_strjoin(var->name, "=");
+		var->str = ft_strjoin(tmp_str, new_value);
 	}
-	return (0);
+	else
+		var->str = ft_strdup(var->name);
 }
 
-void	mark_exported(t_env *node)
+void update_local_value(t_env *local, char *name, char *new_value)
+{
+    t_env *node = find_var(local, name);
+    if (!node)
+        return;
+
+    free(node->value);
+    node->value = new_value ? ft_strdup(new_value) : NULL;
+}
+
+/* void	mark_exported(t_env *node)
 {
 	char	*new_str;
 
@@ -115,4 +141,13 @@ void	mark_exported(t_env *node)
 		node->str = new_str;
 	}
 	node->i = 1;
+} */
+
+void	mark_exported(t_env *var)
+{
+	if (var)
+	{
+		var->exported = 1;
+		printf("exported\n");
+	}
 }
