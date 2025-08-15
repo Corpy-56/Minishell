@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 11:51:21 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/14 18:17:14 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/15 14:39:20 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,6 @@ int	ft_export(char **args, t_env *env, t_env *local)
 		{
 			if (value)
 				update_value(var, value);
-			mark_exported(var);
 		}
 		else
 		{

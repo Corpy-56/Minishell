@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:09:43 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/14 19:10:01 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/15 17:05:38 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	move_var_to_env(t_env **env, t_env **local, t_env *var)
 	}
 }	
 
-t_env	*create_local_var(char **args, t_env *local)
+/* t_env	*create_local_var(char **args, t_env *local)
 {
 	int		i;
 	char	*name;
@@ -124,7 +124,7 @@ t_env	*create_local_var(char **args, t_env *local)
 		i++;
 	}
 	return (local);
-}
+} */
 
 char	*get_env_value(t_env *env, char *name)
 {
@@ -148,7 +148,7 @@ char	*get_env_value(t_env *env, char *name)
 }
 
 
-char	*expand_var(char *args, t_env *env, t_env *local)
+/* char	*expand_var(char *args, t_env *env, t_env *local)
 {
 	size_t	i;
 	size_t	start;
@@ -174,6 +174,50 @@ char	*expand_var(char *args, t_env *env, t_env *local)
 				value = get_env_value(local, name);
 				if (!value && local)
 					value = get_env_value(env, name);
+				if (!value)
+					value = ft_strdup("");
+				str = ft_strjoin_free(str, value);
+				free(name);
+			}
+			else
+				str = ft_strjoin_free(str, ft_strdup("$"));
+		}
+		else
+		{
+			auto char tmp[2] = {args[i], '\0'};
+			str = ft_strjoin_free(str, ft_strdup(tmp));
+			i++;
+		}
+	}
+	return (str);
+} */
+
+char	*expand_var(char *args, t_env *env, t_env *local)
+{
+	size_t	i;
+	size_t	start;
+	char	*str;
+	char	*name;
+	char	*value;
+	size_t	len_str;
+
+	i = 0;
+	str = ft_strdup("");
+	len_str = ft_strlen(args);
+	while (i < len_str)
+	{
+		if (args[i] == '$')
+		{
+			i++;
+			start = i;
+			while (i < len_str && check_valid_var(&args[i]))
+				i++;
+			if (i > start)
+			{
+				name = ft_substr(args, start, i - start);
+				value = get_env_value(env, name);
+				if (!value && local)
+					value = get_env_value(local, name);
 				if (!value)
 					value = ft_strdup("");
 				str = ft_strjoin_free(str, value);

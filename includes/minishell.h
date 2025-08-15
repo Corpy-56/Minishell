@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/14 19:02:39 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/15 14:43:29 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int			ft_error(int i, char *str, char *str2);
 int			white_space(char *str, int i);
 void		free_args(char **args);
 void		free_tokens(t_tokens *token);
-bool		is_assignement(char *str);
+bool		is_local_var(char *str);
 
 
 //utils_var

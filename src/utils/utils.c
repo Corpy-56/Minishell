@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:21:04 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/14 18:42:26 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/15 16:57:43 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,15 +59,39 @@ void	free_tokens(t_tokens *token)
 	}
 }
 
-bool	is_assignement(char *str)
+/* bool	is_local_var(char *str)
 {
 	int	i;
 
 	i = 0;
 	if (str == NULL)
 		return (false);
-	if (str[i] == '=')
-		return (true);
+	while (str[i])
+	{
+		if (str[i] == '=')
+			return (true);
+		i++;
+	}
 	return (false);
-}
+} */
 
+bool	is_local_var(char *s)
+{
+	  int i;
+
+    if (!s || !s[0]) 
+		return false;
+    // NAME must start with letter or _
+    if (!(isalpha(s[0]) || s[0] == '_')) 
+		return false;
+    i = 1;
+    // rest of NAME: letters, digits, _
+	while (s[i] && s[i] != '=')
+	{
+		if (!(isalnum((unsigned char)s[i]) || s[i] == '_'))
+			return false;
+        i++;
+	}
+    // must actually contain '='
+    return (s[i] == '=');
+}

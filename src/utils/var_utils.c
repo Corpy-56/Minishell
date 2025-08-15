@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 12:32:05 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/14 19:02:27 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/15 14:40:05 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	parse_args(char *args, char **name, char **value)
 			pos = j;
 			break ;
 		}
-			j++;
+		j++;
 	}
 	if (pos != -1)
 	{
@@ -37,6 +37,7 @@ void	parse_args(char *args, char **name, char **value)
 	else
 	{
 		*name = ft_strdup(args);
+		*value = NULL;
 		printf("Name: %s, Value: NULL\n", *name);
 	}
 }
@@ -117,31 +118,6 @@ void	update_value(t_env *var, char *new_value)
 	else
 		var->str = ft_strdup(var->name);
 }
-
-void update_local_value(t_env *local, char *name, char *new_value)
-{
-    t_env *node = find_var(local, name);
-    if (!node)
-        return;
-
-    free(node->value);
-    node->value = new_value ? ft_strdup(new_value) : NULL;
-}
-
-/* void	mark_exported(t_env *node)
-{
-	char	*new_str;
-
-	if (node == NULL)
-		return ;
-	if (no_equal_sign(node->str))
-	{	
-		new_str = ft_strjoin(node->str, "=");
-		free(node->str);
-		node->str = new_str;
-	}
-	node->i = 1;
-} */
 
 void	mark_exported(t_env *var)
 {

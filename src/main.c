@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/08/14 19:10:52 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/15 17:01:44 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,7 @@ int	ft_valid_syntax(t_tokens *token)//gerer les / pour cd mais voir ca avec Sara
 	return (0);
 }
 
-int main(int argc, char **argv, char **env)
+/* int main(int argc, char **argv, char **env)
 {
 	char *rl;
 	t_shell	*stru;
@@ -210,19 +210,19 @@ int main(int argc, char **argv, char **env)
 		if (!stru->tokens)
 			continue ;
 		stru->tokens->args = args_from_tokens(stru->tokens);
-		while (tmp != NULL)
-		{
-			printf("%s\n", tmp->str);
-			tmp = stru->tokens; //je stocke mes tokens dans tmp que je renouvelle a chaque fois
-		}
-		// tmp = stru->tokens;
-		// while (tmp)
+		// while (tmp != NULL)
 		// {
 		// 	printf("%s\n", tmp->str);
-		// 	tmp = tmp->next;
+		// 	tmp = stru->tokens; //je stocke mes tokens dans tmp que je renouvelle a chaque fois
 		// }
-		//if (!is_assignement(stru->tokens->args[1]))
-		//	local = create_local_var(stru->tokens->args, local);
+		tmp = stru->tokens;
+		while (tmp != NULL)
+		{
+    	//	printf("%s\n", tmp->str);
+    		tmp = tmp->next;
+		}
+		if (!is_local_var(stru->tokens->args[1]))
+			local = create_local_var(stru->tokens->args, local);
 		i = 0;
 		while (stru->tokens->args[i])
 		{
@@ -261,5 +261,91 @@ int main(int argc, char **argv, char **env)
 	rl_clear_history (); // pas oublier dans le exit et controle C 
     return (0);
 	
+} */
+
+int main(int argc, char **argv, char **env)
+{
+    char        *rl;
+    t_shell     *stru;
+    t_env       *local = NULL;
+    auto int         i, k;
+
+    (void)argc;
+    (void)argv;
+
+    stru = ft_calloc(1, sizeof(t_shell));
+    if (!stru)
+        return (0);
+    stru->environ = ft_duplicate_env(env);
+
+    while (1)
+    {
+        rl = readline("Minishell > ");
+        if (!rl)
+            exit(0);
+        if (*rl)
+            add_history(rl);
+
+        // Free old tokens before parsing new line
+        free_tokens(stru->tokens);
+        stru->tokens = NULL;
+
+        stru->tokens = ft_tokenisation(rl, NULL);
+        free(rl);
+
+        if (!stru->tokens)
+            continue;
+
+        stru->tokens->args = args_from_tokens(stru->tokens);
+
+        // DEBUG: print tokens
+        t_tokens *tmp = stru->tokens;
+        while (tmp)
+        {
+        //    printf("%s\n", tmp->str);
+            tmp = tmp->next;
+        }
+
+        // Variable handling
+        if (stru->tokens->args[0] && is_local_var(stru->tokens->args[0]))
+		{
+			k = 0;
+			while (stru->tokens->args[k] && is_local_var(stru->tokens->args[k]))
+			{
+				
+			}
+		}
+		
+
+        i = 0;
+        while (stru->tokens->args[i])
+        {
+            char *expanded = expand_var(stru->tokens->args[i], stru->environ, local);
+            free(stru->tokens->args[i]);
+            stru->tokens->args[i] = expanded;
+            i++;
+        }
+
+        // Builtins
+        if (ft_strncmp(stru->tokens->args[0], "pwd", 4) == 0)
+            ft_pwd(stru->tokens->args);
+        else if (ft_strncmp(stru->tokens->args[0], "cd", 3) == 0)
+            ft_cd(stru->tokens->args);
+        else if (ft_strncmp(stru->tokens->args[0], "echo", 5) == 0)
+            ft_echo(stru->tokens->args);
+        else if (ft_strncmp(stru->tokens->args[0], "env", 4) == 0)
+            ft_env(stru);
+        else if (ft_strncmp(stru->tokens->args[0], "exit", 5) == 0)
+            ft_exit(stru->tokens->args);
+        else if (ft_strncmp(stru->tokens->args[0], "unset", 5) == 0)
+            ft_unset(stru, stru->tokens->args);
+        else if (ft_strncmp(stru->tokens->args[0], "export", 5) == 0)
+            ft_export(stru->tokens->args, stru->environ, local);
+
+        // Syntax check
+        if (ft_valid_syntax(stru->tokens) != -1)
+            ft_type_token(stru->commande, stru->tokens);
+    }
+    return (0);
 }
 
