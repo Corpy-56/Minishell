@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/08/15 17:01:44 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/21 17:23:21 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,89 +180,6 @@ int	ft_valid_syntax(t_tokens *token)//gerer les / pour cd mais voir ca avec Sara
 	return (0);
 }
 
-/* int main(int argc, char **argv, char **env)
-{
-	char *rl;
-	t_shell	*stru;
-	t_tokens *tmp;
-	t_env	*local = NULL;
-	 int	i;
-	
-
-	(void)argc;
-	(void)argv;
-	//(void)env;
-	stru = ft_calloc(1, sizeof(t_shell));
-	if (stru == NULL)
-		return (0);
-	tmp = stru->tokens;
-	stru->environ = ft_duplicate_env(env);
-	
-	while (1)
-	{
-		rl = readline("Minishell > ");
-		if (!rl)
-			exit(0);//besoin dune fonction pour free
-		if (*rl)
-			add_history(rl);
-		stru->tokens = ft_tokenisation(rl, stru->tokens);
-		//free(rl);
-		if (!stru->tokens)
-			continue ;
-		stru->tokens->args = args_from_tokens(stru->tokens);
-		// while (tmp != NULL)
-		// {
-		// 	printf("%s\n", tmp->str);
-		// 	tmp = stru->tokens; //je stocke mes tokens dans tmp que je renouvelle a chaque fois
-		// }
-		tmp = stru->tokens;
-		while (tmp != NULL)
-		{
-    	//	printf("%s\n", tmp->str);
-    		tmp = tmp->next;
-		}
-		if (!is_local_var(stru->tokens->args[1]))
-			local = create_local_var(stru->tokens->args, local);
-		i = 0;
-		while (stru->tokens->args[i])
-		{
-			char *expanded = expand_var(stru->tokens->args[i], stru->environ, local);
-			free(stru->tokens->args[i]);
-			stru->tokens->args[i] = expanded;
-			i++;
-		}
-		if (ft_strncmp(stru->tokens->args[0], "pwd", 4) == 0)
-			ft_pwd(stru->tokens->args);
-		else if (ft_strncmp(stru->tokens->args[0], "cd", 3) == 0)
-			ft_cd(stru->tokens->args);
-		else if (ft_strncmp(stru->tokens->args[0], "echo", 5) == 0)
-			ft_echo(stru->tokens->args);
-		else if (ft_strncmp(rl, "env", 4) == 0)
-			ft_env(stru);
-		else if (ft_strncmp(stru->tokens->args[0], "exit", 5) == 0)
-			ft_exit(stru->tokens->args);
-		else if (ft_strncmp(stru->tokens->args[0], "unset", 5) == 0)
-			ft_unset(stru, stru->tokens->args);
-		else if (ft_strncmp(stru->tokens->args[0], "export", 5) == 0)
-			ft_export(stru->tokens->args, stru->environ, local);
-		// else
-		// 	local = create_local_var(stru->tokens->args, local);
-		// else
-		// 	printf("bash: %s: command not found\n", stru->tokens->args[0]);
-		free(rl);
-		if (stru->tokens != NULL)
-		{
-			if (ft_valid_syntax(stru->tokens) != -1)
-				ft_type_token(stru->commande, stru->tokens);
-		}
-	}
-	//free_args(stru->tokens->args);
-	free_tokens(stru->tokens);
-	rl_clear_history (); // pas oublier dans le exit et controle C 
-    return (0);
-	
-} */
-
 int main(int argc, char **argv, char **env)
 {
     char        *rl;
@@ -286,7 +203,7 @@ int main(int argc, char **argv, char **env)
         if (*rl)
             add_history(rl);
 
-        // Free old tokens before parsing new line
+		// free les anciens tokens avant de parse la nouvelle ligne
         free_tokens(stru->tokens);
         stru->tokens = NULL;
 
@@ -298,24 +215,23 @@ int main(int argc, char **argv, char **env)
 
         stru->tokens->args = args_from_tokens(stru->tokens);
 
-        // DEBUG: print tokens
         t_tokens *tmp = stru->tokens;
         while (tmp)
-        {
-        //    printf("%s\n", tmp->str);
             tmp = tmp->next;
-        }
 
-        // Variable handling
+        // Variables
         if (stru->tokens->args[0] && is_local_var(stru->tokens->args[0]))
 		{
 			k = 0;
 			while (stru->tokens->args[k] && is_local_var(stru->tokens->args[k]))
 			{
-				
+				local = create_local_var(stru->tokens->args[k], local);
+				k++;
 			}
+			free_tokens(stru->tokens);
+			stru->tokens = NULL;
+			continue ;
 		}
-		
 
         i = 0;
         while (stru->tokens->args[i])
@@ -340,7 +256,7 @@ int main(int argc, char **argv, char **env)
         else if (ft_strncmp(stru->tokens->args[0], "unset", 5) == 0)
             ft_unset(stru, stru->tokens->args);
         else if (ft_strncmp(stru->tokens->args[0], "export", 5) == 0)
-            ft_export(stru->tokens->args, stru->environ, local);
+            ft_export(stru->tokens->args, &stru->environ, local);
 
         // Syntax check
         if (ft_valid_syntax(stru->tokens) != -1)

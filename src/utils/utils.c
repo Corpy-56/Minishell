@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:21:04 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/15 16:57:43 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/20 12:22:27 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,21 +77,31 @@ void	free_tokens(t_tokens *token)
 
 bool	is_local_var(char *s)
 {
-	  int i;
+	int	i;
 
-    if (!s || !s[0]) 
-		return false;
-    // NAME must start with letter or _
-    if (!(isalpha(s[0]) || s[0] == '_')) 
-		return false;
-    i = 1;
-    // rest of NAME: letters, digits, _
+	if (!s || !s[0])
+		return (false);
+	if (!(isalpha(s[0]) || s[0] == '_'))
+		return (false);
+	i = 1;
 	while (s[i] && s[i] != '=')
 	{
 		if (!(isalnum((unsigned char)s[i]) || s[i] == '_'))
-			return false;
-        i++;
+			return (false);
+		i++;
 	}
-    // must actually contain '='
-    return (s[i] == '=');
+	return (s[i] == '=');
+}
+
+void	free_env(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env && env[i])
+	{
+		free(env);
+		i++;
+	}
+	free(env);
 }

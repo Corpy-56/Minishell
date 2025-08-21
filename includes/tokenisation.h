@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/13 18:39:34 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/20 18:31:18 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ typedef struct s_cmd
 
 typedef struct s_env
 {
-	char			*str; //KEY=value
+	char			*str;
 	int				i;
 	char			*name;
 	char			*value;

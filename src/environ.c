@@ -6,36 +6,52 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:52:31 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/31 14:03:14 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/21 16:58:43 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+t_env	*create_env_node(char *str)
+{
+	t_env	*new;
+	char	*equal;
+
+	new = ft_calloc(sizeof(t_env), 1);
+	if (!new)
+		return (NULL);
+	equal = ft_strchr(str, '=');
+	new->str = ft_strdup(str);
+	if (equal)
+	{
+		new->name = ft_substr(str, 0, equal - str);
+		new->value = ft_strdup(equal + 1);
+	}
+	else
+	{
+		new->name = ft_strdup(str);
+		new->value = NULL;
+	}
+	new->next = NULL;
+	return (new);
+}
+
 t_env	*ft_duplicate_env(char **env)
 {
 	int	i;
 
-	auto t_env * fin = NULL, *a_debut = NULL, *environ = NULL;
+	auto t_env * fin = NULL, *a_debut = NULL, *new;
 	i = 0;
 	while (env[i])
 	{
-		environ = ft_calloc(1, sizeof(t_env));
-		if (environ == NULL)
+		new = create_env_node(env[i]);
+		if (!new)
 			return (NULL);
-		environ->i = i;
-		environ->str = ft_strdup(env[i]);
-		environ->next = NULL;
 		if (a_debut == NULL)
-		{
-			a_debut = environ;
-			fin = environ;
-		}
+			a_debut = new;
 		else
-		{
-			fin->next = environ;
-			fin = environ;
-		}
+			fin->next = new;
+		fin = new;
 		i++;
 	}
 	return (a_debut);
