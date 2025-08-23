@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:09:43 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/21 17:00:56 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/23 17:37:41 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	move_var_to_env(t_env **env, t_env **local, t_env *var)
 	else
 		*local = current->next;
 	current->next = NULL;
+	current->exported = 1;
 	last = *env;
 	if (!last)
 		*env = current;
@@ -68,10 +69,12 @@ void	move_var_to_env(t_env **env, t_env **local, t_env *var)
 
 t_env	*create_local_var(char *args, t_env *local)
 {
-	char	*name = NULL;
-	char	*value = NULL;
+	char	*name;
+	char	*value;
 	t_env	*var;
 
+	name = NULL;
+	value = NULL;
 	parse_args(args, &name, &value);
 	if (!is_local_var(args) && !check_valid_var(name))
 	{
@@ -81,7 +84,7 @@ t_env	*create_local_var(char *args, t_env *local)
 	}
 	var = find_var(local, name);
 	if (var)
-		update_value(var, value);
+		update_value(var, ft_strdup(value));
 	else
 		local = add_to_list(local, name, value);
 	free(name);
@@ -120,6 +123,7 @@ char	*expand_var(char *args, t_env *env, t_env *local)
 	char	*name;
 	char	*value;
 	size_t	len_str;
+	char tmp[2];
 
 	i = 0;
 	str = ft_strdup("");
@@ -128,7 +132,8 @@ char	*expand_var(char *args, t_env *env, t_env *local)
 	{
 		if (args[i] != '$')
 		{
-			auto char tmp[2] = {args[i], '\0'};
+			tmp[0] = args[i];
+			tmp[1] = '\0';
 			str = ft_strjoin_free(str, ft_strdup(tmp));
 			i++;
 			continue ;

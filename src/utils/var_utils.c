@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 12:32:05 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/21 16:59:36 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/23 18:02:56 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ t_env	*find_var(t_env *env, char *name)
 	return (NULL);
 }
 
-void	update_value(t_env *var, char *new_value)
+/* void	update_value(t_env *var, char *new_value)
 {
 	char	*tmp_str;
 
@@ -82,6 +82,28 @@ void	update_value(t_env *var, char *new_value)
 	else
 		var->value = NULL;
 	free(var->str);
+	if (var->value)
+	{
+		tmp_str = ft_strjoin(var->name, "=");
+		var->str = ft_strjoin(tmp_str, new_value);
+	}
+	else
+		var->str = ft_strdup(var->name);
+} */
+
+void	update_value(t_env *var, char *new_value)
+{
+	char	*tmp_str;
+	char	*dup_val;
+	char	*new_str;
+
+	if (new_value)
+	{
+		dup_val = ft_strdup(new_value);
+		if (!dup_val)
+			return ;
+	}
+	free(var->value);
 	if (var->value)
 	{
 		tmp_str = ft_strjoin(var->name, "=");

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 11:51:21 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/21 16:59:10 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/23 17:35:53 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ void	print_exported_var(t_env *env)
 	current = env;
 	while (current)
 	{
-		if (current->str)
-			printf("export %s\n", current->str);
+		if (current->value)
+			printf("export %s=\"%s\"\n", current->name, current->value);
 		current = current->next;
 	}
 }
@@ -59,7 +59,7 @@ t_env	*add_to_env(t_env *env, char *name, char *value, int exported)
 	return (env);
 }
 
-int	ft_export(char **args, t_env **env, t_env *local)
+int	ft_export(char **args, t_env **env, t_env **local)
 {
 	int		i;
 	char	*name;
@@ -88,19 +88,20 @@ int	ft_export(char **args, t_env **env, t_env *local)
 			update_value(var, value);
 		else
 		{
-			var = find_var(local, name);
+			var = find_var(*local, name);
 			if (var)
 			{
 				mark_exported(var);
-				move_var_to_env(env, &local, var);
+				move_var_to_env(env, local, var);
 				if (value)
 					update_value(var, value);
 				update_str(var);
 			}
 			else
-				add_to_env(*env, name, value, 1);
+				*env = add_to_env(*env, name, value, 1);
 		}
 		free(name);
+		free(value);
 		i++;
 	}
 	return (0);
