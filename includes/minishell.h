@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/23 17:35:37 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/27 16:28:16 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int			ft_cd(char **args);
 int			ft_unset(t_shell *stru, char **args);
 //int			ft_export(char **args);
 int			ft_export(char **args, t_env **env, t_env **local);
+
 
 
 //main
@@ -69,14 +70,15 @@ t_env		*create_env_node(char *str);
 t_env		*init_env(char **env);
 
 
-
 //variables
 t_env		*add_to_list(t_env *local, char *name, char *value);
-//t_env		*create_local_var(char **args, t_env *local);
 t_env		*create_local_var(char *args, t_env *local);
-char		*expand_var(char *args, t_env *env, t_env *local);
+//char		*expand_var(char *args, t_env *env, t_env *local);
+char		*expand_var(char *args, t_shell *stru);
 void		move_var_to_env(t_env **env, t_env **local, t_env *var);
-
+int			is_assignment_word(const char *str);
+int		main_variables(t_shell *stru);
+void		main_expand(t_shell *stru);
 
 
 

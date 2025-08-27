@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/23 16:59:16 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/25 14:28:04 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct s_shell
 	t_tokens	*tokens;
 	t_env		*environ;
 	t_env		*local;
+	int			last_status;
 }				t_shell;
 
 #endif

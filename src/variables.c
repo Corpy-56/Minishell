@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:09:43 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/23 17:37:41 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/27 19:02:43 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,27 @@ t_env	*add_to_list(t_env *local, char *name, char *value)
 	return (local);
 }
 
+static void	move_var_to_env2(t_env **env, t_env *current)
+{
+	t_env	*last;
+
+	current->next = NULL;
+	current->exported = 1;
+	last = *env;
+	if (!last)
+		*env = current;
+	else
+	{
+		while (last->next)
+			last = last->next;
+		last->next = current;
+	}
+}
+
 void	move_var_to_env(t_env **env, t_env **local, t_env *var)
 {
 	t_env	*prev;
 	t_env	*current;
-	t_env	*last;
 
 	prev = NULL;
 	current = *local;
@@ -54,18 +70,29 @@ void	move_var_to_env(t_env **env, t_env **local, t_env *var)
 		prev->next = current->next;
 	else
 		*local = current->next;
-	current->next = NULL;
-	current->exported = 1;
-	last = *env;
-	if (!last)
-		*env = current;
-	else
+	move_var_to_env2(env, current);
+}
+
+int	is_assignment_word(const char *str)
+{
+	const char	*next;
+	const char	*eq_sign;
+
+	eq_sign = ft_strchr(str, '=');
+	if (!eq_sign || eq_sign == str)
+		return (0);
+	if (!ft_isalpha(*str) && *str != '_')
+		return (0);
+	next = str + 1;
+	while (next < eq_sign)
 	{
-		while (last->next)
-			last = last->next;
-		last->next = current;
+		if (!ft_isalnum(*next) && *next != '_')
+			return (0);
+		next++;
 	}
-}	
+	return (1);
+}
+
 
 t_env	*create_local_var(char *args, t_env *local)
 {
@@ -76,8 +103,9 @@ t_env	*create_local_var(char *args, t_env *local)
 	name = NULL;
 	value = NULL;
 	parse_args(args, &name, &value);
-	if (!is_local_var(args) && !check_valid_var(name))
+	if (!is_assignment_word(args))
 	{
+		printf("bash: '%s': command not found\n", args);
 		free(name);
 		free(value);
 		return (local);
@@ -92,70 +120,30 @@ t_env	*create_local_var(char *args, t_env *local)
 	return (local);
 }
 
-char	*get_env_value(t_env *env, char *name)
-{
-	t_env	*current;
 
-	if (!env || !name)
-		return (NULL);
-	current = env;
-	while (current)
-	{
-		if (!current->name)
-			return (NULL);
-		if (ft_strcmp(current->name, name) == 0)
-		{
-			if (current->value)
-				return (ft_strdup(current->value));
-			else
-				return (ft_strdup(""));
-		}
-		current = current->next;
-	}
-	return (NULL);
-}
-
-char	*expand_var(char *args, t_env *env, t_env *local)
+int	main_variables(t_shell *stru)
 {
-	size_t	i;
-	size_t	start;
-	char	*str;
-	char	*name;
-	char	*value;
-	size_t	len_str;
-	char tmp[2];
+	int		i;
 
 	i = 0;
-	str = ft_strdup("");
-	len_str = ft_strlen(args);
-	while (i < len_str)
+	if (stru->tokens->args[0] && is_assignment_word(stru->tokens->args[0]))
 	{
-		if (args[i] != '$')
+		while (stru->tokens->args[i]
+			&& is_assignment_word(stru->tokens->args[i]))
 		{
-			tmp[0] = args[i];
-			tmp[1] = '\0';
-			str = ft_strjoin_free(str, ft_strdup(tmp));
+			stru->local = create_local_var(stru->tokens->args[i], stru->local);
 			i++;
-			continue ;
 		}
-		i++;
-		start = i;
-		while ((i < len_str && ft_isalnum(args[i])) || args[i] == '_')
-			i++;
-		if (i == start)
+		if (stru->tokens->args[i] == NULL)
 		{
-			str = ft_strjoin_free(str, ft_strdup("$"));
-			continue ;
+			free_tokens(stru->tokens);
+			stru->tokens = NULL;
+			return (1);
 		}
-		name = ft_substr(args, start, i - start);
-		value = get_env_value(env, name);
-		if (!value && local)
-			value = get_env_value(local, name);
-		if (!value)
-			value = ft_strdup("");
-		str = ft_strjoin_free(str, value);
-		free(name);
 	}
-	return (str);
+	return (0);
 }
+
+
+
 

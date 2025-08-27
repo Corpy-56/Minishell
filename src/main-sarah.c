@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/08/23 16:15:12 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/27 16:32:16 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,8 +184,7 @@ int main(int argc, char **argv, char **env)
 {
     char        *rl;
     t_shell     *stru;
-    t_env       *local = NULL;
-    auto int         i, k;
+	int			status;
 
     (void)argc;
     (void)argv;
@@ -219,45 +218,27 @@ int main(int argc, char **argv, char **env)
         while (tmp)
             tmp = tmp->next;
 
-        // Variables
-        if (stru->tokens->args[0] && is_local_var(stru->tokens->args[0]))
-		{
-			k = 0;
-			while (stru->tokens->args[k] && is_local_var(stru->tokens->args[k]))
-			{
-				local = create_local_var(stru->tokens->args[k], local);
-				k++;
-			}
-			free_tokens(stru->tokens);
-			stru->tokens = NULL;
+		if (main_variables(stru) == 1)
 			continue ;
-		}
-
-        i = 0;
-        while (stru->tokens->args[i])
-        {
-            char *expanded = expand_var(stru->tokens->args[i], stru->environ, local);
-			if (expanded != stru->tokens->args[i])
-            	free(stru->tokens->args[i]);
-            stru->tokens->args[i] = expanded;
-            i++;
-        }
+		main_expand(stru);
 
         // Builtins
         if (ft_strncmp(stru->tokens->args[0], "pwd", 4) == 0)
-            ft_pwd(stru->tokens->args);
+            status = ft_pwd(stru->tokens->args);
         else if (ft_strncmp(stru->tokens->args[0], "cd", 3) == 0)
-            ft_cd(stru->tokens->args);
+            status = ft_cd(stru->tokens->args);
         else if (ft_strncmp(stru->tokens->args[0], "echo", 5) == 0)
-            ft_echo(stru->tokens->args);
+            status = ft_echo(stru->tokens->args);
         else if (ft_strncmp(stru->tokens->args[0], "env", 4) == 0)
-            ft_env(stru->environ);
+            status = ft_env(stru->environ);
         else if (ft_strncmp(stru->tokens->args[0], "exit", 5) == 0)
-            ft_exit(stru->tokens->args);
+            status = ft_exit(stru->tokens->args);
         else if (ft_strncmp(stru->tokens->args[0], "unset", 5) == 0)
-            ft_unset(stru, stru->tokens->args);
+            status = ft_unset(stru, stru->tokens->args);
         else if (ft_strncmp(stru->tokens->args[0], "export", 5) == 0)
-            ft_export(stru->tokens->args, &stru->environ, local);
+			status = ft_export(stru->tokens->args, &stru->environ, &stru->local);
+		stru->last_status = status;
+		
 
         // Syntax check
         if (ft_valid_syntax(stru->tokens) != -1)
@@ -265,4 +246,3 @@ int main(int argc, char **argv, char **env)
     }
     return (0);
 }
-

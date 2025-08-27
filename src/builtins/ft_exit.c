@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:01:37 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/21 17:23:45 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/27 19:17:48 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static int	is_overflowing(long res, long neg, long digit)
 	else
 		return (res > (-(LONG_MIN + digit)) / 10);
 }
-
 int	str_to_long(const char *str, long *out)
 {
 	int			i;
@@ -48,6 +47,8 @@ int	str_to_long(const char *str, long *out)
 		res = res * 10 + digit;
 		i++;
 	}
+	// if (str_is_digit(str, i, neg))
+	// 	return 0;
 	if (str[i])
 		return (1);
 	*out = res * neg;
@@ -56,12 +57,12 @@ int	str_to_long(const char *str, long *out)
 
 int	ft_exit(char **args)
 {
-	long	result;
+	long	out;
 
 	printf("exit\n");
 	if (!args[1])
 		exit(0);
-	if (str_to_long(args[1], &result))
+	if (str_to_long(args[1], &out))
 	{
 		printf("bash: exit: %s: numeric argument required\n", args[1]);
 		exit(2);
@@ -71,7 +72,7 @@ int	ft_exit(char **args)
 		printf("bash: exit: too many arguments\n");
 		return (1);
 	}
-	exit(result % 256);
+	exit(out % 256);
 	return (0);
 }
 

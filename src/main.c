@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/08/23 17:34:50 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/27 17:47:56 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,9 +256,9 @@ t_cmd	*ft_type_token(t_cmd *commande, t_tokens *b_debut)
 	i = 0;
 	a_debut = NULL;
 	fin = NULL;
-	commande = ft_calloc(sizeof(t_cmd), 1);
-	if (commande == NULL)
-		return (NULL);// faire une vrai sorti
+	// commande = ft_calloc(sizeof(t_cmd), 1);
+	// if (commande == NULL)
+	// 	return (NULL);// faire une vrai sorti
 	p_actuel = b_debut;
 	while (p_actuel)
 	{
@@ -312,24 +312,26 @@ int	ft_valid_syntax(t_tokens *token)
 
 void	ft_test_bultins(t_cmd *commande, t_shell *stru)
 {
-	pid_t	pid;
-	//t_env	*local = NULL;
+	//pid_t	pid;
+	int			status;
 
+	status = 0;
 	if (ft_strncmp(commande->cmd, "pwd", 4) == 0)
-		ft_pwd(stru->tokens->args);
+		status = ft_pwd(commande->args);
 	else if (ft_strncmp(commande->cmd, "cd", 3) == 0)
-		ft_cd(commande->args);
+		status = ft_cd(commande->args);
 	else if (ft_strncmp(commande->cmd, "echo", 5) == 0)
-		ft_echo(commande->args);
+		status = ft_echo(commande->args);
 	else if (ft_strncmp(commande->cmd, "env", 4) == 0)
-		ft_env(stru->environ);
+		status = ft_env(stru->environ);
 	else if (ft_strncmp(commande->cmd, "exit", 5) == 0)
-		ft_exit(commande->args);
+		status = ft_exit(commande->args);
 	else if (ft_strncmp(commande->cmd, "unset", 5) == 0)
-		ft_unset(stru, commande->args);
+		status = ft_unset(stru, commande->args);
 	else if (ft_strncmp(commande->cmd, "export", 5) == 0)
-            ft_export(commande->args, &stru->environ, &stru->local);
-	else if (ft_strncmp(commande->cmd, "./", 2) == 0 || ft_strncmp(commande->cmd, "/", 1) == 0 )
+        status = ft_export(commande->args, &stru->environ, &stru->local);
+	stru->last_status = status;
+	/* else if (ft_strncmp(commande->cmd, "./", 2) == 0 || ft_strncmp(commande->cmd, "/", 1) == 0 )
 	{
 		pid = fork();
 		if (pid == -1)
@@ -344,7 +346,7 @@ void	ft_test_bultins(t_cmd *commande, t_shell *stru)
 			wait(NULL);
 			return ;
 		}
-	}// faut faire des gosses sinon on remplace le processus
+	} */// faut faire des gosses sinon on remplace le processus
 	//sinon tu fais une fonction qui execute si seulement ls sinon message derreur 
 }
 
@@ -358,6 +360,21 @@ void	ft_on_exect(t_cmd *commande, t_shell *stru)
 		if (commande->cmd != NULL)
 			ft_test_bultins(commande, stru);//on peut aussi mettre le exceve
 		a_debut = a_debut->next;
+	}
+}
+void	command_expand(t_cmd *cmd, t_shell *stru)
+{
+	char	*expanded;
+	int		i;
+	
+	i = 0;
+	while (cmd->args[i])
+	{
+		expanded = expand_var(cmd->args[i], stru);
+		if (expanded != cmd->args[i])
+			free(cmd->args[i]);
+		cmd->args[i] = expanded;
+		i++;
 	}
 }
 
@@ -387,46 +404,25 @@ int main(int argc, char **argv, char **env)
 		if (!stru->tokens)
 			continue ;
 		stru->tokens->args = args_from_tokens(stru->tokens);
-
-		//varaibles
-		if (stru->tokens->args[0] && is_local_var(stru->tokens->args[0]))
-		{
-			int k = 0;
-			while (stru->tokens->args[k] && is_local_var(stru->tokens->args[k]))
-			{
-				stru->local = create_local_var(stru->tokens->args[k], stru->local);
-				k++;
-			}
-			free_tokens(stru->tokens);
-			stru->tokens = NULL;
+		if (main_variables(stru) == 1)
 			continue ;
-		}
-		// $
-		int i = 0;
-		while (stru->tokens->args[i])
-		{
-			char *expanded = expand_var(stru->tokens->args[i], stru->environ, stru->local);
-			if (expanded != stru->tokens->args[i])
-				free(stru->tokens->args[i]);
-			stru->tokens->args[i] = expanded;
-			i++;
-		}
-
+	//	main_expand(stru);
 		if (stru->tokens != NULL)
 		{
-			
-
 			if (ft_valid_syntax(stru->tokens) != -1)
 			{
 				stru->commande = ft_type_token(stru->commande, stru->tokens);
+				command_expand(stru->commande, stru);
 				ft_on_exect(stru->commande, stru);
 			}
 		}
-	//	free_args(stru->tokens->args);
-		free_tokens(stru->tokens);
 	}
+	//	free_args(stru->tokens->args);
+	free_tokens(stru->tokens);
 	rl_clear_history ();
-//	free_env(*stru->environ);
+	//	free_env(*stru->environ);
     return (0);
 }
+
+
 

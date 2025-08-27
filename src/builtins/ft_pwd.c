@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:04:02 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/16 16:09:02 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/27 18:14:34 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,9 @@
 int	ft_pwd(char **args)
 {
 	char	*pwd;
+
 	(void)args;
 	pwd = getcwd(NULL, 0);
 	printf("%s\n", pwd);
-	//if (args[1])
-	//free(pwd);
 	return (0);
 }
