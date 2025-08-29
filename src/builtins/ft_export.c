@@ -6,12 +6,11 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 11:51:21 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/27 18:57:44 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/28 15:07:19 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 void	print_exported_var(t_env *env)
 {
@@ -29,10 +28,8 @@ void	print_exported_var(t_env *env)
 t_env	*add_to_env2(t_env *env, char *name, char *value, t_env *new_var)
 {
 	char	*tmp_str;
-	int		exported;
 	t_env	*last;
 
-	exported = 0;
 	if (value)
 	{
 		tmp_str = ft_strjoin(name, "=");
@@ -41,7 +38,6 @@ t_env	*add_to_env2(t_env *env, char *name, char *value, t_env *new_var)
 	}
 	else
 		new_var->str = ft_strdup(name);
-	new_var->exported = exported;
 	new_var->next = NULL;
 	if (!env)
 		return (new_var);
@@ -80,7 +76,6 @@ static void	export2(t_env **env, t_env **local, char *name, char *value)
 		var = find_var(*local, name);
 		if (var)
 		{
-			mark_exported(var);
 			move_var_to_env(env, local, var);
 			if (value)
 				update_value(var, value);

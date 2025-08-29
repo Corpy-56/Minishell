@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/08/27 17:47:56 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/29 16:20:58 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -329,7 +329,7 @@ void	ft_test_bultins(t_cmd *commande, t_shell *stru)
 	else if (ft_strncmp(commande->cmd, "unset", 5) == 0)
 		status = ft_unset(stru, commande->args);
 	else if (ft_strncmp(commande->cmd, "export", 5) == 0)
-        status = ft_export(commande->args, &stru->environ, &stru->local);
+		status = ft_export(commande->args, &stru->environ, &stru->local);
 	stru->last_status = status;
 	/* else if (ft_strncmp(commande->cmd, "./", 2) == 0 || ft_strncmp(commande->cmd, "/", 1) == 0 )
 	{
@@ -352,29 +352,14 @@ void	ft_test_bultins(t_cmd *commande, t_shell *stru)
 
 void	ft_on_exect(t_cmd *commande, t_shell *stru)
 {
-	t_cmd *a_debut;
+	t_cmd	*a_debut;
 
 	a_debut = commande;
-	while(a_debut)
+	while (a_debut)
 	{
 		if (commande->cmd != NULL)
-			ft_test_bultins(commande, stru);//on peut aussi mettre le exceve
+			ft_test_bultins(commande, stru); //on peut aussi mettre le exceve
 		a_debut = a_debut->next;
-	}
-}
-void	command_expand(t_cmd *cmd, t_shell *stru)
-{
-	char	*expanded;
-	int		i;
-	
-	i = 0;
-	while (cmd->args[i])
-	{
-		expanded = expand_var(cmd->args[i], stru);
-		if (expanded != cmd->args[i])
-			free(cmd->args[i]);
-		cmd->args[i] = expanded;
-		i++;
 	}
 }
 
@@ -406,7 +391,7 @@ int main(int argc, char **argv, char **env)
 		stru->tokens->args = args_from_tokens(stru->tokens);
 		if (main_variables(stru) == 1)
 			continue ;
-	//	main_expand(stru);
+		// main_expand(stru);
 		if (stru->tokens != NULL)
 		{
 			if (ft_valid_syntax(stru->tokens) != -1)

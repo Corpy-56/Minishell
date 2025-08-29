@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:01:37 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/27 19:17:48 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/28 15:09:21 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,24 @@
 
 static int	is_overflowing(long res, long neg, long digit)
 {
-	if (neg == 1) // 9223372036854775807 & 9223372036854775808 ok 
+	if (neg == 1)
 		return (res > (LONG_MAX - digit) / 10);
 	else
 		return (res > (-(LONG_MIN + digit)) / 10);
 }
+
+static void	str_not_digit(const char *str, long neg, int i)
+{
+	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
+		i++;
+	if (str[i] == '+' || str[i] == '-')
+	{
+		if (str[i] == '-')
+			neg = -1;
+		i++;
+	}
+}
+
 int	str_to_long(const char *str, long *out)
 {
 	int			i;
@@ -29,14 +42,7 @@ int	str_to_long(const char *str, long *out)
 	i = 0;
 	neg = 1;
 	res = 0;
-	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
-		i++;
-	if (str[i] == '+' || str[i] == '-')
-	{
-		if (str[i] == '-')
-			neg = -1;
-		i++;
-	}
+	str_not_digit(str, neg, i);
 	if (!str[i])
 		return (1);
 	while (str[i] >= '0' && str[i] <= '9')
@@ -47,8 +53,6 @@ int	str_to_long(const char *str, long *out)
 		res = res * 10 + digit;
 		i++;
 	}
-	// if (str_is_digit(str, i, neg))
-	// 	return 0;
 	if (str[i])
 		return (1);
 	*out = res * neg;
@@ -75,4 +79,3 @@ int	ft_exit(char **args)
 	exit(out % 256);
 	return (0);
 }
-

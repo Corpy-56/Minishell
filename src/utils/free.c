@@ -1,27 +1,52 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_env.c                                           :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/11 11:07:01 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/28 10:16:29 by skuor            ###   ########.fr       */
+/*   Created: 2025/08/28 14:50:57 by skuor             #+#    #+#             */
+/*   Updated: 2025/08/28 14:51:31 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_env(t_env *env)
+void	free_env(char **env)
 {
-	t_env	*tmp;
+	int	i;
 
-	tmp = env;
-	while (tmp)
+	i = 0;
+	while (env && env[i])
 	{
-		if (tmp->value)
-			printf("%s=%s\n", tmp->name, tmp->value);
-		tmp = tmp->next;
+		free(env);
+		i++;
 	}
-	return (0);
+	free(env);
+}
+
+void	free_args(char **args)
+{
+	int	i;
+
+	i = 0;
+	while (args[i])
+	{
+		free(args);
+		i++;
+	}
+	free(args);
+}
+
+void	free_tokens(t_tokens *token)
+{
+	t_tokens	*next;
+
+	while (token)
+	{
+		free(token->str);
+		next = token->next;
+		free(token);
+		token = next;
+	}
 }
