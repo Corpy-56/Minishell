@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/08/29 16:20:58 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/08 11:30:20 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -404,7 +404,7 @@ int main(int argc, char **argv, char **env)
 	}
 	//	free_args(stru->tokens->args);
 	free_tokens(stru->tokens);
-	rl_clear_history ();
+	clear_history ();
 	//	free_env(*stru->environ);
     return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sarah <sarah@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:21:04 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/28 15:09:36 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/05 13:13:31 by sarah            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ bool	is_local_var(char *s)
 
 	if (!s || !s[0])
 		return (false);
-	if (!(isalpha(s[0]) || s[0] == '_'))
+	if (!(ft_isalpha(s[0]) || s[0] == '_'))
 		return (false);
 	i = 1;
 	while (s[i] && s[i] != '=')
 	{
-		if (!(isalnum((unsigned char)s[i]) || s[i] == '_'))
+		if (!(ft_isalnum((unsigned char)s[i]) || s[i] == '_'))
 			return (false);
 		i++;
 	}

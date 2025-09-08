@@ -6,7 +6,7 @@
 #    By: skuor <skuor@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/19 10:10:18 by skuor             #+#    #+#              #
-#    Updated: 2025/08/14 14:06:07 by skuor            ###   ########.fr        #
+#    Updated: 2025/09/08 11:56:03 by skuor            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,6 +87,6 @@ clean:
 fclean: clean
 	@rm -rf $(NAME)
 
-re: fclean all
+re: fclean clean all
 
 .PHONY: clean fclean all re

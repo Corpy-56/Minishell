@@ -6,7 +6,7 @@
 #    By: skuor <skuor@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/08 16:18:45 by skuor             #+#    #+#              #
-#    Updated: 2025/08/29 16:13:10 by skuor            ###   ########.fr        #
+#    Updated: 2025/09/08 11:50:10 by skuor            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ UTILS_FILES = utils.c utils_var.c utils_expan.c utils_token.c free.c
 
 OBJ = 	$(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o)) \
 		$(addprefix $(OBJ_DIR), $(BLTINS_FILES:.c=.o)) \
-		$(addprefix $(OBJ_DIR), $(UTILS_FILES:.c=.o)) \
+		$(addprefix $(OBJ_DIR), $(UTILS_FILES:.c=.o))
 
 INC_H = -I $(INC_DIR) -I $(LIBFT_DIR)/includes/
 
@@ -42,6 +42,7 @@ $(NAME): $(OBJ)
 	@$(CC) $(CFLAGS) $(INC_H) $(OBJ) -L$(LIBFT_DIR) -lft -lreadline -o $(NAME)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJ_DIR)
+#	@echo "Compiling $<"
 	@$(CC) $(CFLAGS) $(INC_H) -c -o $@ $<
 
 $(OBJ_DIR)%.o: $(BLTINS_DIR)%.c | $(OBJ_DIR)

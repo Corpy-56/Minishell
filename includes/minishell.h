@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/29 15:30:13 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/06 18:36:32 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <unistd.h>
 # include <stdbool.h>
 # include <limits.h>
+# include <sys/stat.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -79,6 +80,8 @@ t_tokens	*ft_creat_token(char *temp);
 void		free_args(char **args);
 void		free_tokens(t_tokens *token);
 void		free_env(char **env);
+void		free_split(char **to_free);
+
 
 #endif
 
