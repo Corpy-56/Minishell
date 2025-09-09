@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_token.c                                      :+:      :+:    :+:   */
+/*   tokens_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/29 15:23:24 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/09 14:21:15 by skuor            ###   ########.fr       */
+/*   Created: 2025/09/08 16:51:06 by agouin            #+#    #+#             */
+/*   Updated: 2025/09/08 16:54:29 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,42 +25,20 @@ int	count_tokens(t_tokens *token)
 	return (count);
 }
 
-char	**args_from_tokens(t_tokens *token)
+int	white_space(char *str, int i)
 {
-	int		i;
-	int		count;
-	char	**args;
-
-	i = 0;
-	count = count_tokens(token);
-	args = malloc(sizeof(char *) * (count + 1));
-	if (!args)
-		return (NULL);
-	while (token)
+	while (str[i] != '\0' && (str[i] == 32 || str[i] == 9))
 	{
-		args[i] = ft_strdup(token->str);
+		if (i != 0 && str[i] == '$' && (str[i - 1] != 32 || str[i - 1] != 9))
+			i++;
 		i++;
-		token = token->next;
 	}
-	args[i] = NULL;
-	return (args);
+	if (str[i] != 32 && str[i] != 9 && str[i] != '\0')
+		return (i);
+	else if (str[i] == '\0')
+		return (-1);
+	return (0);
 }
-
-// t_tokens	*ft_creat_token(char *temp)
-// {
-// 	t_tokens	*token;
-
-// 	token = ft_calloc(sizeof(t_tokens), 1);
-// 	if (!token)
-// 		return (NULL);
-// 	if (temp)
-// 		token->str = ft_strdup(temp);
-// 	else
-// 		token->str = NULL;
-// 	token->next = NULL;
-// 	return (token);
-// }
-
 
 void	ft_quote(char *rl, int i)
 {
@@ -120,4 +98,23 @@ char	*ft_strjoin_char(char *str, const char c)
 	return (joined);
 }
 
+char	**args_from_tokens(t_tokens *token)
+{
+	int		i;
+	int		count;
+	char	**args;
 
+	i = 0;
+	count = count_tokens(token);
+	args = malloc(sizeof(char *) * (count + 1));
+	if (!args)
+		return (NULL);
+	while (token)
+	{
+		args[i] = ft_strdup(token->str);
+		i++;
+		token = token->next;
+	}
+	args[i] = NULL;
+	return (args);
+}

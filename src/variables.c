@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:09:43 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/29 15:21:43 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/09 14:28:53 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ t_env	*create_local_var(char *args, t_env *local)
 	name = NULL;
 	value = NULL;
 	parse_args(args, &name, &value);
-	if (!is_assignment_word(args))
+	if (is_assignment_word(args))
 	{
 		printf("bash: '%s': command not found\n", args);
 		free(name);

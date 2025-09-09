@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/06 18:36:32 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/09 14:15:35 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,13 @@ void		command_expand(t_cmd *cmd, t_shell *stru);
 //utils_token
 int			count_tokens(t_tokens *token);
 char		**args_from_tokens(t_tokens *token);
-t_tokens	*ft_creat_token(char *temp);
+int			count_tokens(t_tokens *token);
+// t_tokens	*ft_creat_token(char *temp);
+void		ft_quote(char *rl, int i);
+char		*ft_strjoin_char(char *str, const char c);
+t_tokens	*ft_creat_token(char *rl, int i);
+
+
 
 //free
 void		free_args(char **args);

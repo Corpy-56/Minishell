@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/08 11:30:20 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/09 15:34:52 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -382,7 +382,7 @@ int main(int argc, char **argv, char **env)
 			exit(0);//besoin dune fonction pour free
 		if (*rl)
 			add_history(rl);
-		free_tokens(stru->tokens);
+	//	free_tokens(stru->tokens);
         stru->tokens = NULL;
 		stru->tokens = ft_tokenisation(rl, stru->tokens);
 		free(rl);
@@ -391,20 +391,20 @@ int main(int argc, char **argv, char **env)
 		stru->tokens->args = args_from_tokens(stru->tokens);
 		if (main_variables(stru) == 1)
 			continue ;
-		// main_expand(stru);
+		main_expand(stru);
 		if (stru->tokens != NULL)
 		{
 			if (ft_valid_syntax(stru->tokens) != -1)
 			{
 				stru->commande = ft_type_token(stru->commande, stru->tokens);
-				command_expand(stru->commande, stru);
+				// command_expand(stru->commande, stru);
 				ft_on_exect(stru->commande, stru);
 			}
 		}
 	}
 	//	free_args(stru->tokens->args);
 	free_tokens(stru->tokens);
-	clear_history ();
+	clear_history();
 	//	free_env(*stru->environ);
     return (0);
 }

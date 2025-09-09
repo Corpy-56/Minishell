@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exp_utils.c                                        :+:      :+:    :+:   */
+/*   utils_expan.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 14:47:22 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/28 14:55:15 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/09 15:31:35 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,18 +55,18 @@ int	is_assignment_word(const char *str)
 	return (1);
 }
 
-void	command_expand(t_cmd *cmd, t_shell *stru)
-{
-	char	*expanded;
-	int		i;
+// void	command_expand(t_cmd *cmd, t_shell *stru)
+// {
+// 	char	*expanded;
+// 	int		i;
 
-	i = 0;
-	while (cmd->args[i])
-	{
-		expanded = expand_var(cmd->args[i], stru);
-		if (expanded != cmd->args[i])
-			free(cmd->args[i]);
-		cmd->args[i] = expanded;
-		i++;
-	}
-}
+// 	i = 0;
+// 	while (cmd->args[i])
+// 	{
+// 		expanded = expand_var(cmd->args[i], stru);
+// 		if (expanded != cmd->args[i])
+// 			free(cmd->args[i]);
+// 		cmd->args[i] = expanded;
+// 		i++;
+// 	}
+// }

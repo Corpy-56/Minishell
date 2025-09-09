@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/28 15:08:41 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/09 14:01:47 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_tokens
 {
 	char			*str;
 	char			**args;
+	int				dollars;
 	int				type_i;
 	struct s_tokens	*next;	
 }					t_tokens;

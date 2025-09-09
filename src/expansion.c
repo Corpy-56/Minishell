@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 18:16:15 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/28 15:09:56 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/09 15:37:45 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,36 +67,64 @@ char	*expand_var(char *args, t_shell *stru)
 	len_str = ft_strlen(args);
 	while (i < len_str)
 	{
-		if (args[i] != '$')
+		if (args[i] == '$' && stru->tokens->dollars == 1)
 		{
+			if (i + 1 < len_str && args[i + 1] == '?')
+			{
+				expand_exit_status(stru, &str);
+				i += 2;
+			}
+			else
+			{
+				i++;
+				i = expand_var2(stru, args, i, &str);
+			}
+		}
+		else
+		{
+			// Ajouter le caractère tel quel
 			no_expansion(args, &str, i);
 			i++;
-			continue ;
 		}
-		if (i + 1 < len_str && args[i + 1] == '?')
-		{
-			expand_exit_status(stru, &str);
-			i += 2;
-			continue ;
-		}
-		i++;
-		i = expand_var2(stru, args, i, &str);
+		// else
+		// {
+		// 	// Ajouter le caractère tel quel
+		// 	char tmp[2] = {args[i], '\0'};
+		// 	str = ft_strjoin_free(str, ft_strdup(tmp));
+		// 	i++;
+		// }
 	}
 	return (str);
 }
 
-void	main_expand(t_shell *stru)
+// void	main_expand(t_shell *stru)
+// {
+// 	char	*expanded;
+// 	int		j;
+
+// 	j = 0;
+// 	while (stru->tokens->args[j])
+// 	{
+// 		expanded = expand_var(stru->tokens->args[j], stru);
+// 		// if (expanded != stru->tokens->args[j])
+// 		// 	free(stru->tokens->args[j]);
+// 		stru->tokens->args[j] = expanded;
+// 		j++;
+// 	}
+// }
+
+void	main_expand(t_shell *str)
 {
 	char	*expanded;
-	int		j;
+	t_shell *stru;
 
-	j = 0;
-	while (stru->tokens->args[j])
+	stru = str;
+	while (stru->tokens)
 	{
-		expanded = expand_var(stru->tokens->args[j], stru);
-		if (expanded != stru->tokens->args[j])
-			free(stru->tokens->args[j]);
-		stru->tokens->args[j] = expanded;
-		j++;
+		expanded = expand_var(stru->tokens->str, stru);
+		// if (expanded != stru->tokens->args[j])
+		// 	free(stru->tokens->args[j]);
+		stru->tokens->str = expanded;
+		stru->tokens = stru->tokens->next;
 	}
 }
