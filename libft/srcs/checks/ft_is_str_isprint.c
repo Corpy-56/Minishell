@@ -1,25 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   checks.h                                           :+:      :+:    :+:   */
+/*   ft_is_str_isprint.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/11 15:24:01 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/11 11:08:42 by skuor            ###   ########.fr       */
+/*   Created: 2025/05/05 11:32:53 by skuor             #+#    #+#             */
+/*   Updated: 2025/09/10 14:12:40 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CHECKS_H
-# define CHECKS_H
+#include "libft.h"
 
-int		ft_is_str_isprint(char *str);
-int		ft_isalpha(int i);
-int		ft_isdigit(int i);
-int		ft_isalnum(int i);
-int		ft_isascii(int i);
-int		ft_isprint(int i);
-int		is_space(char ws);
-bool	is_sign(char c);
+int	ft_is_str_isprint(char *str)
+{
+	int	i;
+	int	j;
 
-#endif
+	j = 1;
+	i = 0;
+	while (str[i] && j == 1)
+	{
+		j = ft_isprint(str[i]);
+		i++;
+	}
+	if (j == 1)
+		return (1);
+	return (0);
+}

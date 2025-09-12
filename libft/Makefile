@@ -6,7 +6,7 @@
 #    By: skuor <skuor@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/19 10:10:18 by skuor             #+#    #+#              #
-#    Updated: 2025/09/08 11:56:03 by skuor            ###   ########.fr        #
+#    Updated: 2025/09/11 11:09:01 by skuor            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ LINKED_LIST_DIR = $(addprefix $(SRC_DIR), linked_list/)
 MEMORY_DIR = $(addprefix $(SRC_DIR), memory/)
 STRINGS_DIR = $(addprefix $(SRC_DIR), strings/)
 
-CHECKS_FILES =	ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c is_sign.c ft_isspace.c
+CHECKS_FILES =	ft_is_str_isprint.c ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c is_sign.c ft_isspace.c
 
 CONVERSION_FILES = ft_toupper.c ft_tolower.c ft_atoi.c ft_itoa.c ft_atol.c
 

@@ -1,0 +1,173 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_type_token.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/10 13:56:23 by agouin            #+#    #+#             */
+/*   Updated: 2025/09/10 15:08:57 by agouin           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+#include <fcntl.h>
+#include <signal.h>
+#include <sys/wait.h>
+
+t_tokens	*ft_test_stdout(t_cmd *cmd, t_tokens *p_temp)
+{
+	t_tokens	*p_a;
+
+	p_a = p_temp;
+	if (ft_strncmp(p_a->str, ">", 2) == 0)
+	{
+		if (cmd->fd_out_put1 != -2)
+			close(cmd->fd_out_put1);
+		if (p_a->next->str != NULL)
+			cmd->fd_out_put1 = open(p_a->next->str, O_CREAT | O_WRONLY, 0777);
+		if (cmd->fd_out_put1 == -1)
+			ft_error(1, ": Permission denied\n", p_a->next->str);
+	}
+	else if (ft_strncmp(p_a->str, ">>", 3) == 0)
+	{
+		if (cmd->fd_out_put2 != -2)
+			close(cmd->fd_out_put2);
+		if (p_a->next->str != NULL)
+			cmd->fd_out_put2 = open(p_a->next->str, O_CREAT | O_WRONLY, 0777);
+		if (cmd->fd_out_put2 == -1)
+			ft_error(1, ": Permission denied\n", p_a->next->str);
+	}
+	return (p_temp->next);
+}
+
+t_tokens	*ft_test_stdin(t_cmd *commande, t_tokens *p_actuel)
+{
+	int	j;
+
+	j = -2;
+	if (commande->fd_int_put != -2)
+		close(commande->fd_int_put);
+	if (p_actuel->next->str != NULL)
+	{
+		j = access(p_actuel->next->str, F_OK);
+		if (j != 0)
+			ft_error(1, ": No such file or directory\n", p_actuel->next->str);
+		if (j == 0)
+		{
+			j = access(p_actuel->next->str, X_OK);
+			if (j != 0)
+				ft_error(1, ": Permission denied\n", p_actuel->next->str);
+		}
+		if (j == 0)
+			commande->fd_int_put = open(p_actuel->next->str, O_RDONLY, 0777);
+		if (commande->fd_int_put == -1)
+			ft_error(1, ": No such file or directory\n", p_actuel->next->str);
+	}
+	return (p_actuel->next);
+}
+
+t_tokens	*ft_heredoc_lexer(t_tokens *p_actuel, t_cmd *commande)
+{
+	int			i;
+	t_tokens	*a_debut;
+
+	i = 0;
+	a_debut = p_actuel;
+	if (commande->heredoc == NULL)
+	{
+		while (a_debut)
+		{
+			if (ft_strncmp(a_debut->str, "<<", 3) == 0)
+				i++;
+			a_debut = a_debut->next;
+		}
+		commande->heredoc = ft_calloc(sizeof(char *), i + 1);
+		a_debut = p_actuel;
+	}
+	if (a_debut != NULL)
+	{
+		i = 0;
+		while (commande->heredoc[i] != NULL)
+			i++;
+		if (a_debut->next->str != NULL)
+			commande->heredoc[i] = ft_strdup(a_debut->next->str);
+	}
+	return (p_actuel->next);
+}
+
+//void	ft_printf_a_debut(t_cmd *a_debut)// fonction test pour voir si tout cest bien passe (a enlever)
+//{
+//	int	i;
+//	int	j;
+
+//	i = 0;
+//	j = 0;
+//	while (a_debut)
+//	{
+//		i = 0;
+//		if (j > 0)
+//			printf("Changement de pipe\n");
+//		if (a_debut->args != NULL)
+//		{
+//			while (a_debut->args[i])
+//				printf("Argument : %s\n", a_debut->args[i++]);
+//		}
+//		i = 0;
+//		if (a_debut->heredoc != NULL)
+//		{
+//			while (a_debut->heredoc[i])
+//				printf("heredoc : %s\n", a_debut->heredoc[i++]);
+//		}
+//		if (a_debut->fd_int_put > 0)
+//			printf("fd : %d\n", a_debut->fd_int_put);
+//		if (a_debut->fd_out_put2 > 0)
+//			printf("fd : %d\n", a_debut->fd_out_put2);
+//		if (a_debut->fd_out_put1 > 0)
+//			printf("fd : %d\n", a_debut->fd_out_put1);
+//		j++;
+//		a_debut = a_debut->next;
+//	}
+//}
+
+t_tokens	*ft_type_token_2(t_tokens *p_actuel, t_cmd *commande)
+{
+	if (ft_strncmp(p_actuel->str, ">", 1) == 0)
+		p_actuel = ft_test_stdout(commande, p_actuel);
+	else if (ft_strncmp(p_actuel->str, "<", 2) == 0)
+		p_actuel = ft_test_stdin(commande, p_actuel);
+	else if (ft_strncmp(p_actuel->str, "<<", 3) == 0)
+		p_actuel = ft_heredoc_lexer(p_actuel, commande);
+	else if (ft_is_str_isprint(p_actuel->str) == 1
+		&& ft_strncmp(p_actuel->str, "|", 2) != 0)
+		lexer_cmd(commande, p_actuel);
+	return (p_actuel);
+}
+
+t_cmd	*ft_type_token(t_cmd *commande, t_tokens *b_debut)
+{
+	t_tokens	*p_actuel;
+	int			i;
+
+	auto t_cmd * a_debut = NULL, *fin = NULL;
+	i = 0;
+	p_actuel = b_debut;
+	while (p_actuel)
+	{
+		if (i == 0 || ft_strncmp(p_actuel->str, "|", 2) == 0)
+		{
+			commande = ft_creat_token2();
+			if (a_debut == NULL)
+				a_debut = commande;
+			else
+				fin->next = commande;
+			fin = commande;
+			i++;
+		}
+		p_actuel = ft_type_token_2(p_actuel, commande);
+		p_actuel = p_actuel->next;
+	}
+	commande = a_debut;
+	//ft_printf_a_debut(a_debut);
+	return (commande);
+}

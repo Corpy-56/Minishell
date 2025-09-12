@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarah <sarah@student.42.fr>                +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:01:37 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/05 13:12:56 by sarah            ###   ########.fr       */
+/*   Updated: 2025/09/11 11:51:33 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	is_overflowing(long res, long neg, long digit)
 static void	str_not_digit(const char *str, long neg, int i)
 {
 	(void)neg;
-	
+
 	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
 		i++;
 	if (str[i] == '+' || str[i] == '-')

@@ -6,13 +6,13 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/09/08 12:18:55 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/12 16:48:34 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*find_in_path(char *name, char *path_val)
+char	*find_in_path(char *name, t_shell *stru)
 {
 	char	**rep;
 	char	*base;
@@ -21,8 +21,8 @@ char	*find_in_path(char *name, char *path_val)
 	struct stat	info;
 	int		i;
 
-	i = 0;	
-	if (!name || !path_val)
+	i = 0;
+	if (name == NULL || stru->path_dirs == NULL)
 		return (NULL);
 	while (name[i])
 	{
@@ -30,10 +30,10 @@ char	*find_in_path(char *name, char *path_val)
 			return (NULL);
 		i++;
 	}
-	rep = ft_split(path_val, ':');
+	i = 0;
+	rep = stru->path_dirs;
 	if (rep == NULL)
 		return (NULL);
-	i = 0;
 	while (rep[i])
 	{
 		if (rep[i][0] == '\0')
@@ -64,48 +64,48 @@ char	*find_in_path(char *name, char *path_val)
 		{
 			free(chosen_path);
 			i++;
-			continue ;	
+			continue ;
 		}
-		free_split(rep);
+		printf("%s\n", chosen_path);
 		return (chosen_path);
 	}
-	free_split(rep);
 	return (NULL);
 }
 
 void    run_external(t_cmd *cmd, t_shell *stru, char **env)
 {
-    int     pid;
+	int		pid;
 	int		i;
+	int		status;
 	char	*path_val;
 	char	*chosen_path;
-    char    **argv;
+	char	**argv;
 
 	argv = cmd->args;
 	if (argv == NULL || argv[0] == NULL)
 		return ;
-    pid = fork();
+	pid = fork();
 	if (pid < 0)
 	{
 		stru->last_status = 1;
 		return ;
 	}
 	i = 0;
-    if (pid == 0)
-    {
-       	while (argv[i])
+	if (pid == 0)
+	{
+		while (argv[i])
 		{
-			if (argv[i] == '/')
-            	execve(argv[0], argv, env);
+			if (ft_strcmp(argv[i], "/"))
+				execve(argv[0], argv, env);
 			i++;
 		}
 		path_val = get_env_value(stru->environ, "PATH");
-		if (path_val == NULL || path_val == "")
+		if (path_val == NULL)
 		{
 			printf("bash: %s: command not found\n", argv[0]);
 			exit(127);
 		}	
-		chosen_path = find_in_path(argv[0], path_val);
+		chosen_path = find_in_path(argv[0], stru);
 		if (chosen_path)
 			execve(chosen_path, argv, env);
 		else
@@ -113,5 +113,12 @@ void    run_external(t_cmd *cmd, t_shell *stru, char **env)
 			printf("bash: %s: command not found\n", argv[0]);
 			exit(127);
 		}
-    }
+	}
+	else
+	{
+		status = 0;
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			stru->last_status = WEXITSTATUS(status);
+	}
 }

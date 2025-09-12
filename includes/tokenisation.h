@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/09 14:01:47 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/11 18:17:51 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ typedef struct s_cmd
 	int				fd_out_put1;
 	int				fd_out_put2;
 	int				fd_int_put;
-	char			*heredoc;
+	char			**heredoc;
 	struct s_cmd	*next;
 }					t_cmd;
 
@@ -30,6 +30,7 @@ typedef struct s_env
 	int				i;
 	char			*name;
 	char			*value;
+	char			**path;
 	struct s_env	*next;
 }					t_env;
 
@@ -48,6 +49,8 @@ typedef struct s_shell
 	t_tokens	*tokens;
 	t_env		*environ;
 	t_env		*local;
+	t_env		*path_node;
+	char		**path_dirs;
 	int			last_status;
 }				t_shell;
 

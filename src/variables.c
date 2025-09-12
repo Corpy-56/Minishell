@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:09:43 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/09 14:28:53 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/12 10:04:56 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ t_env	*create_local_var(char *args, t_env *local)
 	name = NULL;
 	value = NULL;
 	parse_args(args, &name, &value);
-	if (is_assignment_word(args))
+	if (!is_assignment_word(args))
 	{
 		printf("bash: '%s': command not found\n", args);
 		free(name);
@@ -103,6 +103,30 @@ int	main_variables(t_shell *stru)
 	int		i;
 
 	i = 0;
+	if (stru->commande->args[0] && is_assignment_word(stru->commande->args[0]))
+	{
+		while (stru->commande->args[i]
+			&& is_assignment_word(stru->commande->args[i]))
+		{
+			stru->local = create_local_var(stru->commande->args[i],
+					stru->local);
+			i++;
+		}
+		if (stru->commande->args[i] == NULL)
+		{
+			free(stru->commande);
+			stru->commande = NULL;
+			return (1);
+		}
+	}
+	return (0);
+}
+
+/* int	main_variables(t_shell *stru)
+{
+	int		i;
+
+	i = 0;
 	if (stru->tokens->args[0] && is_assignment_word(stru->tokens->args[0]))
 	{
 		while (stru->tokens->args[i]
@@ -119,4 +143,4 @@ int	main_variables(t_shell *stru)
 		}
 	}
 	return (0);
-}
+} */

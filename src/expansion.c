@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 18:16:15 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/09 15:37:45 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/11 11:52:59 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static void	expand_exit_status(t_shell *stru, char **str)
 	*str = ft_strjoin_free(*str, status_str);
 }
 
-char	*expand_var(char *args, t_shell *stru)
+/* char	*expand_var(char *args, t_shell *stru)
 {
 	size_t	i;
 	char	*str;
@@ -95,6 +95,34 @@ char	*expand_var(char *args, t_shell *stru)
 		// }
 	}
 	return (str);
+} */
+
+char	*expand_var(t_tokens *token, t_shell *stru, size_t i)
+{
+	char	*str;
+	size_t	len_str;
+
+	str = ft_strdup("");
+	len_str = ft_strlen(token->str);
+	while (i < len_str)
+	{
+		if (token->str[i] == '$' && token->dollars >= 1)
+		{
+			if (i + 1 < len_str && token->str[i + 1] == '?')
+			{
+				expand_exit_status(stru, &str);
+				i += 2;
+			}
+			else
+				i = expand_var2(stru, token->str, i + 1, &str);
+		}
+		else
+		{
+			no_expansion(token->str, &str, i);
+			i++;
+		}
+	}
+	return (str);
 }
 
 // void	main_expand(t_shell *stru)
@@ -115,16 +143,18 @@ char	*expand_var(char *args, t_shell *stru)
 
 void	main_expand(t_shell *str)
 {
-	char	*expanded;
-	t_shell *stru;
+	char		*expanded;
+	t_tokens	*token;
+	size_t		i;
 
-	stru = str;
-	while (stru->tokens)
+	token = str->tokens;
+	while (token)
 	{
-		expanded = expand_var(stru->tokens->str, stru);
-		// if (expanded != stru->tokens->args[j])
+		i = 0;
+		expanded = expand_var(token, str, i);
+		//if (expanded != stru->tokens->args[j]) a quoi ca sert
 		// 	free(stru->tokens->args[j]);
-		stru->tokens->str = expanded;
-		stru->tokens = stru->tokens->next;
+		token->str = expanded;
+		token = token->next;
 	}
 }
