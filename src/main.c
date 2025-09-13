@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/12 14:26:56 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/13 18:52:53 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,7 @@
 
 int	ft_test_bultins(t_cmd *commande, t_shell *stru)
 {
-	//pid_t	pid;
-	int			status;
+	int	status;
 
 	status = 0;
 	if (ft_strncmp(commande->cmd, "pwd", 4) == 0)
@@ -145,9 +144,11 @@ int main(int argc, char **argv, char **env)
 			if (ft_valid_syntax(stru->tokens) != -1)
 			{
 				stru->commande = ft_type_token(stru->commande, stru->tokens);
+				// dbg_print_pipeline(stru->commande);
 				if (main_variables(stru) == 1)
 					continue ;
-				ft_on_exect(stru->commande, stru, env);
+				// ft_on_exect(stru->commande, stru, env);
+				exec_cmd_line(stru, env);
 			}
 		}
 	}

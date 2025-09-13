@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/09/12 16:48:34 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/13 19:16:05 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,59 +66,62 @@ char	*find_in_path(char *name, t_shell *stru)
 			i++;
 			continue ;
 		}
-		printf("%s\n", chosen_path);
+		// printf("%s\n", chosen_path);
 		return (chosen_path);
 	}
 	return (NULL);
 }
 
-void    run_external(t_cmd *cmd, t_shell *stru, char **env)
+void	exec_external(t_cmd *cmd, t_shell *stru, char **env)
 {
-	int		pid;
 	int		i;
-	int		status;
-	char	*path_val;
-	char	*chosen_path;
-	char	**argv;
 
-	argv = cmd->args;
+	auto char *path_val, *chosen_path, **argv = cmd->args;
 	if (argv == NULL || argv[0] == NULL)
 		return ;
+	i = -1;
+	while (argv[++i])
+	{
+		if (ft_strcmp(argv[i], "/"))
+			execve(argv[0], argv, env);
+	}
+	path_val = get_env_value(stru->environ, "PATH");
+	if (path_val == NULL)
+	{
+		printf("bash: %s: command not found\n", argv[0]);
+		exit(127);
+	}	
+	chosen_path = find_in_path(argv[0], stru);
+	if (chosen_path)
+		execve(chosen_path, argv, env);
+	else
+	{
+		printf("bash: %s: command not found\n", argv[0]);
+		exit(127);
+	}
+}
+
+void	run_external(t_cmd *cmd, t_shell *stru, char **env)
+{
+	int		pid;
+	int		status;
+	// char	**argv;
+
+	// argv = cmd->args;
+	// if (argv == NULL || argv[0] == NULL)
+	// 	return ;
 	pid = fork();
 	if (pid < 0)
 	{
 		stru->last_status = 1;
 		return ;
 	}
-	i = 0;
 	if (pid == 0)
-	{
-		while (argv[i])
-		{
-			if (ft_strcmp(argv[i], "/"))
-				execve(argv[0], argv, env);
-			i++;
-		}
-		path_val = get_env_value(stru->environ, "PATH");
-		if (path_val == NULL)
-		{
-			printf("bash: %s: command not found\n", argv[0]);
-			exit(127);
-		}	
-		chosen_path = find_in_path(argv[0], stru);
-		if (chosen_path)
-			execve(chosen_path, argv, env);
-		else
-		{
-			printf("bash: %s: command not found\n", argv[0]);
-			exit(127);
-		}
-	}
+		exec_external(cmd, stru, env);
 	else
 	{
 		status = 0;
 		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			stru->last_status = WEXITSTATUS(status);
+		stru->last_status = extract_exit_status(status);
 	}
 }

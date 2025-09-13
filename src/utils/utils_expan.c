@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 14:47:22 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/09 15:31:35 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/13 17:47:26 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,3 +70,12 @@ int	is_assignment_word(const char *str)
 // 		i++;
 // 	}
 // }
+
+int	extract_exit_status(int status)
+{
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	else if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	return (1);
+}

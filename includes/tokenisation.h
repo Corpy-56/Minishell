@@ -6,12 +6,20 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/11 18:17:51 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/13 18:02:25 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKENISATION_H
 # define TOKENISATION_H
+
+typedef struct s_redir
+{
+	int				type;
+	char			*target;
+	struct s_redir	*next;
+}					t_redir;
+
 
 typedef struct s_cmd
 {
@@ -21,6 +29,8 @@ typedef struct s_cmd
 	int				fd_out_put2;
 	int				fd_int_put;
 	char			**heredoc;
+	t_redir			*redirs;
+	int				is_builtin;
 	struct s_cmd	*next;
 }					t_cmd;
 

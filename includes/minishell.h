@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/12 13:27:02 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/13 19:00:32 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,11 @@ t_tokens	*ft_test_stdin(t_cmd *commande, t_tokens *p_actuel);
 t_tokens	*ft_heredoc_lexer(t_tokens *p_actuel, t_cmd *commande);
 
 //external_commands
+void		exec_external(t_cmd *cmd, t_shell *stru, char **env);
 void		run_external(t_cmd *cmd, t_shell *stru, char **env);
+
+//exec
+void		exec_cmd_line(t_shell *stru, char **env);
 
 //utils
 int			ft_error(int i, char *str, char *str2);
@@ -85,6 +89,8 @@ void		update_str(t_env *var);
 char		*get_env_value(t_env *env, char *name);
 int			is_assignment_word(const char *str);
 void		command_expand(t_cmd *cmd, t_shell *stru);
+int			extract_exit_status(int status);
+
 
 //utils_token
 int			count_tokens(t_tokens *token);
@@ -106,6 +112,11 @@ t_cmd		*ft_creat_token2(void);
 t_cmd		*lexer_cmd(t_cmd *commande, t_tokens *p_actuel);
 int			ft_nb_tokens(t_tokens *p_actuel);
 int			ft_valid_syntax(t_tokens *token);
+
+//utils_builtins
+bool		is_builtin(t_cmd *commande);
+int			ft_test_bultins(t_cmd *commande, t_shell *stru);
+
 
 #endif
 
