@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/09/13 19:16:05 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/15 11:13:26 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,11 +105,7 @@ void	run_external(t_cmd *cmd, t_shell *stru, char **env)
 {
 	int		pid;
 	int		status;
-	// char	**argv;
 
-	// argv = cmd->args;
-	// if (argv == NULL || argv[0] == NULL)
-	// 	return ;
 	pid = fork();
 	if (pid < 0)
 	{

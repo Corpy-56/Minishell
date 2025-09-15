@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/13 19:20:34 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/15 18:59:04 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,26 @@ int	count_maillons(t_cmd *cmd)
 	return (n);
 }
 
-void	run_two(t_cmd *cmd_a, t_cmd *cmd_b, t_shell *sh, char **env)
+t_cmd	**collect_maillons(t_cmd *head, int n)
+{
+	t_cmd	**cmds;
+	int		i;
+
+	cmds = malloc(sizeof(t_cmd *) * (n + 1));
+	if (!cmds)
+		return (NULL);
+	i = 0;
+	while (head)
+	{
+		cmds[i] = head;
+		head = head->next;
+		i++;
+	}
+	cmds[i] = NULL;
+	return (cmds);
+}
+
+/* void	run_two(t_cmd *cmd_a, t_cmd *cmd_b, t_shell *sh, char **env)
 {
 	int	pipefd[2];
 	int	pid1;
@@ -73,6 +92,81 @@ void	run_two(t_cmd *cmd_a, t_cmd *cmd_b, t_shell *sh, char **env)
 	status1 = waitpid(pid1, 0, 0);
 	status2 = waitpid(pid2, 0, 0);
 	sh->last_status = extract_exit_status(status2);
+} */
+
+
+void	run_pipes(t_cmd *cmd, t_shell *sh, char **env)
+{
+	int	fd[2];
+	int	**pids;
+	int	pid;
+	int	i;
+	int	n;
+	int	prev_read;
+	int	status;
+	int	last_pid;
+
+	n = count_maillons(cmd);
+	prev_read = -1;
+	collect_maillons(cmd, n);
+	pids = malloc(sizeof(int) * (n + 1));
+	if (!pids)
+		return ;
+	i = 0;
+	while (i < (n - 1))
+	{
+		if (i < (n - 1))
+		{
+			if (pipe(fd) == -1)
+				exit(1);
+		}
+		pid = fork();
+		if (pid == 0)
+		{
+			if (prev_read != -1)
+			{
+				if (dup2(prev_read, STDIN_FILENO) == -1)
+					exit(1);
+				close(prev_read);
+			}
+			if (i < (n - 1))
+			{
+				if (dup2(fd[1], STDOUT_FILENO) == -1)
+					exit(1);
+				close(fd[0]);
+				close(fd[1]);
+			}
+			if (is_builtin(cmd))
+				exit(ft_test_bultins(cmd, sh));
+			else
+			{
+				exec_external(cmd, sh, env);
+				exit(127);
+			}
+		}
+		pids[i] = &pid;
+		if (prev_read != -1)
+			close(prev_read);
+		if (i < (n - 1))
+		{
+			close(fd[1]);
+			prev_read = fd[0];
+		}
+		else
+			prev_read = -1;
+		i++;
+	}
+	if (prev_read != -1)
+		close(prev_read);
+	last_pid = 0;
+	while (i <= (n - 1))
+	{
+		status = 0;
+		waitpid(*pids[i], &status, 0);
+		if (i == (n - 1))
+			last_pid = extract_exit_status(last_pid);
+	}
+	sh->last_status = last_pid;
 }
 
 void	exec_cmd_line(t_shell *stru, char **env)
@@ -92,9 +186,9 @@ void	exec_cmd_line(t_shell *stru, char **env)
 			run_external(head, stru, env);
 		return ;
 	}
-	if (n == 2)
+	if (n >= 2)
 	{
-		run_two(head, head->next, stru, env);
+		run_pipes(head, stru, env);
 		return ;
 	}
 }
