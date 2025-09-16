@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/13 19:00:32 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/16 14:52:54 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 int			ft_cd(char **args);
 int			ft_echo(char **args);
 int			ft_env(t_env *env);
-int			ft_exit(char **args);
+int			ft_exit(t_shell *stru, char **args);
 int			ft_export(char **args, t_env **env, t_env **local);
 int			ft_pwd(char **args);
 int			ft_unset(t_shell *stru, char **args);
@@ -104,7 +104,14 @@ t_tokens	*ft_creat_token(char *rl, int i);
 //free
 void		free_args(char **args);
 void		free_tokens(t_tokens *token);
-void		free_env(char **env);
+// void		free_env(char **env);
+void		free_env(t_env **env);
+void		free_cmds(t_cmd *cmd);
+void		free_split(char **to_free);
+
+//clean
+void		clean_cmd(t_shell *stru);
+void		clean_all(t_shell *stru);
 
 //token_type_utils
 void		ft_initialization_commande(t_cmd *commande);

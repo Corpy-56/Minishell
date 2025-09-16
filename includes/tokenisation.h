@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/13 18:02:25 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/16 11:44:48 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_shell
 	t_env		*path_node;
 	char		**path_dirs;
 	int			last_status;
+	int			should_exit;
 }				t_shell;
 
 #endif

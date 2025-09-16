@@ -6,23 +6,27 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 14:50:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/06 18:36:40 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/16 15:22:22 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_env(char **env)
+void	free_env(t_env **env)
 {
-	int	i;
+	t_env	*current;
+	t_env	*next;
 
-	i = 0;
-	while (env && env[i])
+	current = *env;
+	while (current)
 	{
-		free(env);
-		i++;
+		next = current->next;
+		free(current->name);
+		free(current->value);
+		free(current);
+		next = *env;
 	}
-	free(env);
+	env = NULL;
 }
 
 void	free_args(char **args)
@@ -30,6 +34,8 @@ void	free_args(char **args)
 	int	i;
 
 	i = 0;
+	if (!args)
+		return ;
 	while (args[i])
 	{
 		free(args);
@@ -44,10 +50,25 @@ void	free_tokens(t_tokens *token)
 
 	while (token)
 	{
-		free(token->str);
 		next = token->next;
+		free(token->str);
+		free_args(token->args);
 		free(token);
 		token = next;
+	}
+}
+
+void	free_cmds(t_cmd *cmd)
+{
+	t_cmd	*next;
+
+	while (cmd)
+	{
+		next = cmd->next;
+		free_args(cmd->args);
+		free(cmd->cmd);
+		free(cmd);
+		cmd = next;
 	}
 }
 
@@ -65,4 +86,5 @@ void	free_split(char **to_free)
 	}
 	free(to_free);
 }
+
 

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/15 18:59:04 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/16 11:57:58 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,25 +95,26 @@ t_cmd	**collect_maillons(t_cmd *head, int n)
 } */
 
 
-void	run_pipes(t_cmd *cmd, t_shell *sh, char **env)
+void	run_pipes(t_cmd *head, t_shell *sh, char **env)
 {
 	int	fd[2];
-	int	**pids;
-	int	pid;
+	pid_t	*pids;
+	pid_t	pid;
 	int	i;
 	int	n;
 	int	prev_read;
 	int	status;
 	int	last_pid;
+	t_cmd	**cmds;
 
-	n = count_maillons(cmd);
+	n = count_maillons(head);
 	prev_read = -1;
-	collect_maillons(cmd, n);
-	pids = malloc(sizeof(int) * (n + 1));
-	if (!pids)
+	cmds = collect_maillons(head, n);
+	pids = malloc(sizeof(pid_t) * n);
+	if (!cmds || !pids)
 		return ;
 	i = 0;
-	while (i < (n - 1))
+	while (i < n)
 	{
 		if (i < (n - 1))
 		{
@@ -136,15 +137,15 @@ void	run_pipes(t_cmd *cmd, t_shell *sh, char **env)
 				close(fd[0]);
 				close(fd[1]);
 			}
-			if (is_builtin(cmd))
-				exit(ft_test_bultins(cmd, sh));
+			if (is_builtin(cmds[i]))
+				exit(ft_test_bultins(cmds[i], sh));
 			else
 			{
-				exec_external(cmd, sh, env);
+				exec_external(cmds[i], sh, env);
 				exit(127);
 			}
 		}
-		pids[i] = &pid;
+		pids[i] = pid;
 		if (prev_read != -1)
 			close(prev_read);
 		if (i < (n - 1))
@@ -154,18 +155,23 @@ void	run_pipes(t_cmd *cmd, t_shell *sh, char **env)
 		}
 		else
 			prev_read = -1;
+		status = 0;
+		last_pid = 0;
+		waitpid(pids[i], &status, 0);
+		if (i == (n - 1))
+				last_pid = extract_exit_status(last_pid);
 		i++;
 	}
 	if (prev_read != -1)
 		close(prev_read);
-	last_pid = 0;
-	while (i <= (n - 1))
-	{
-		status = 0;
-		waitpid(*pids[i], &status, 0);
-		if (i == (n - 1))
-			last_pid = extract_exit_status(last_pid);
-	}
+	// while (i < n)
+	// {
+	// 	status = 0;
+	// 	last_pid = 0;
+	// 	waitpid(pids[i], &status, 0);
+	// 	if (i == (n - 1))
+	// 			last_pid = extract_exit_status(last_pid);
+	// }
 	sh->last_status = last_pid;
 }
 
@@ -181,13 +187,18 @@ void	exec_cmd_line(t_shell *stru, char **env)
 	if (n == 1)
 	{
 		if (is_builtin(head))
+		{
 			stru->last_status = ft_test_bultins(head, stru);
+			if (stru->should_exit)
+				return ;
+		}
 		else
 			run_external(head, stru, env);
 		return ;
 	}
 	if (n >= 2)
 	{
+		// run_two(head, head->next, stru, env);
 		run_pipes(head, stru, env);
 		return ;
 	}

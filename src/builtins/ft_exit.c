@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:01:37 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/11 11:51:33 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/16 11:56:25 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,23 +61,31 @@ int	str_to_long(const char *str, long *out)
 	return (0);
 }
 
-int	ft_exit(char **args)
+int	ft_exit(t_shell *stru, char **args)
 {
 	long	out;
 
 	printf("exit\n");
 	if (!args[1])
-		exit(0);
+	{
+		stru->last_status = 0;
+		stru->should_exit = 1;
+		return (0);
+	}
 	if (str_to_long(args[1], &out))
 	{
 		printf("bash: exit: %s: numeric argument required\n", args[1]);
-		exit(2);
+		stru->last_status = 2;
+		stru->should_exit = 1;
 	}
 	if (args[2])
 	{
 		printf("bash: exit: too many arguments\n");
 		return (1);
 	}
-	exit(out % 256);
+	stru->last_status = out % 256;
+	if (stru->last_status < 0)
+		stru->last_status += 256;
+	stru->should_exit = 1;
 	return (0);
 }

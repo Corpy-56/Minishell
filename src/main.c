@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/13 18:52:53 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/16 16:02:31 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	ft_test_bultins(t_cmd *commande, t_shell *stru)
 	else if (ft_strncmp(commande->cmd, "env", 4) == 0)
 		status = ft_env(stru->environ);
 	else if (ft_strncmp(commande->cmd, "exit", 5) == 0)
-		status = ft_exit(commande->args);
+		status = ft_exit(stru, commande->args);
 	else if (ft_strncmp(commande->cmd, "unset", 5) == 0)
 		status = ft_unset(stru, commande->args);
 	else if (ft_strncmp(commande->cmd, "export", 5) == 0)
@@ -109,12 +109,10 @@ void	ft_on_exect(t_cmd *commande, t_shell *stru, char **env)
 		a_debut = a_debut->next;
 	}
 }
-
 int main(int argc, char **argv, char **env)
 {
 	char *rl;
 	t_shell	*stru;
-	//t_env *local = NULL;
 
 	(void)argc;
 	(void)argv;
@@ -122,42 +120,43 @@ int main(int argc, char **argv, char **env)
 	if (stru == NULL)
 		return (0);
 	stru->environ = ft_duplicate_env(env, stru);
-	while (1)
+	while (!stru->should_exit)
 	{
 		rl = readline("Minishell > ");
 		if (!rl)
-			exit(0);//besoin dune fonction pour free
+		{
+			stru->last_status = 1;
+			stru->should_exit = 1;
+			break ;
+		}
 		if (*rl)
 			add_history(rl);
-	//	free_tokens(stru->tokens);
         stru->tokens = NULL;
 		stru->tokens = ft_tokenisation(rl, stru->tokens);
 		free(rl);
 		if (!stru->tokens)
 			continue ;
 		stru->tokens->args = args_from_tokens(stru->tokens);
-		// if (main_variables(stru) == 1)
-		// 	continue ;
 		main_expand(stru);
 		if (stru->tokens != NULL)
 		{
 			if (ft_valid_syntax(stru->tokens) != -1)
 			{
 				stru->commande = ft_type_token(stru->commande, stru->tokens);
-				// dbg_print_pipeline(stru->commande);
 				if (main_variables(stru) == 1)
 					continue ;
 				// ft_on_exect(stru->commande, stru, env);
 				exec_cmd_line(stru, env);
 			}
 		}
+		 clean_cmd(stru);
 	}
+	clean_all(stru);
+
+
 	//	free_args(stru->tokens->args);
-	free_tokens(stru->tokens);
-	clear_history();
+	// free_tokens(stru->tokens);
+	// clear_history();
 	//	free_env(*stru->environ);
     return (0);
 }
-
-
-
