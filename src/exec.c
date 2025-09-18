@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sarah <sarah@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/16 11:57:58 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/18 13:44:50 by sarah            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	count_maillons(t_cmd *cmd)
 	while (cmd)
 	{
 		n++;
-		cmd = cmd ->next;
+		cmd = cmd->next;
 	}
 	return (n);
 }
@@ -178,8 +178,19 @@ void	run_pipes(t_cmd *head, t_shell *sh, char **env)
 void	exec_cmd_line(t_shell *stru, char **env)
 {
 	t_cmd	*head;
+	char	*path_val;
 	int		n;
 
+	path_val = NULL;
+	if (!stru->path_dirs)
+	{
+		if (stru->path_node && stru->path_node->value)
+			path_val = stru->path_node->value;
+		else
+			path_val = get_env_value(stru->environ, "PATH");
+		if (path_val)
+			stru->path_dirs = ft_split(path_val, ':');	
+	}
 	head = stru->commande;
 	n = count_maillons(head);
 	if (n == 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environ.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sarah <sarah@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:52:31 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/12 12:21:36 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/17 12:31:30 by sarah            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_env	*create_env_node(char *str)
 		new->name = ft_strdup(str);
 		new->value = NULL;
 	}
-	if (ft_strncmp(new->name, "PATH", 5) == 0 && new->value != NULL)
+	if (ft_strncmp(new->name, "PATH", 4) == 0 && new->value != NULL)
 		new->path = ft_split(new->value, ':');
 	else
 		new->path = NULL;

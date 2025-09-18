@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_type_token.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: sarah <sarah@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:56:23 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/10 15:08:57 by agouin           ###   ########.fr       */
+/*   Updated: 2025/09/18 15:44:27 by sarah            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,22 @@ t_tokens	*ft_heredoc_lexer(t_tokens *p_actuel, t_cmd *commande)
 //	}
 //}
 
-t_tokens	*ft_type_token_2(t_tokens *p_actuel, t_cmd *commande)
+// t_tokens	*ft_type_token_2(t_tokens *p_actuel, t_cmd *commande)
+// {
+// 	if (ft_strncmp(p_actuel->str, ">", 1) == 0)
+// 		p_actuel = ft_test_stdout(commande, p_actuel);
+// 	else if (ft_strncmp(p_actuel->str, "<", 2) == 0)
+// 		p_actuel = ft_test_stdin(commande, p_actuel);
+// 	else if (ft_strncmp(p_actuel->str, "<<", 3) == 0)
+// 		p_actuel = ft_heredoc_lexer(p_actuel, commande);
+// 	else if (ft_is_str_isprint(p_actuel->str) == 1
+// 		&& ft_strncmp(p_actuel->str, "|", 2) != 0)
+// 		lexer_cmd(commande, p_actuel);
+// 	return (p_actuel);
+// }
+
+
+t_tokens	*ft_type_token_2(t_tokens *p_actuel, t_cmd *commande, t_shell *stru)
 {
 	if (ft_strncmp(p_actuel->str, ">", 1) == 0)
 		p_actuel = ft_test_stdout(commande, p_actuel);
@@ -140,11 +155,16 @@ t_tokens	*ft_type_token_2(t_tokens *p_actuel, t_cmd *commande)
 		p_actuel = ft_heredoc_lexer(p_actuel, commande);
 	else if (ft_is_str_isprint(p_actuel->str) == 1
 		&& ft_strncmp(p_actuel->str, "|", 2) != 0)
-		lexer_cmd(commande, p_actuel);
+	{
+		if (commande->cmd == NULL && is_assignment_word(p_actuel->str))
+			stru->local = create_local_var(p_actuel->str, stru->local);
+		else
+			lexer_cmd(commande, p_actuel);
+	}
 	return (p_actuel);
 }
 
-t_cmd	*ft_type_token(t_cmd *commande, t_tokens *b_debut)
+t_cmd	*ft_type_token(t_cmd *commande, t_tokens *b_debut, t_shell *stru)
 {
 	t_tokens	*p_actuel;
 	int			i;
@@ -164,7 +184,7 @@ t_cmd	*ft_type_token(t_cmd *commande, t_tokens *b_debut)
 			fin = commande;
 			i++;
 		}
-		p_actuel = ft_type_token_2(p_actuel, commande);
+		p_actuel = ft_type_token_2(p_actuel, commande, stru);
 		p_actuel = p_actuel->next;
 	}
 	commande = a_debut;

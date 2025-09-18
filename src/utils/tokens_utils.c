@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokens_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: sarah <sarah@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 16:51:06 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/08 16:54:29 by agouin           ###   ########.fr       */
+/*   Updated: 2025/09/18 15:25:08 by sarah            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,23 +98,3 @@ char	*ft_strjoin_char(char *str, const char c)
 	return (joined);
 }
 
-char	**args_from_tokens(t_tokens *token)
-{
-	int		i;
-	int		count;
-	char	**args;
-
-	i = 0;
-	count = count_tokens(token);
-	args = malloc(sizeof(char *) * (count + 1));
-	if (!args)
-		return (NULL);
-	while (token)
-	{
-		args[i] = ft_strdup(token->str);
-		i++;
-		token = token->next;
-	}
-	args[i] = NULL;
-	return (args);
-}

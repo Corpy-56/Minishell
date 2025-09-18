@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_expan.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sarah <sarah@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 14:47:22 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/13 17:47:26 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/18 15:23:50 by sarah            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ char	*get_env_value(t_env *env, char *name)
 		if (ft_strcmp(current->name, name) == 0)
 		{
 			if (current->value)
-				return (ft_strdup(current->value));
+				return (current->value);
 			else
-				return (ft_strdup(""));
+				return ("");
 		}
 		current = current->next;
 	}

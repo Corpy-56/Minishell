@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sarah <sarah@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 14:50:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/16 15:22:22 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/18 13:32:46 by sarah            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,22 @@ void	free_env(t_env **env)
 	t_env	*current;
 	t_env	*next;
 
+	if (!env || !*env)
+		return ;
 	current = *env;
 	while (current)
 	{
 		next = current->next;
 		free(current->name);
 		free(current->value);
+		if (current->path)
+			free_split(current->path);
+		free(current->str);
 		free(current);
-		next = *env;
+		current = next;
 	}
-	env = NULL;
+	if (env)
+		*env = NULL;
 }
 
 void	free_args(char **args)
@@ -38,7 +44,7 @@ void	free_args(char **args)
 		return ;
 	while (args[i])
 	{
-		free(args);
+		free(args[i]);
 		i++;
 	}
 	free(args);

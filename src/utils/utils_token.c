@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sarah <sarah@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 15:23:24 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/09 14:21:15 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/18 15:24:15 by sarah            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,22 +45,6 @@ char	**args_from_tokens(t_tokens *token)
 	args[i] = NULL;
 	return (args);
 }
-
-// t_tokens	*ft_creat_token(char *temp)
-// {
-// 	t_tokens	*token;
-
-// 	token = ft_calloc(sizeof(t_tokens), 1);
-// 	if (!token)
-// 		return (NULL);
-// 	if (temp)
-// 		token->str = ft_strdup(temp);
-// 	else
-// 		token->str = NULL;
-// 	token->next = NULL;
-// 	return (token);
-// }
-
 
 void	ft_quote(char *rl, int i)
 {

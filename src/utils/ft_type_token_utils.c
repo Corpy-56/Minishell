@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_type_token_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sarah <sarah@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:42:37 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/12 12:20:59 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/18 15:47:28 by sarah            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,9 @@ t_cmd	*lexer_cmd(t_cmd *commande, t_tokens *p_actuel)
 	int	i;
 	int	j;
 
+	if (commande->cmd == NULL && is_assignment_word(p_actuel->str))
+		return (commande);
+	
 	i = ft_nb_tokens(p_actuel);
 	j = 0;
 	if (commande->cmd == NULL)

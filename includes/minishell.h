@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/16 14:52:54 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/18 17:25:24 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token);
 
 //environ
 t_env		*ft_duplicate_env(char **env, t_shell *stru);
-// t_env		*ft_duplicate_env(char **env);
 t_env		*create_env_node(char *str);
 
 //variables
@@ -55,13 +54,12 @@ void		move_var_to_env(t_env **env, t_env **local, t_env *var);
 int			main_variables(t_shell *stru);
 
 //expansion
-// char		*expand_var(char *args, t_shell *stru);
 char		*expand_var(t_tokens *token, t_shell *stru, size_t i);
 void		main_expand(t_shell *stru);
 
 //token_type
-t_cmd		*ft_type_token(t_cmd *commande, t_tokens *b_debut);
-t_tokens	*ft_type_token_2(t_tokens *p_actuel, t_cmd *commande);
+t_cmd		*ft_type_token(t_cmd *commande, t_tokens *b_debut, t_shell *stru);
+t_tokens	*ft_type_token_2(t_tokens *p_actuel, t_cmd *commande, t_shell *stru);
 t_tokens	*ft_test_stdout(t_cmd *cmd, t_tokens *p_temp);
 t_tokens	*ft_test_stdin(t_cmd *commande, t_tokens *p_actuel);
 t_tokens	*ft_heredoc_lexer(t_tokens *p_actuel, t_cmd *commande);
@@ -77,6 +75,8 @@ void		exec_cmd_line(t_shell *stru, char **env);
 int			ft_error(int i, char *str, char *str2);
 int			white_space(char *str, int i);
 bool		is_local_var(char *str);
+int			append_char(char **result, char c);
+int			append_str(char **result, const char *str);
 
 //utils_var
 int			check_valid_var(char *str);
@@ -96,7 +96,6 @@ int			extract_exit_status(int status);
 int			count_tokens(t_tokens *token);
 char		**args_from_tokens(t_tokens *token);
 int			count_tokens(t_tokens *token);
-// t_tokens	*ft_creat_token(char *temp);
 void		ft_quote(char *rl, int i);
 char		*ft_strjoin_char(char *str, const char c);
 t_tokens	*ft_creat_token(char *rl, int i);
@@ -104,7 +103,6 @@ t_tokens	*ft_creat_token(char *rl, int i);
 //free
 void		free_args(char **args);
 void		free_tokens(t_tokens *token);
-// void		free_env(char **env);
 void		free_env(t_env **env);
 void		free_cmds(t_cmd *cmd);
 void		free_split(char **to_free);
@@ -124,6 +122,8 @@ int			ft_valid_syntax(t_tokens *token);
 bool		is_builtin(t_cmd *commande);
 int			ft_test_bultins(t_cmd *commande, t_shell *stru);
 
+//utils_cmd
+t_cmd	*suppr_empty_cmd(t_cmd *head);
 
 #endif
 

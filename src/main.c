@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/16 16:02:31 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/18 17:33:05 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,13 @@ int main(int argc, char **argv, char **env)
 		{
 			if (ft_valid_syntax(stru->tokens) != -1)
 			{
-				stru->commande = ft_type_token(stru->commande, stru->tokens);
+				stru->commande = ft_type_token(stru->commande, stru->tokens, stru);
+				stru->commande = suppr_empty_cmd(stru->commande);
+				if (stru->commande == NULL)
+				{
+					clean_cmd(stru);
+					continue ;
+				}
 				if (main_variables(stru) == 1)
 					continue ;
 				// ft_on_exect(stru->commande, stru, env);
@@ -152,8 +158,7 @@ int main(int argc, char **argv, char **env)
 		 clean_cmd(stru);
 	}
 	clean_all(stru);
-
-
+	free(stru);
 	//	free_args(stru->tokens->args);
 	// free_tokens(stru->tokens);
 	// clear_history();

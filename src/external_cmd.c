@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: sarah <sarah@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/09/15 11:13:26 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/18 13:31:52 by sarah            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,23 +74,25 @@ char	*find_in_path(char *name, t_shell *stru)
 
 void	exec_external(t_cmd *cmd, t_shell *stru, char **env)
 {
-	int		i;
+	// int		i;
 
 	auto char *path_val, *chosen_path, **argv = cmd->args;
 	if (argv == NULL || argv[0] == NULL)
 		return ;
-	i = -1;
-	while (argv[++i])
-	{
-		if (ft_strcmp(argv[i], "/"))
-			execve(argv[0], argv, env);
-	}
+	// i = -1;
+	// while (argv[++i])
+	// {
+	// 	if (ft_strcmp(argv[i], "/"))
+	// 		execve(argv[0], argv, env);
+	// }
+	if (ft_strchr(argv[0], '/'))
+		execve(argv[0], argv, env);
 	path_val = get_env_value(stru->environ, "PATH");
 	if (path_val == NULL)
 	{
 		printf("bash: %s: command not found\n", argv[0]);
 		exit(127);
-	}	
+	}
 	chosen_path = find_in_path(argv[0], stru);
 	if (chosen_path)
 		execve(chosen_path, argv, env);

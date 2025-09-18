@@ -6,7 +6,7 @@
 /*   By: sarah <sarah@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:21:04 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/05 13:13:31 by sarah            ###   ########.fr       */
+/*   Updated: 2025/09/18 10:12:16 by sarah            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,34 @@ bool	is_local_var(char *s)
 		i++;
 	}
 	return (s[i] == '=');
+}
+
+int	append_char(char **result, char c)
+{
+	char	*tmp;
+
+	tmp = ft_strjoin_char(*result, c);
+	if (!tmp)
+		return (-1);
+	*result = tmp;
+	return (0);
+}
+
+int	append_str(char **result, const char *str)
+{
+	int		i;
+	char	*tmp;
+	
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])
+	{
+		tmp = ft_strjoin_char(*result, str[i]);
+		if (!tmp)
+			return (-1);
+		i++;
+		*result = tmp;
+	}
+	return (0);
 }
