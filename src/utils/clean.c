@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarah <sarah@student.42.fr>                +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 14:32:46 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/18 12:30:34 by sarah            ###   ########.fr       */
+/*   Updated: 2025/09/19 10:36:58 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	clean_cmd(t_shell *stru)
 void	clean_all(t_shell *stru)
 {
 	(void)stru;
-	
+
 	clean_cmd(stru);
 	if (stru->environ)
 	{
@@ -47,5 +47,4 @@ void	clean_all(t_shell *stru)
 		stru->local = NULL;
 	}
 	clear_history();
-	// free(stru);
 }

@@ -3,42 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarah <sarah@student.42.fr>                +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 18:16:15 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/18 13:51:49 by sarah            ###   ########.fr       */
+/*   Updated: 2025/09/19 11:07:06 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// static size_t	expand_var2(t_shell *stru, char *args, size_t i, char **str)
-// {
-// 	size_t	start;
-// 	size_t	len_str;
-// 	char	*name;
-// 	char	*value;
-
-// 	start = i;
-// 	len_str = ft_strlen(args);
-// 	while (i < len_str && (ft_isalnum(args[i]) || args[i] == '_'))
-// 		i++;
-// 	if (i == start)
-// 	{
-// 		*str = ft_strjoin_free(*str, ft_strdup("$"));
-// 		return (start);
-// 	}
-// 	name = ft_substr(args, start, i - start);
-// 	value = get_env_value(stru->environ, name);
-// 	if (!value && stru->local)
-// 		value = get_env_value(stru->local, name);
-// 	if (!value)
-// 		value = ft_strdup("");
-// 	*str = ft_strjoin_free(*str, value);
-// 	free(name);
-// 	return (i);
-// }
-
 
 static size_t	expand_var2(t_shell *stru, char *args, size_t i, char **str)
 {
@@ -82,14 +54,6 @@ static size_t	expand_var2(t_shell *stru, char *args, size_t i, char **str)
 	return (i);
 }
 
-// static void	expand_exit_status(t_shell *stru, char **str)
-// {
-// 	char	*status_str;
-
-// 	status_str = ft_itoa(stru->last_status);
-// 	*str = ft_strjoin_free(*str, status_str);
-// }
-
 static void	expand_exit_status(t_shell *stru, char **str)
 {
 	char	*status_str;
@@ -98,34 +62,6 @@ static void	expand_exit_status(t_shell *stru, char **str)
 	append_str(str, status_str);
 	free(status_str);
 }
-
-// char	*expand_var(t_tokens *token, t_shell *stru, size_t i)
-// {
-// 	char	*str;
-// 	size_t	len_str;
-
-// 	str = ft_strdup("");
-// 	len_str = ft_strlen(token->str);
-// 	while (i < len_str)
-// 	{
-// 		if (token->str[i] == '$' && token->dollars >= 1)
-// 		{
-// 			if (i + 1 < len_str && token->str[i + 1] == '?')
-// 			{
-// 				expand_exit_status(stru, &str);
-// 				i += 2;
-// 			}
-// 			else
-// 				i = expand_var2(stru, token->str, i + 1, &str);
-// 		}
-// 		else
-// 		{
-// 			no_expansion(token->str, &str, i);
-// 			i++;
-// 		}
-// 	}
-// 	return (str);
-// }
 
 char	*expand_var(t_tokens *token, t_shell *stru, size_t i)
 {
@@ -182,7 +118,7 @@ void	main_expand(t_shell *stru)
 {
 	t_tokens	*token;
 	char		*expanded;
-	
+
 	token = stru->tokens;
 	while (token)
 	{

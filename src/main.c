@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/18 17:33:05 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/19 14:57:48 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ int main(int argc, char **argv, char **env)
 		}
 		if (*rl)
 			add_history(rl);
-        stru->tokens = NULL;
+		stru->tokens = NULL;
 		stru->tokens = ft_tokenisation(rl, stru->tokens);
 		free(rl);
 		if (!stru->tokens)
@@ -155,13 +155,9 @@ int main(int argc, char **argv, char **env)
 				exec_cmd_line(stru, env);
 			}
 		}
-		 clean_cmd(stru);
+		clean_cmd(stru);
 	}
 	clean_all(stru);
 	free(stru);
-	//	free_args(stru->tokens->args);
-	// free_tokens(stru->tokens);
-	// clear_history();
-	//	free_env(*stru->environ);
     return (0);
 }

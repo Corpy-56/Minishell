@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 11:51:21 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/28 15:07:19 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/19 15:21:17 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,21 +95,22 @@ int	ft_export(char **args, t_env **env, t_env **local)
 	name = NULL;
 	if (!args[1])
 		return (print_exported_var(*env), 0);
-	i = 1;
-	while (args[i])
+	i = 0;
+	while (args[++i])
 	{
 		parse_args(args[i], &name, &value);
 		if (!check_valid_var(name))
 		{
-			printf("bash: export: '%s': not a valid identifier\n", args[i]);
+			err_msg_export(args[i]);
 			free(name);
 			free(value);
 			return (1);
 		}
+		if (args[i] && i > 8000)
+			ft_putstr_fd("minishell: /bin/ls/: Argument list too long\n", 2);
 		export2(env, local, name, value);
 		free(name);
 		free(value);
-		i++;
 	}
 	return (0);
 }

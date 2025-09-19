@@ -6,7 +6,7 @@
 #    By: skuor <skuor@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/08 16:18:45 by skuor             #+#    #+#              #
-#    Updated: 2025/09/18 17:25:46 by skuor            ###   ########.fr        #
+#    Updated: 2025/09/19 14:15:12 by skuor            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = minishell
 
 CC = cc 
 MAKE = make
-CFLAGS = -Wall -Wextra -Werror -Wno-unused-but-set-variable -g3
+CFLAGS = -Wall -Wextra -Werror -g3
 SRC_DIR = ./src/
 OBJ_DIR = ./objects/
 INC_DIR = ./includes/
@@ -22,7 +22,7 @@ BLTINS_DIR = $(SRC_DIR)builtins/
 UTILS_DIR = $(SRC_DIR)utils/
 LIBFT_DIR = ./libft/
 
-SRC_FILES = main.c ft_tokenisation.c variables.c environ.c expansion.c ft_type_token.c external_cmd.c exec.c
+SRC_FILES = main.c ft_tokenisation.c variables.c environ.c expansion.c ft_type_token.c external_cmd.c exec.c error_msg.c
 BLTINS_FILES = ft_exit.c ft_pwd.c ft_env.c ft_echo.c ft_cd.c ft_unset.c ft_export.c
 UTILS_FILES = utils.c utils_var.c utils_expan.c utils_token.c free.c ft_type_token_utils.c utils_builtins.c clean.c utils_cmd.c
 

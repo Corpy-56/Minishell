@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_type_token_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarah <sarah@student.42.fr>                +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:42:37 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/18 15:47:28 by sarah            ###   ########.fr       */
+/*   Updated: 2025/09/19 16:40:50 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,14 @@ int	ft_valid_syntax(t_tokens *token)
 
 	p_actuel = token;
 	if (ft_strncmp(p_actuel->str, "|", 1) == 0 && p_actuel)
-		return (ft_error(1, "syntax error near unexpected token `|'\n", NULL));
-	while(p_actuel != NULL)
+		return (err_msg_synt("|"), 2);
+	while (p_actuel != NULL)
 	{
 		if ((p_actuel->next == NULL && ft_strncmp(p_actuel->str, "|", 1) == 0) || ft_strncmp(p_actuel->str, "||", 2) == 0)
-			return (ft_error(1, "syntax error near unexpected token '|'\n", NULL));
+			return (err_msg_synt("||"), 2);
 		else if (ft_strncmp(p_actuel->str, ">>>", 3) == 0 || ft_strncmp(p_actuel->str, "<<<", 3) == 0)
 			return (ft_error(1, "syntax error near unexpected token \n", NULL)); // pas exactement le bon message derreur normalement plus precis
+			// return (err_msg_synt(">"), 2);
 		else if (ft_strncmp(p_actuel->str, ">", 1) == 0 || ft_strncmp(p_actuel->str, "<", 1) == 0)
 		{
 			if (p_actuel->next == NULL || ft_is_str_isprint(p_actuel->next->str) == 0 || ft_strncmp(p_actuel->next->str, ">", 1) == 0 || ft_strncmp(p_actuel->next->str, "<", 1) == 0)
@@ -81,7 +82,7 @@ t_cmd	*lexer_cmd(t_cmd *commande, t_tokens *p_actuel)
 
 	if (commande->cmd == NULL && is_assignment_word(p_actuel->str))
 		return (commande);
-	
+
 	i = ft_nb_tokens(p_actuel);
 	j = 0;
 	if (commande->cmd == NULL)

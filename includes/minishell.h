@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/18 17:25:24 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/19 16:33:28 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <fcntl.h>
 # include <signal.h>
 # include <sys/wait.h>
+# include <errno.h>
 
 //builtins
 int			ft_cd(char **args);
@@ -123,7 +124,15 @@ bool		is_builtin(t_cmd *commande);
 int			ft_test_bultins(t_cmd *commande, t_shell *stru);
 
 //utils_cmd
-t_cmd	*suppr_empty_cmd(t_cmd *head);
+t_cmd		*suppr_empty_cmd(t_cmd *head);
+
+//error_msg
+void		err_msg_cmd(char **argv);
+void		err_msg_export(char *argv);
+void		err_msg_synt(char *c);
+// int			err_msg_synt(char *c);
+
+
 
 #endif
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarah <sarah@student.42.fr>                +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/18 13:44:50 by sarah            ###   ########.fr       */
+/*   Updated: 2025/09/19 11:59:28 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,16 +95,17 @@ t_cmd	**collect_maillons(t_cmd *head, int n)
 } */
 
 
+
 void	run_pipes(t_cmd *head, t_shell *sh, char **env)
 {
-	int	fd[2];
+	int		fd[2];
 	pid_t	*pids;
 	pid_t	pid;
-	int	i;
-	int	n;
-	int	prev_read;
-	int	status;
-	int	last_pid;
+	int		i;
+	int		n;
+	int		prev_read;
+	int		status;
+	int		last_pid;
 	t_cmd	**cmds;
 
 	n = count_maillons(head);
@@ -159,27 +160,17 @@ void	run_pipes(t_cmd *head, t_shell *sh, char **env)
 		last_pid = 0;
 		waitpid(pids[i], &status, 0);
 		if (i == (n - 1))
-				last_pid = extract_exit_status(last_pid);
+			last_pid = extract_exit_status(last_pid);
 		i++;
 	}
 	if (prev_read != -1)
 		close(prev_read);
-	// while (i < n)
-	// {
-	// 	status = 0;
-	// 	last_pid = 0;
-	// 	waitpid(pids[i], &status, 0);
-	// 	if (i == (n - 1))
-	// 			last_pid = extract_exit_status(last_pid);
-	// }
 	sh->last_status = last_pid;
 }
 
-void	exec_cmd_line(t_shell *stru, char **env)
+static void	reconstruct_path_dirs(t_shell *stru)
 {
-	t_cmd	*head;
 	char	*path_val;
-	int		n;
 
 	path_val = NULL;
 	if (!stru->path_dirs)
@@ -189,8 +180,16 @@ void	exec_cmd_line(t_shell *stru, char **env)
 		else
 			path_val = get_env_value(stru->environ, "PATH");
 		if (path_val)
-			stru->path_dirs = ft_split(path_val, ':');	
+			stru->path_dirs = ft_split(path_val, ':');
 	}
+}
+
+void	exec_cmd_line(t_shell *stru, char **env)
+{
+	t_cmd	*head;
+	int		n;
+
+	reconstruct_path_dirs(stru);
 	head = stru->commande;
 	n = count_maillons(head);
 	if (n == 0)
@@ -209,7 +208,6 @@ void	exec_cmd_line(t_shell *stru, char **env)
 	}
 	if (n >= 2)
 	{
-		// run_two(head, head->next, stru, env);
 		run_pipes(head, stru, env);
 		return ;
 	}

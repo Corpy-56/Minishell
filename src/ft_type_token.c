@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_type_token.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarah <sarah@student.42.fr>                +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:56:23 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/18 15:44:27 by sarah            ###   ########.fr       */
+/*   Updated: 2025/09/19 11:58:19 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,54 +96,39 @@ t_tokens	*ft_heredoc_lexer(t_tokens *p_actuel, t_cmd *commande)
 	return (p_actuel->next);
 }
 
-//void	ft_printf_a_debut(t_cmd *a_debut)// fonction test pour voir si tout cest bien passe (a enlever)
-//{
-//	int	i;
-//	int	j;
-
-//	i = 0;
-//	j = 0;
-//	while (a_debut)
-//	{
-//		i = 0;
-//		if (j > 0)
-//			printf("Changement de pipe\n");
-//		if (a_debut->args != NULL)
-//		{
-//			while (a_debut->args[i])
-//				printf("Argument : %s\n", a_debut->args[i++]);
-//		}
-//		i = 0;
-//		if (a_debut->heredoc != NULL)
-//		{
-//			while (a_debut->heredoc[i])
-//				printf("heredoc : %s\n", a_debut->heredoc[i++]);
-//		}
-//		if (a_debut->fd_int_put > 0)
-//			printf("fd : %d\n", a_debut->fd_int_put);
-//		if (a_debut->fd_out_put2 > 0)
-//			printf("fd : %d\n", a_debut->fd_out_put2);
-//		if (a_debut->fd_out_put1 > 0)
-//			printf("fd : %d\n", a_debut->fd_out_put1);
-//		j++;
-//		a_debut = a_debut->next;
-//	}
-//}
-
-// t_tokens	*ft_type_token_2(t_tokens *p_actuel, t_cmd *commande)
+// void	ft_printf_a_debut(t_cmd *a_debut)// fonction test pour voir si tout cest bien passe (a enlever)
 // {
-// 	if (ft_strncmp(p_actuel->str, ">", 1) == 0)
-// 		p_actuel = ft_test_stdout(commande, p_actuel);
-// 	else if (ft_strncmp(p_actuel->str, "<", 2) == 0)
-// 		p_actuel = ft_test_stdin(commande, p_actuel);
-// 	else if (ft_strncmp(p_actuel->str, "<<", 3) == 0)
-// 		p_actuel = ft_heredoc_lexer(p_actuel, commande);
-// 	else if (ft_is_str_isprint(p_actuel->str) == 1
-// 		&& ft_strncmp(p_actuel->str, "|", 2) != 0)
-// 		lexer_cmd(commande, p_actuel);
-// 	return (p_actuel);
-// }
+// 	int	i;
+// 	int	j;
 
+// 	i = 0;
+// 	j = 0;
+// 	while (a_debut)
+// 	{
+// 		i = 0;
+// 		if (j > 0)
+// 			printf("Changement de pipe\n");
+// 		if (a_debut->args != NULL)
+// 		{
+// 			while (a_debut->args[i])
+// 				printf("Argument : %s\n", a_debut->args[i++]);
+// 		}
+// 		i = 0;
+// 		if (a_debut->heredoc != NULL)
+// 		{
+// 			while (a_debut->heredoc[i])
+// 				printf("heredoc : %s\n", a_debut->heredoc[i++]);
+// 		}
+// 		if (a_debut->fd_int_put > 0)
+// 			printf("fd : %d\n", a_debut->fd_int_put);
+// 		if (a_debut->fd_out_put2 > 0)
+// 			printf("fd : %d\n", a_debut->fd_out_put2);
+// 		if (a_debut->fd_out_put1 > 0)
+// 			printf("fd : %d\n", a_debut->fd_out_put1);
+// 		j++;
+// 		a_debut = a_debut->next;
+// 	}
+// }
 
 t_tokens	*ft_type_token_2(t_tokens *p_actuel, t_cmd *commande, t_shell *stru)
 {
@@ -188,6 +173,6 @@ t_cmd	*ft_type_token(t_cmd *commande, t_tokens *b_debut, t_shell *stru)
 		p_actuel = p_actuel->next;
 	}
 	commande = a_debut;
-	//ft_printf_a_debut(a_debut);
+	// ft_printf_a_debut(a_debut);
 	return (commande);
 }
