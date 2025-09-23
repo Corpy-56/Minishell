@@ -6,11 +6,54 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/23 18:52:12 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/19 14:57:48 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <fcntl.h>
+#include <signal.h>
+#include <sys/wait.h>
+
+// void	ft_test_bultins(t_cmd *commande, t_shell *stru)
+// {
+// 	//pid_t	pid;
+// 	int			status;
+
+// 	status = 0;
+// 	if (ft_strncmp(commande->cmd, "pwd", 4) == 0)
+// 		status = ft_pwd(commande->args);
+// 	else if (ft_strncmp(commande->cmd, "cd", 3) == 0)
+// 		status = ft_cd(commande->args);
+// 	else if (ft_strncmp(commande->cmd, "echo", 5) == 0)
+// 		status = ft_echo(commande->args);
+// 	else if (ft_strncmp(commande->cmd, "env", 4) == 0)
+// 		status = ft_env(stru->environ);
+// 	else if (ft_strncmp(commande->cmd, "exit", 5) == 0)
+// 		status = ft_exit(commande->args);
+// 	else if (ft_strncmp(commande->cmd, "unset", 5) == 0)
+// 		status = ft_unset(stru, commande->args);
+// 	else if (ft_strncmp(commande->cmd, "export", 5) == 0)
+// 		status = ft_export(commande->args, &stru->environ, &stru->local);
+// 	stru->last_status = status;
+// 	/* else if (ft_strncmp(commande->cmd, "./", 2) == 0 || ft_strncmp(commande->cmd, "/", 1) == 0 )
+// 	{
+// 		pid = fork();
+// 		if (pid == -1)
+// 			return ;
+// 		if (pid == 0)
+// 		{
+// 			execve(commande->cmd, commande->args, &stru->environ->str);
+// 		//	kill(pid, SIGKILL); je pense pas quil soit vraiment necessaire peut etre plus tard quand le programme sera BIG
+// 		}
+// 		else if (pid > 0)
+// 		{
+// 			wait(NULL);
+// 			return ;
+// 		}
+// 	} */// faut faire des gosses sinon on remplace le processus
+// 	//sinon tu fais une fonction qui execute si seulement ls sinon message derreur 
+// }
 
 int	ft_test_bultins(t_cmd *commande, t_shell *stru)
 {
@@ -70,7 +113,6 @@ int main(int argc, char **argv, char **env)
 {
 	char *rl;
 	t_shell	*stru;
-	int	syntax;
 
 	(void)argc;
 	(void)argv;
@@ -80,57 +122,38 @@ int main(int argc, char **argv, char **env)
 	stru->environ = ft_duplicate_env(env, stru);
 	while (!stru->should_exit)
 	{
-		ft_signal();
 		rl = readline("Minishell > ");
 		if (!rl)
 		{
 			stru->last_status = 1;
 			stru->should_exit = 1;
-			ft_exit_d(); // je suis pas sur voir avec Sarah
 			break ;
 		}
 		if (*rl)
 			add_history(rl);
-  //j      stru->tokens = NULL;
+		stru->tokens = NULL;
 		stru->tokens = ft_tokenisation(rl, stru->tokens);
 		free(rl);
 		if (!stru->tokens)
 			continue ;
-		// stru->tokens->args = args_from_tokens(stru->tokens);
+		stru->tokens->args = args_from_tokens(stru->tokens);
 		main_expand(stru);
-		split_all_tokens(stru->tokens, stru);
-		unquote_tokens(stru->tokens);
 		if (stru->tokens != NULL)
 		{
-			// if (ft_valid_syntax(stru->tokens) != -1)
-			// {
-			// 	stru->commande = ft_type_token(stru->commande, stru->tokens, stru);
-			// 	stru->commande = suppr_empty_cmd(stru->commande);
-			// 	if (stru->commande == NULL)
-			// 	{
-
-			// 		clean_cmd(stru);
-			// 		continue ;
-			// 	}
-			// //	if (main_variables(stru) == 1)
-			// //		continue ;
-			// 	exec_cmd_line(stru, env);
-			// }
-			syntax = ft_valid_syntax(stru->tokens);
-			if (syntax != 0)
+			if (ft_valid_syntax(stru->tokens) != -1)
 			{
-				stru->last_status = 258;
-				clean_cmd(stru);
-				continue ;
+				stru->commande = ft_type_token(stru->commande, stru->tokens, stru);
+				stru->commande = suppr_empty_cmd(stru->commande);
+				if (stru->commande == NULL)
+				{
+					clean_cmd(stru);
+					continue ;
+				}
+				if (main_variables(stru) == 1)
+					continue ;
+				// ft_on_exect(stru->commande, stru, env);
+				exec_cmd_line(stru, env);
 			}
-			stru->commande = ft_type_token(stru->commande, stru->tokens, stru);
-			stru->commande = suppr_empty_cmd(stru->commande);
-			if (stru->commande == NULL)
-			{
-				clean_cmd(stru);
-				continue ;
-			}
-			exec_cmd_line(stru, env);
 		}
 		clean_cmd(stru);
 	}

@@ -6,13 +6,13 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 18:16:15 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/19 11:07:06 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/23 14:21:57 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static size_t	expand_var2(t_shell *stru, char *args, size_t i, char **str)
+size_t	expand_var2(t_shell *stru, char *args, size_t i, char **str)
 {
 	size_t	start;
 	size_t	len_str;
@@ -131,21 +131,3 @@ void	main_expand(t_shell *stru)
 		token = token->next;
 	}
 }
-
-// void	main_expand(t_shell *str)
-// {
-// 	char		*expanded;
-// 	t_tokens	*token;
-// 	size_t		i;
-
-// 	token = str->tokens;
-// 	while (token)
-// 	{
-// 		i = 0;
-// 		expanded = expand_var(token, str, i);
-// 		//if (expanded != stru->tokens->args[j])
-// 		// 	free(stru->tokens->args[j]);
-// 		token->str = expanded;
-// 		token = token->next;
-// 	}
-// }

@@ -6,7 +6,7 @@
 #    By: skuor <skuor@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/08 16:18:45 by skuor             #+#    #+#              #
-#    Updated: 2025/09/19 14:15:12 by skuor            ###   ########.fr        #
+#    Updated: 2025/09/23 14:25:12 by skuor            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,9 +22,14 @@ BLTINS_DIR = $(SRC_DIR)builtins/
 UTILS_DIR = $(SRC_DIR)utils/
 LIBFT_DIR = ./libft/
 
-SRC_FILES = main.c ft_tokenisation.c variables.c environ.c expansion.c ft_type_token.c external_cmd.c exec.c error_msg.c
+SRC_FILES = main.c ft_tokenisation.c variables.c environ.c expansion.c fields_splitting.c \
+			ft_type_token.c external_cmd.c exec.c error_msg.c ft_heredoc.c ft_signals.c
+
 BLTINS_FILES = ft_exit.c ft_pwd.c ft_env.c ft_echo.c ft_cd.c ft_unset.c ft_export.c
-UTILS_FILES = utils.c utils_var.c utils_expan.c utils_token.c free.c ft_type_token_utils.c utils_builtins.c clean.c utils_cmd.c
+
+UTILS_FILES = utils.c utils_expan.c utils_tokens.c ft_type_token_utils.c \
+			  utils_builtins.c utils_cmd.c utils_quotes.c utils_var.c \
+			  free.c clean.c
 
 OBJ = 	$(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o)) \
 		$(addprefix $(OBJ_DIR), $(BLTINS_FILES:.c=.o)) \

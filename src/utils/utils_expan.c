@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_expan.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarah <sarah@student.42.fr>                +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 14:47:22 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/18 15:23:50 by sarah            ###   ########.fr       */
+/*   Updated: 2025/09/23 14:21:31 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,3 +79,20 @@ int	extract_exit_status(int status)
 		return (128 + WTERMSIG(status));
 	return (1);
 }
+
+bool	is_ifs(char c, const char *ifs)
+{
+	int	i;
+	
+	i = 0;
+	if (!ifs)
+		return (false);
+	while (ifs[i])
+	{
+		if (ifs[i] == c)
+			return (true);
+		i++;
+	}
+	return (false);
+}
+

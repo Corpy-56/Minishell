@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:42:37 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/19 16:40:50 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/23 19:18:39 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,28 @@ int	ft_valid_syntax(t_tokens *token)
 	t_tokens	*p_actuel;// je peux faire une fonction avec i qui affiche un message different en fonction de i
 
 	p_actuel = token;
+	if (ft_strncmp(p_actuel->str, "||", 2) == 0 && p_actuel)
+		return (err_msg_syntax("||"), 2);
 	if (ft_strncmp(p_actuel->str, "|", 1) == 0 && p_actuel)
-		return (err_msg_synt("|"), 2);
+		return (err_msg_syntax("|"), 2);
 	while (p_actuel != NULL)
 	{
-		if ((p_actuel->next == NULL && ft_strncmp(p_actuel->str, "|", 1) == 0) || ft_strncmp(p_actuel->str, "||", 2) == 0)
-			return (err_msg_synt("||"), 2);
-		else if (ft_strncmp(p_actuel->str, ">>>", 3) == 0 || ft_strncmp(p_actuel->str, "<<<", 3) == 0)
-			return (ft_error(1, "syntax error near unexpected token \n", NULL)); // pas exactement le bon message derreur normalement plus precis
-			// return (err_msg_synt(">"), 2);
+		if ((p_actuel->next == NULL && ft_strncmp(p_actuel->str, "|", 1) == 0))
+			return (err_msg_syntax("|"), 2);
+		else if (ft_strncmp(p_actuel->str, "||", 2) == 0)
+			return (err_msg_syntax("||"), 2);
+		else if (ft_strncmp(p_actuel->str, ">>>", 3) == 0)
+			return (err_msg_syntax(">"), 2);
+		else if (ft_strncmp(p_actuel->str, "<<<", 3) == 0)
+			return (err_msg_syntax("newline"), 2);
 		else if (ft_strncmp(p_actuel->str, ">", 1) == 0 || ft_strncmp(p_actuel->str, "<", 1) == 0)
 		{
-			if (p_actuel->next == NULL || ft_is_str_isprint(p_actuel->next->str) == 0 || ft_strncmp(p_actuel->next->str, ">", 1) == 0 || ft_strncmp(p_actuel->next->str, "<", 1) == 0)
-				return (ft_error(1, "syntax error near unexpected token\n", NULL)); // pas exactement le bon message derreur normalement plus precis
+			if (p_actuel->next == NULL || ft_is_str_isprint(p_actuel->next->str) == 0)
+				return(err_msg_syntax("newline"), 2);
+			else if (ft_strncmp(p_actuel->next->str, ">", 1) == 0)
+				return (err_msg_syntax(">"), 2);
+			else if (ft_strncmp(p_actuel->next->str, "<", 1) == 0)
+				return (err_msg_syntax("<"), 2);
 		}
 		p_actuel = p_actuel->next;
 	}

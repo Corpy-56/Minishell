@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/19 16:33:28 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/23 17:12:44 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@
 # include <sys/wait.h>
 # include <errno.h>
 
-//builtins
+/* ************************************ BUILTINS ************************************ */
+
+/* ********* builtins ********* */
 int			ft_cd(char **args);
 int			ft_echo(char **args);
 int			ft_env(t_env *env);
@@ -36,103 +38,130 @@ int			ft_export(char **args, t_env **env, t_env **local);
 int			ft_pwd(char **args);
 int			ft_unset(t_shell *stru, char **args);
 
-//main
-int			main(int argc, char **argv, char **env);
+/* ************************************ SOURCES ************************************ */
 
-//tokenisation
+/* ********* tokenisation ********* */
 int			count_tokens(t_tokens *token);
 char		**args_from_tokens(t_tokens *token);
 t_tokens	*ft_tokenisation(char *rl, t_tokens *token);
 
-//environ
+/* ********* environ ********* */
 t_env		*ft_duplicate_env(char **env, t_shell *stru);
 t_env		*create_env_node(char *str);
 
-//variables
+/* ********* variables ********* */
 t_env		*add_to_local(t_env *local, char *name, char *value);
 t_env		*create_local_var(char *args, t_env *local);
 void		move_var_to_env(t_env **env, t_env **local, t_env *var);
 int			main_variables(t_shell *stru);
 
-//expansion
+/* ********* expansion ********* */
 char		*expand_var(t_tokens *token, t_shell *stru, size_t i);
+size_t		expand_var2(t_shell *stru, char *args, size_t i, char **str);
 void		main_expand(t_shell *stru);
+void		split_all_tokens(t_tokens *head, t_shell *stru);
 
-//token_type
+/* ********* token_type ********* */
 t_cmd		*ft_type_token(t_cmd *commande, t_tokens *b_debut, t_shell *stru);
 t_tokens	*ft_type_token_2(t_tokens *p_actuel, t_cmd *commande, t_shell *stru);
 t_tokens	*ft_test_stdout(t_cmd *cmd, t_tokens *p_temp);
 t_tokens	*ft_test_stdin(t_cmd *commande, t_tokens *p_actuel);
 t_tokens	*ft_heredoc_lexer(t_tokens *p_actuel, t_cmd *commande);
 
-//external_commands
+/* ********* extenal cmds ********* */
 void		exec_external(t_cmd *cmd, t_shell *stru, char **env);
 void		run_external(t_cmd *cmd, t_shell *stru, char **env);
 
-//exec
+/* ********* exec ********* */
 void		exec_cmd_line(t_shell *stru, char **env);
 
-//utils
+/* ********* ft_heredocs ********* */
+int			ft_setup_heredoc(t_cmd *commande);
+void		ft_child_heredoc(t_cmd *commande);
+void		ft_heredoc(t_cmd *commande, int pidfd, int i);
+void		signal_handler(int signum, siginfo_t *info, void *context);
+
+/* ********* ft_signals ********* */
+void		ft_signal(void);
+void		signal_handler1(int signum);
+void    	ft_exit_d();
+
+/* ********* fields_splitting ********* */
+size_t		count_fields(const char *str, const char *ifs);
+char		**split_by_ifs(const char *str, const char *ifs);
+void		split_all_tokens(t_tokens *head, t_shell *stru);
+
+
+/* ********* main ********* */
+int			main(int argc, char **argv, char **env);
+
+/* ************************************ UTILS ************************************ */
+
+/* ********* utils ********* */
 int			ft_error(int i, char *str, char *str2);
-int			white_space(char *str, int i);
+bool		is_operator(char *op);
 bool		is_local_var(char *str);
 int			append_char(char **result, char c);
 int			append_str(char **result, const char *str);
 
-//utils_var
+/* ********* utils_var ********* */
 int			check_valid_var(char *str);
 t_env		*find_var(t_env *env, char *name);
 void		parse_args(char *args, char **name, char **value);
 void		update_value(t_env *var, char *new_value);
 void		update_str(t_env *var);
 
-//utils_expan
+/* ********* utils_expan ********* */
 char		*get_env_value(t_env *env, char *name);
 int			is_assignment_word(const char *str);
-void		command_expand(t_cmd *cmd, t_shell *stru);
+bool		is_ifs(char c, const char *ifs);
 int			extract_exit_status(int status);
+char		**split_by_ifs(const char *str, const char *ifs);
 
-
-//utils_token
+/* ********* utils_token ********* */
 int			count_tokens(t_tokens *token);
 char		**args_from_tokens(t_tokens *token);
-int			count_tokens(t_tokens *token);
 void		ft_quote(char *rl, int i);
 char		*ft_strjoin_char(char *str, const char c);
-t_tokens	*ft_creat_token(char *rl, int i);
+int			white_space(char *str, int i);
 
-//free
-void		free_args(char **args);
-void		free_tokens(t_tokens *token);
-void		free_env(t_env **env);
-void		free_cmds(t_cmd *cmd);
-void		free_split(char **to_free);
+/* ********* utils_quotes ********* */
+bool		is_quote(char quote);
+void		skip_quoted(const char *str, size_t *i);
+char		*remove_quotes(const char *str);
+void		unquote_tokens(t_tokens *head);
 
-//clean
-void		clean_cmd(t_shell *stru);
-void		clean_all(t_shell *stru);
-
-//token_type_utils
+/* ********* type_toke_utils ********* */
 void		ft_initialization_commande(t_cmd *commande);
 t_cmd		*ft_creat_token2(void);
 t_cmd		*lexer_cmd(t_cmd *commande, t_tokens *p_actuel);
 int			ft_nb_tokens(t_tokens *p_actuel);
 int			ft_valid_syntax(t_tokens *token);
 
-//utils_builtins
+/* ********* utils_builtins ********* */
 bool		is_builtin(t_cmd *commande);
 int			ft_test_bultins(t_cmd *commande, t_shell *stru);
 
-//utils_cmd
+/* ********* utils_cmd ********* */
 t_cmd		*suppr_empty_cmd(t_cmd *head);
 
-//error_msg
+/* ********* free ********* */
+void		free_tokens(t_tokens *token);
+void		free_env(t_env **env);
+void		free_cmds(t_cmd *cmd);
+void		free_doublechar(char **to_free);
+void		free_fields(char **fields, size_t i);
+
+/* ********* clean ********* */
+void		clean_cmd(t_shell *stru);
+void		clean_all(t_shell *stru);
+
+/* ********* error msg ********* */
 void		err_msg_cmd(char **argv);
 void		err_msg_export(char *argv);
-void		err_msg_synt(char *c);
+void		err_msg_syntax(char *c);
 // int			err_msg_synt(char *c);
-
-
+void		err_msg_dir(char **argv);
 
 #endif
 

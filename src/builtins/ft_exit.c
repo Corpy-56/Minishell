@@ -6,11 +6,17 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:01:37 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/19 14:43:08 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/22 10:07:23 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void ft_exit_d()
+{
+	write(1, "exit\n", 6);
+	exit (0);
+}
 
 static int	is_overflowing(long res, long neg, long digit)
 {

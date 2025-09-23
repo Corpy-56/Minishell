@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokens_utils.c                                     :+:      :+:    :+:   */
+/*   utils_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarah <sarah@student.42.fr>                +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/08 16:51:06 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/18 15:25:08 by sarah            ###   ########.fr       */
+/*   Created: 2025/08/29 15:23:24 by skuor             #+#    #+#             */
+/*   Updated: 2025/09/22 19:34:06 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,25 @@ int	count_tokens(t_tokens *token)
 	return (count);
 }
 
-int	white_space(char *str, int i)
+char	**args_from_tokens(t_tokens *token)
 {
-	while (str[i] != '\0' && (str[i] == 32 || str[i] == 9))
+	int		i;
+	int		count;
+	char	**args;
+
+	i = 0;
+	count = count_tokens(token);
+	args = malloc(sizeof(char *) * (count + 1));
+	if (!args)
+		return (NULL);
+	while (token)
 	{
-		if (i != 0 && str[i] == '$' && (str[i - 1] != 32 || str[i - 1] != 9))
-			i++;
+		args[i] = ft_strdup(token->str);
 		i++;
+		token = token->next;
 	}
-	if (str[i] != 32 && str[i] != 9 && str[i] != '\0')
-		return (i);
-	else if (str[i] == '\0')
-		return (-1);
-	return (0);
+	args[i] = NULL;
+	return (args);
 }
 
 void	ft_quote(char *rl, int i)
@@ -96,5 +102,20 @@ char	*ft_strjoin_char(char *str, const char c)
 	joined[i] = '\0';
 	free(str);
 	return (joined);
+}
+
+int	white_space(char *str, int i)
+{
+	while (str[i] != '\0' && (str[i] == 32 || str[i] == 9))
+	{
+		if (i != 0 && str[i] == '$' && (str[i - 1] != 32 || str[i - 1] != 9))
+			i++;
+		i++;
+	}
+	if (str[i] != 32 && str[i] != 9 && str[i] != '\0')
+		return (i);
+	else if (str[i] == '\0')
+		return (-1);
+	return (0);
 }
 

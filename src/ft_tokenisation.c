@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:07:35 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/09 14:15:14 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/23 11:47:16 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,23 +46,56 @@ char	*ft_one_token_extra(char *rl, int i, t_tokens *token)
 	return (token->str);
 }
 
+// int	ft_one_token(char *rl, int i, t_tokens *token)
+// {
+// 	while (rl[i])
+// 	{
+// 		if (rl[i] == '\'')
+// 		{
+// 			while (rl[++i] != '\0' && rl[i] != '\'')
+// 				token->str = ft_strjoin_char(token->str, rl[i]);
+// 		}
+// 		else if (rl[i] == '\"')
+// 		{
+// 			while (rl[++i] != '\0' && rl[i] != '\"')
+// 			{
+// 				if (rl[i] == '$')
+// 					token->dollars += 1;
+// 				token->str = ft_strjoin_char(token->str, rl[i]);
+// 			}
+// 		}
+// 		else if (rl[i] != 9 && rl[i] != 32 && rl[i])
+// 			token->str = ft_one_token_extra(rl, i, token);
+// 		else if (rl[i] == 9 || rl[i] == 32 || rl[i] == '\0')
+// 			return (i);
+// 		i++;
+// 	}
+// 	return (i);
+// }
+
 int	ft_one_token(char *rl, int i, t_tokens *token)
 {
 	while (rl[i])
 	{
 		if (rl[i] == '\'')
 		{
+			token->str = ft_strjoin_char(token->str, rl[i]);
 			while (rl[++i] != '\0' && rl[i] != '\'')
+				token->str = ft_strjoin_char(token->str, rl[i]);
+			if (rl[i] == '\'')
 				token->str = ft_strjoin_char(token->str, rl[i]);
 		}
 		else if (rl[i] == '\"')
 		{
+			token->str = ft_strjoin_char(token->str, rl[i]);
 			while (rl[++i] != '\0' && rl[i] != '\"')
 			{
 				if (rl[i] == '$')
 					token->dollars += 1;
 				token->str = ft_strjoin_char(token->str, rl[i]);
 			}
+			if (rl[i] == '\"')
+				token->str = ft_strjoin_char(token->str, rl[i]);
 		}
 		else if (rl[i] != 9 && rl[i] != 32 && rl[i])
 			token->str = ft_one_token_extra(rl, i, token);
@@ -113,4 +146,3 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
 	}
 	return (a_debut);
 }
-

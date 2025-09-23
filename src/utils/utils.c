@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:21:04 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/19 09:43:21 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/22 14:53:05 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,6 @@ int	ft_error(int i, char *str, char *str2)
 	write(2, str, (ft_strlen(str)));
 	return (-1);
 }
-
-int	white_space(char *str, int i)
-{
-	while (str[i] != '\0' && (str[i] == 32 || str[i] == 9))
-		i++;
-	if (str[i] != 32 && str[i] != 9 && str[i] != '\0')
-		return (i);
-	else if (str[i] == '\0')
-		return (-1);
-	return (0);
-}
-
 bool	is_local_var(char *s)
 {
 	int	i;
@@ -48,6 +36,23 @@ bool	is_local_var(char *s)
 		i++;
 	}
 	return (s[i] == '=');
+}
+
+bool	is_operator(char *op)
+{
+	if (!op)
+		return (false);
+	if (ft_strncmp(op, "|", 2) == 0)
+		return (true);
+	if (ft_strncmp(op, ">>", 3) == 0)
+		return (true);
+	if (ft_strncmp(op, "<<", 3) == 0)
+		return (true);
+	if (ft_strncmp(op, ">", 2) == 0)
+		return (true);
+	if (ft_strncmp(op, "<", 2) == 0)
+		return (true);
+	return (false);
 }
 
 int	append_char(char **result, char c)

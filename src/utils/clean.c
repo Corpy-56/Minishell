@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 14:32:46 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/19 10:36:58 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/22 16:46:54 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	clean_cmd(t_shell *stru)
 	}
 	if (stru->path_dirs)
 	{
-		free_split(stru->path_dirs);
+		free_doublechar(stru->path_dirs);
 		stru->path_dirs = NULL;
 	}
 }
@@ -48,3 +48,5 @@ void	clean_all(t_shell *stru)
 	}
 	clear_history();
 }
+
+

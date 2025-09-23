@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/19 11:59:28 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/22 10:49:53 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,11 +184,93 @@ static void	reconstruct_path_dirs(t_shell *stru)
 	}
 }
 
+char *ft_expand_heredoc2(char *line, t_shell *stru)
+{
+	char	*str;
+	size_t i;
+	size_t	len_str;
+	size_t	start;
+	size_t	j;
+
+	i = 0;
+	str = ft_calloc(1, 1);
+	if (!str)
+		return (NULL);
+	len_str = ft_strlen(line);
+	start = 0;
+	while (i < len_str)
+	{
+		if (line[i] == '$')
+		{
+			j = start;
+			while (j < i)
+			{
+				if (append_char(&str, line[j]) < 0)
+				{
+					free(str);
+					return (NULL);
+				}
+				j++;
+			}
+			//if (i + 1 < len_str && line[i + 1] == '?')
+			//{
+			//	expand_exit_status(stru, &str);
+			//	i += 2;
+			//}
+			//else
+			i = expand_var2(stru, line, i + 1, &str);
+			start = i;
+		}
+		else
+			i++;
+	}
+	j = start;
+	while (j < i)
+	{
+		if (append_char(&str, line[j]) < 0)
+		{
+			free(str);
+			return (NULL);
+		}
+		j++;
+	}
+	return (str);
+}
+
+void ft_expand_heredoc(int fd, t_shell *stru)
+{
+	char *line;
+	int new_fd;
+	char *temp;
+
+	new_fd = open(".files_expand", O_CREAT | O_RDWR | O_TRUNC, 0600);
+	while(1)
+	{
+		line = get_next_line(fd);
+		if (line == NULL)
+		{
+			close(fd);
+			dup2(new_fd, STDIN_FILENO);
+			close(new_fd);
+			unlink(".files_expand");
+			break ;
+		}
+		temp = ft_expand_heredoc2(line, stru);
+		write(new_fd, temp, ft_strlen(line));
+		write(new_fd, "\n", 1);
+		free(temp);
+	}
+}
+
 void	exec_cmd_line(t_shell *stru, char **env)
 {
 	t_cmd	*head;
 	int		n;
+	int	fd_stdin;
+	int fd;
 
+	fd_stdin = dup(0);
+	fd = 0;
 	reconstruct_path_dirs(stru);
 	head = stru->commande;
 	n = count_maillons(head);
@@ -196,6 +278,13 @@ void	exec_cmd_line(t_shell *stru, char **env)
 		return ;
 	if (n == 1)
 	{
+		if (head->heredoc != NULL)
+		{
+			fd = ft_setup_heredoc(head);
+			if (fd == 0)
+				return ;//il y a une erreur
+			ft_expand_heredoc(fd, stru);
+		}
 		if (is_builtin(head))
 		{
 			stru->last_status = ft_test_bultins(head, stru);
@@ -204,6 +293,8 @@ void	exec_cmd_line(t_shell *stru, char **env)
 		}
 		else
 			run_external(head, stru, env);
+		dup2(fd_stdin, 0);
+		close(fd_stdin);
 		return ;
 	}
 	if (n >= 2)

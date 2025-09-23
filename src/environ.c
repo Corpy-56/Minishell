@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   environ.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sarah <sarah@student.42.fr>                +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:52:31 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/17 12:31:30 by sarah            ###   ########.fr       */
+/*   Updated: 2025/09/23 10:08:39 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,27 +39,6 @@ t_env	*create_env_node(char *str)
 	new->next = NULL;
 	return (new);
 }
-
-/* t_env	*ft_duplicate_env(char **env)
-{
-	int	i;
-
-	auto t_env * fin = NULL, *a_debut = NULL, *new;
-	i = 0;
-	while (env[i])
-	{
-		new = create_env_node(env[i]);
-		if (!new)
-			return (NULL);
-		if (a_debut == NULL)
-			a_debut = new;
-		else
-			fin->next = new;
-		fin = new;
-		i++;
-	}
-	return (a_debut);
-} */
 
 t_env	*ft_duplicate_env(char **env, t_shell *stru)
 {

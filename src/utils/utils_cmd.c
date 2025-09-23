@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 16:59:00 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/18 17:25:18 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/22 16:46:16 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	free_one_maillon(t_cmd *cmd)
 {
 	if (!cmd)
 		return ;
-	free_args(cmd->args);
+	free_doublechar(cmd->args);
 	free(cmd->cmd);
 	free(cmd);
 }
