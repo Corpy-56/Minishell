@@ -3,40 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tokenisation.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:07:35 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/23 11:47:16 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/24 15:21:56 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*ft_tokenisation_quote(char *rl, char *temp, int i)
-{
-	char	quote;
-
-	if (rl[i] == '\"' || rl[i] == '\'')
-	{
-		quote = rl[i++];
-		temp = ft_strjoin_char(temp, quote);
-		while (rl[i] && rl[i] != quote)
-			temp = ft_strjoin_char(temp, rl[i++]);
-		if (rl[i++] == quote)
-			temp = ft_strjoin_char(temp, quote);
-	}
-	else if ((rl[i] == '<' || rl[i] == '>'))
-	{
-		while ((rl[i] == '<' || rl[i] == '>') && rl[i])
-			temp = ft_strjoin_char(temp, rl[i++]);
-	}
-	else if (rl[i] == '|')
-	{
-		while (rl[i] == '|' && rl[i])
-			temp = ft_strjoin_char(temp, rl[i++]);
-	}
-	return (temp);
-}
 
 char	*ft_one_token_extra(char *rl, int i, t_tokens *token)
 {
@@ -45,33 +19,6 @@ char	*ft_one_token_extra(char *rl, int i, t_tokens *token)
 	token->str = ft_strjoin_char(token->str, rl[i]);
 	return (token->str);
 }
-
-// int	ft_one_token(char *rl, int i, t_tokens *token)
-// {
-// 	while (rl[i])
-// 	{
-// 		if (rl[i] == '\'')
-// 		{
-// 			while (rl[++i] != '\0' && rl[i] != '\'')
-// 				token->str = ft_strjoin_char(token->str, rl[i]);
-// 		}
-// 		else if (rl[i] == '\"')
-// 		{
-// 			while (rl[++i] != '\0' && rl[i] != '\"')
-// 			{
-// 				if (rl[i] == '$')
-// 					token->dollars += 1;
-// 				token->str = ft_strjoin_char(token->str, rl[i]);
-// 			}
-// 		}
-// 		else if (rl[i] != 9 && rl[i] != 32 && rl[i])
-// 			token->str = ft_one_token_extra(rl, i, token);
-// 		else if (rl[i] == 9 || rl[i] == 32 || rl[i] == '\0')
-// 			return (i);
-// 		i++;
-// 	}
-// 	return (i);
-// }
 
 int	ft_one_token(char *rl, int i, t_tokens *token)
 {
@@ -97,8 +44,22 @@ int	ft_one_token(char *rl, int i, t_tokens *token)
 			if (rl[i] == '\"')
 				token->str = ft_strjoin_char(token->str, rl[i]);
 		}
+		else if (rl[i] == '<' || rl[i] == '>')
+		{
+			if (token->str == NULL)
+			{
+				while ((rl[i] == '<' || rl[i] == '>') && rl[i])
+				{
+					token->str = ft_strjoin_char(token->str, rl[i]);
+					i++;
+				}
+			}
+			return (i -1);
+		}
 		else if (rl[i] != 9 && rl[i] != 32 && rl[i])
 			token->str = ft_one_token_extra(rl, i, token);
+		else if ((rl[i] != '<' || rl[i] != '>') && token->str == NULL)
+			token->str = ft_strjoin_char(token->str, rl[i]);
 		else if (rl[i] == 9 || rl[i] == 32 || rl[i] == '\0')
 			return (i);
 		i++;

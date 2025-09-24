@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/22 10:49:53 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/24 17:08:07 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,7 +237,7 @@ char *ft_expand_heredoc2(char *line, t_shell *stru)
 	return (str);
 }
 
-void ft_expand_heredoc(int fd, t_shell *stru)
+int ft_expand_heredoc(int fd, t_shell *stru)
 {
 	char *line;
 	int new_fd;
@@ -250,16 +250,18 @@ void ft_expand_heredoc(int fd, t_shell *stru)
 		if (line == NULL)
 		{
 			close(fd);
-			dup2(new_fd, STDIN_FILENO);
 			close(new_fd);
+			new_fd = open(".files_expand", O_CREAT | O_RDWR, 0600);
+			//dup2(new_fd, STDIN_FILENO);
+			//close(new_fd);
 			unlink(".files_expand");
-			break ;
+			return (new_fd) ;
 		}
 		temp = ft_expand_heredoc2(line, stru);
 		write(new_fd, temp, ft_strlen(line));
-		write(new_fd, "\n", 1);
 		free(temp);
 	}
+	return (-1);
 }
 
 void	exec_cmd_line(t_shell *stru, char **env)
@@ -267,9 +269,11 @@ void	exec_cmd_line(t_shell *stru, char **env)
 	t_cmd	*head;
 	int		n;
 	int	fd_stdin;
+	//int fd_stdout;
 	int fd;
 
 	fd_stdin = dup(0);
+	//fd_stdout = dup(1);
 	fd = 0;
 	reconstruct_path_dirs(stru);
 	head = stru->commande;
@@ -281,10 +285,15 @@ void	exec_cmd_line(t_shell *stru, char **env)
 		if (head->heredoc != NULL)
 		{
 			fd = ft_setup_heredoc(head);
-			if (fd == 0)
+			if (fd == -1)
 				return ;//il y a une erreur
-			ft_expand_heredoc(fd, stru);
+			fd = ft_expand_heredoc(fd, stru); // je dois faire une sortit derreur je pense
 		}
+		//if (head->fd_out_put1 != -2)
+		//{
+		//	dup2(head->fd_out_put1, STDOUT_FILENO);
+		//	close(head->fd_out_put1);
+		//}
 		if (is_builtin(head))
 		{
 			stru->last_status = ft_test_bultins(head, stru);
@@ -292,8 +301,10 @@ void	exec_cmd_line(t_shell *stru, char **env)
 				return ;
 		}
 		else
-			run_external(head, stru, env);
+			run_external(head, stru, env, fd);
+	//	dup2(fd_stdout, 1);
 		dup2(fd_stdin, 0);
+	//	close(fd_stdout);
 		close(fd_stdin);
 		return ;
 	}

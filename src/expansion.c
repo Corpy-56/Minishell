@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 18:16:15 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/23 14:21:57 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/24 17:34:00 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,12 +122,20 @@ void	main_expand(t_shell *stru)
 	token = stru->tokens;
 	while (token)
 	{
-		expanded = expand_var(token, stru, 0);
-		if (expanded)
+		if (ft_strncmp(token->str, "<<", 3) == 0 && token->next != NULL)
+			token = token->next->next;
+	//	else if (token->str == NULL)
+		//	token = token->next;
+		else
 		{
-			free(token->str);
-			token->str = expanded;
+			expanded = expand_var(token, stru, 0);
+			if (expanded)
+			{
+				free(token->str);
+				token->str = expanded;
+			}
+			token = token->next;
 		}
-		token = token->next;
 	}
 }
+

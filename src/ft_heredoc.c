@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/19 16:32:09 by agouin           ###   ########.fr       */
+/*   Updated: 2025/09/24 12:09:09 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ int	ft_setup_heredoc(t_cmd *commande)
 		waitpid(pid, &status, 0);
 		sigaction(SIGINT, &old_signale, NULL);
 		fd = open(".files", O_RDONLY);
-		//close(fd);
 		unlink(".files");
 		return (fd);
 	}

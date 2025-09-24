@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/09/22 11:18:54 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/24 12:08:06 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	exec_external(t_cmd *cmd, t_shell *stru, char **env)
 		err_msg_cmd(argv);
 }
 
-void	run_external(t_cmd *cmd, t_shell *stru, char **env)
+void	run_external(t_cmd *cmd, t_shell *stru, char **env, int fd)
 {
 	int		pid;
 	int		status;
@@ -108,7 +108,11 @@ void	run_external(t_cmd *cmd, t_shell *stru, char **env)
 		return ;
 	}
 	if (pid == 0)
+	{
+		dup2(fd, STDIN_FILENO);
+		close(fd);
 		exec_external(cmd, stru, env);
+	}
 	else
 	{
 		status = 0;
