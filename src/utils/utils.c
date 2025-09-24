@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:21:04 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/22 14:53:05 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/24 10:46:22 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	ft_error(int i, char *str, char *str2)
 	write(2, str, (ft_strlen(str)));
 	return (-1);
 }
+
 bool	is_local_var(char *s)
 {
 	int	i;

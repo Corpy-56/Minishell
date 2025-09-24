@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:01:37 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/22 10:07:23 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/24 14:27:27 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int	ft_exit(t_shell *stru, char **args)
 	if (args[2])
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+		stru->last_status = 1;
 		return (1);
 	}
 	stru->last_status = out % 256;

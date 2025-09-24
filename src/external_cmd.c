@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/09/22 11:18:54 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/24 15:14:23 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,25 +75,26 @@ char	*find_in_path(char *name, t_shell *stru)
 void	exec_external(t_cmd *cmd, t_shell *stru, char **env)
 {
 	struct stat	info;
-	
+
 	auto char *path_val, *chosen_path, **argv = cmd->args;
 	if (argv == NULL || argv[0] == NULL)
 		return ;
 	if (stat(argv[0], &info) == 0)
 	{
 		if (S_ISDIR(info.st_mode))
-			err_msg_dir(argv);
+			err_msg_dir(argv, stru);
+		return ;
 	}
 	if (ft_strchr(argv[0], '/'))
 		execve(argv[0], argv, env);
 	path_val = get_env_value(stru->environ, "PATH");
 	if (path_val == NULL)
-		err_msg_cmd(argv);
+		err_msg_cmd(argv, stru);
 	chosen_path = find_in_path(argv[0], stru);
 	if (chosen_path)
 		execve(chosen_path, argv, env);
 	else
-		err_msg_cmd(argv);
+		err_msg_cmd(argv, stru);
 }
 
 void	run_external(t_cmd *cmd, t_shell *stru, char **env)

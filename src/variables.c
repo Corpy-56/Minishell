@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:09:43 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/23 19:31:57 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/24 13:47:22 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	move_var_to_env(t_env **env, t_env **local, t_env *var)
 	move_var_to_env2(env, current);
 }
 
-t_env	*create_local_var(char *args, t_env *local)
+t_env	*create_local_var(char *args, t_env *local, t_shell *stru)
 {
 	char	*name;
 	char	*value;
@@ -83,7 +83,7 @@ t_env	*create_local_var(char *args, t_env *local)
 	parse_args(args, &name, &value);
 	if (!is_assignment_word(args))
 	{
-		err_msg_cmd(&args);
+		err_msg_cmd(&args, stru);
 		free(name);
 		free(value);
 		return (local);
@@ -109,7 +109,7 @@ int	main_variables(t_shell *stru)
 			&& is_assignment_word(stru->commande->args[i]))
 		{
 			stru->local = create_local_var(stru->commande->args[i],
-					stru->local);
+					stru->local, stru);
 			i++;
 		}
 		if (stru->commande->args[i] == NULL)

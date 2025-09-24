@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/23 17:12:44 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/24 15:20:04 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # include <sys/wait.h>
 # include <errno.h>
 
-/* ************************************ BUILTINS ************************************ */
+/* ******************************** BUILTINS ******************************** */
 
 /* ********* builtins ********* */
 int			ft_cd(char **args);
@@ -35,10 +35,10 @@ int			ft_echo(char **args);
 int			ft_env(t_env *env);
 int			ft_exit(t_shell *stru, char **args);
 int			ft_export(char **args, t_env **env, t_env **local);
-int			ft_pwd(char **args);
+int			ft_pwd(char **args, t_shell *stru);
 int			ft_unset(t_shell *stru, char **args);
 
-/* ************************************ SOURCES ************************************ */
+/* ******************************** SOURCES ******************************** */
 
 /* ********* tokenisation ********* */
 int			count_tokens(t_tokens *token);
@@ -51,7 +51,7 @@ t_env		*create_env_node(char *str);
 
 /* ********* variables ********* */
 t_env		*add_to_local(t_env *local, char *name, char *value);
-t_env		*create_local_var(char *args, t_env *local);
+t_env		*create_local_var(char *args, t_env *local, t_shell *stru);
 void		move_var_to_env(t_env **env, t_env **local, t_env *var);
 int			main_variables(t_shell *stru);
 
@@ -84,7 +84,7 @@ void		signal_handler(int signum, siginfo_t *info, void *context);
 /* ********* ft_signals ********* */
 void		ft_signal(void);
 void		signal_handler1(int signum);
-void    	ft_exit_d();
+void		ft_exit_d(void);
 
 /* ********* fields_splitting ********* */
 size_t		count_fields(const char *str, const char *ifs);
@@ -95,7 +95,7 @@ void		split_all_tokens(t_tokens *head, t_shell *stru);
 /* ********* main ********* */
 int			main(int argc, char **argv, char **env);
 
-/* ************************************ UTILS ************************************ */
+/* ******************************** UTILS ********************************** */
 
 /* ********* utils ********* */
 int			ft_error(int i, char *str, char *str2);
@@ -157,11 +157,11 @@ void		clean_cmd(t_shell *stru);
 void		clean_all(t_shell *stru);
 
 /* ********* error msg ********* */
-void		err_msg_cmd(char **argv);
+void		err_msg_cmd(char **argv, t_shell *stru);
 void		err_msg_export(char *argv);
 void		err_msg_syntax(char *c);
-// int			err_msg_synt(char *c);
-void		err_msg_dir(char **argv);
+void		err_msg_dir(char **argv, t_shell *stru);
+void		err_msg_chdir(void);
 
 #endif
 

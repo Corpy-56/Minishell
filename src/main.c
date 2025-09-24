@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/23 18:52:12 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/24 18:14:01 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	ft_test_bultins(t_cmd *commande, t_shell *stru)
 
 	status = 0;
 	if (ft_strncmp(commande->cmd, "pwd", 4) == 0)
-		status = ft_pwd(commande->args);
+		status = ft_pwd(commande->args, stru);
 	else if (ft_strncmp(commande->cmd, "cd", 3) == 0)
 		status = ft_cd(commande->args);
 	else if (ft_strncmp(commande->cmd, "echo", 5) == 0)
@@ -32,9 +32,9 @@ int	ft_test_bultins(t_cmd *commande, t_shell *stru)
 	else if (ft_strncmp(commande->cmd, "export", 5) == 0)
 		status = ft_export(commande->args, &stru->environ, &stru->local);
 	else
-		return (0);
+		return (1);
 	stru->last_status = status;
-	return (1);
+	return (0);
 }
 
 
@@ -86,7 +86,7 @@ int main(int argc, char **argv, char **env)
 		{
 			stru->last_status = 1;
 			stru->should_exit = 1;
-			ft_exit_d(); // je suis pas sur voir avec Sarah
+			// ft_exit_d(); // je suis pas sur voir avec Sarah
 			break ;
 		}
 		if (*rl)
@@ -114,7 +114,8 @@ int main(int argc, char **argv, char **env)
 			// 	}
 			// //	if (main_variables(stru) == 1)
 			// //		continue ;
-			// 	exec_cmd_line(stru, env);
+			// 	// exec_cmd_line(stru, env);
+			// 	ft_on_exect(stru->commande, stru, env);
 			// }
 			syntax = ft_valid_syntax(stru->tokens);
 			if (syntax != 0)
@@ -136,5 +137,5 @@ int main(int argc, char **argv, char **env)
 	}
 	clean_all(stru);
 	free(stru);
-    return (0);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 14:20:54 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/23 16:52:55 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/24 10:55:13 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ size_t	count_fields(const char *str, const char *ifs)
 {
 	size_t	i;
 	size_t	n_fields;
-	
+
 	i = 0;
 	n_fields = 0;
 	if (!str || !*str)

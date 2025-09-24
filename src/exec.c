@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/22 10:49:53 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/24 15:15:42 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,8 +266,8 @@ void	exec_cmd_line(t_shell *stru, char **env)
 {
 	t_cmd	*head;
 	int		n;
-	int	fd_stdin;
-	int fd;
+	int		fd_stdin;
+	int 	fd;
 
 	fd_stdin = dup(0);
 	fd = 0;

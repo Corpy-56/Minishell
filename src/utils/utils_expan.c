@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 14:47:22 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/23 14:21:31 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/24 13:58:41 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	extract_exit_status(int status)
 bool	is_ifs(char c, const char *ifs)
 {
 	int	i;
-	
+
 	i = 0;
 	if (!ifs)
 		return (false);

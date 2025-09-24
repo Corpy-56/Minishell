@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:42:37 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/23 19:18:39 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/24 10:53:28 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	ft_valid_syntax(t_tokens *token)
 		else if (ft_strncmp(p_actuel->str, ">", 1) == 0 || ft_strncmp(p_actuel->str, "<", 1) == 0)
 		{
 			if (p_actuel->next == NULL || ft_is_str_isprint(p_actuel->next->str) == 0)
-				return(err_msg_syntax("newline"), 2);
+				return (err_msg_syntax("newline"), 2);
 			else if (ft_strncmp(p_actuel->next->str, ">", 1) == 0)
 				return (err_msg_syntax(">"), 2);
 			else if (ft_strncmp(p_actuel->next->str, "<", 1) == 0)
