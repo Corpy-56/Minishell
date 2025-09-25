@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/24 18:14:01 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/25 15:18:34 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,31 @@ int	ft_test_bultins(t_cmd *commande, t_shell *stru)
 	return (0);
 }
 
+// void	ft_test_bultins(t_cmd *commande, t_shell *stru)
+// {
+// 	int	status;
+
+// 	status = 0;
+// 	if (ft_strncmp(commande->cmd, "pwd", 4) == 0)
+// 		status = ft_pwd(commande->args, stru);
+// 	else if (ft_strncmp(commande->cmd, "cd", 3) == 0)
+// 		status = ft_cd(commande->args);
+// 	else if (ft_strncmp(commande->cmd, "echo", 5) == 0)
+// 		status = ft_echo(commande->args);
+// 	else if (ft_strncmp(commande->cmd, "env", 4) == 0)
+// 		status = ft_env(stru->environ);
+// 	else if (ft_strncmp(commande->cmd, "exit", 5) == 0)
+// 		status = ft_exit(stru, commande->args);
+// 	else if (ft_strncmp(commande->cmd, "unset", 5) == 0)
+// 		status = ft_unset(stru, commande->args);
+// 	else if (ft_strncmp(commande->cmd, "export", 5) == 0)
+// 		status = ft_export(commande->args, &stru->environ, &stru->local);
+// 	// else
+// 	// 	return (1);
+// 	stru->last_status = status;
+// 	// return (0);
+// }
+
 
 /* void	ft_on_exect(t_cmd *commande, t_shell *stru)
 {
@@ -51,26 +76,27 @@ int	ft_test_bultins(t_cmd *commande, t_shell *stru)
 	}
 } */
 
-void	ft_on_exect(t_cmd *commande, t_shell *stru, char **env)
-{
-	t_cmd	*a_debut;
+// void	ft_on_exect(t_cmd *commande, t_shell *stru, char **env)
+// {
+// 	t_cmd	*a_debut;
 
-	a_debut = commande;
-	while (a_debut)
-	{
-		if (commande->cmd != NULL)
-		{
-			if (!ft_test_bultins(commande, stru))
-				run_external(commande, stru, env);
-		}
-		a_debut = a_debut->next;
-	}
-}
+// 	a_debut = commande;
+// 	while (a_debut)
+// 	{
+// 		if (commande->cmd != NULL)
+// 		{
+// 			if (!ft_test_bultins(commande, stru))
+// 				run_external(commande, stru, env);
+// 		}
+// 		a_debut = a_debut->next;
+// 	}
+// }
 int main(int argc, char **argv, char **env)
 {
 	char *rl;
 	t_shell	*stru;
 	int	syntax;
+	int	status;
 
 	(void)argc;
 	(void)argv;
@@ -135,7 +161,9 @@ int main(int argc, char **argv, char **env)
 		}
 		clean_cmd(stru);
 	}
+	status = stru->last_status;
 	clean_all(stru);
 	free(stru);
-	return (0);
+	// return (0);
+	exit (status);
 }

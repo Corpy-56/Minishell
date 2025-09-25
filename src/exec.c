@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/24 15:15:42 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/25 10:48:18 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,7 +287,8 @@ void	exec_cmd_line(t_shell *stru, char **env)
 		}
 		if (is_builtin(head))
 		{
-			stru->last_status = ft_test_bultins(head, stru);
+			// stru->last_status = ft_test_bultins(head, stru);
+			(void)ft_test_bultins(head, stru);
 			if (stru->should_exit)
 				return ;
 		}

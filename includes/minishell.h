@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/24 15:20:04 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/25 10:45:11 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ int			ft_valid_syntax(t_tokens *token);
 
 /* ********* utils_builtins ********* */
 bool		is_builtin(t_cmd *commande);
-int			ft_test_bultins(t_cmd *commande, t_shell *stru);
+int		ft_test_bultins(t_cmd *commande, t_shell *stru);
 
 /* ********* utils_cmd ********* */
 t_cmd		*suppr_empty_cmd(t_cmd *head);
