@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/24 10:58:03 by agouin           ###   ########.fr       */
+/*   Updated: 2025/09/25 16:04:10 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	signal_handler1(int signum)
 {
 	(void)signum;
-//	write(1, "\nMinishell : ", 14);
+	//write(1, "\nMinishell : ", 14);
 	write(1, "\n", 1);
 	rl_replace_line("", 0);//efface la ligne
 	rl_on_new_line();//remet une ligne 

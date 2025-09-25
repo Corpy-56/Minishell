@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 18:16:15 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/24 17:34:00 by agouin           ###   ########.fr       */
+/*   Updated: 2025/09/25 14:58:47 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,10 +122,15 @@ void	main_expand(t_shell *stru)
 	token = stru->tokens;
 	while (token)
 	{
-		if (ft_strncmp(token->str, "<<", 3) == 0 && token->next != NULL)
-			token = token->next->next;
-	//	else if (token->str == NULL)
-		//	token = token->next;
+		if (token->str == NULL)
+			token = token->next;
+		else if (ft_strncmp(token->str, "<<", 3) == 0 && token->next != NULL)
+		{
+			token = token->next;
+			while(token->str == NULL && token->next != NULL)
+				token = token->next;
+			token = token->next;
+		}
 		else
 		{
 			expanded = expand_var(token, stru, 0);

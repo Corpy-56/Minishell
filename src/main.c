@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/24 17:38:01 by agouin           ###   ########.fr       */
+/*   Updated: 2025/09/25 15:00:11 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int main(int argc, char **argv, char **env)
 {
 	char *rl;
 	t_shell	*stru;
-//	int	syntax;
+	int	syntax;
 
 	(void)argc;
 	(void)argv;
@@ -66,40 +66,32 @@ int main(int argc, char **argv, char **env)
 		free(rl);
 		if (!stru->tokens)
 			continue ;
-	//	main_expand(stru);
-		t_tokens *tokens;
-
-		tokens = stru->tokens;
-		while(tokens)
+		main_expand(stru);
+		split_all_tokens(stru->tokens, stru);
+		unquote_tokens(stru->tokens);
+		if (stru->tokens != NULL)
 		{
-			printf("%s\n", tokens->str);
-			tokens = tokens->next;
+			 //	if (main_variables(stru) == 1)
+			 //		continue ;
+			syntax = ft_valid_syntax(stru->tokens);
+			if (syntax != 0)
+			{
+				stru->last_status = 258;
+				clean_cmd(stru);
+				continue ;
+			}
+			stru->commande = ft_type_token(stru->commande, stru->tokens, stru);
+			stru->commande = suppr_empty_cmd(stru->commande);
+			if (stru->commande == NULL)
+			{
+				clean_cmd(stru);
+				continue ;
+			}
+			exec_cmd_line(stru, env);
 		}
-		//split_all_tokens(stru->tokens, stru);
-		//unquote_tokens(stru->tokens);
-	//	if (stru->tokens != NULL)
-	//	{
-			// //	if (main_variables(stru) == 1)
-			// //		continue ;
-			//syntax = ft_valid_syntax(stru->tokens);
-			//if (syntax != 0)
-			//{
-			//	stru->last_status = 258;
-			//	clean_cmd(stru);
-			//	continue ;
-			//}
-			//stru->commande = ft_type_token(stru->commande, stru->tokens, stru);
-			//stru->commande = suppr_empty_cmd(stru->commande);
-			//if (stru->commande == NULL)
-			//{
-			//	clean_cmd(stru);
-			//	continue ;
-			//}
-			//exec_cmd_line(stru, env);
-	//	}
-		//clean_cmd(stru);
+		clean_cmd(stru);
 	}
-//	clean_all(stru);
-//	free(stru);
+	clean_all(stru);
+	free(stru);
     return (0);
 }
