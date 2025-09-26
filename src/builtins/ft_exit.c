@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:01:37 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/25 15:23:35 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/26 11:47:57 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	ft_exit(t_shell *stru, char **args)
 		printf("bash: exit: %s: numeric argument required\n", args[1]);
 		stru->last_status = 2;
 		stru->should_exit = 1;
-		// exit(2);
+		return (2);
 	}
 	if (args[2])
 	{

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/25 10:45:11 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/26 15:31:49 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 /* ******************************** BUILTINS ******************************** */
 
 /* ********* builtins ********* */
-int			ft_cd(char **args);
+int			ft_cd(char **args, t_shell *stru);
 int			ft_echo(char **args);
 int			ft_env(t_env *env);
 int			ft_exit(t_shell *stru, char **args);
@@ -48,6 +48,8 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token);
 /* ********* environ ********* */
 t_env		*ft_duplicate_env(char **env, t_shell *stru);
 t_env		*create_env_node(char *str);
+int		update_env(t_env *head, char *name, char *value, t_shell *stru);
+
 
 /* ********* variables ********* */
 t_env		*add_to_local(t_env *local, char *name, char *value);

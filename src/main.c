@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/25 15:18:34 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/26 13:35:43 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	ft_test_bultins(t_cmd *commande, t_shell *stru)
 	if (ft_strncmp(commande->cmd, "pwd", 4) == 0)
 		status = ft_pwd(commande->args, stru);
 	else if (ft_strncmp(commande->cmd, "cd", 3) == 0)
-		status = ft_cd(commande->args);
+		status = ft_cd(commande->args, stru);
 	else if (ft_strncmp(commande->cmd, "echo", 5) == 0)
 		status = ft_echo(commande->args);
 	else if (ft_strncmp(commande->cmd, "env", 4) == 0)
@@ -110,7 +110,8 @@ int main(int argc, char **argv, char **env)
 		rl = readline("Minishell > ");
 		if (!rl)
 		{
-			stru->last_status = 1;
+			write(1, "exit\n", 5);
+			// stru->last_status = 1;
 			stru->should_exit = 1;
 			// ft_exit_d(); // je suis pas sur voir avec Sarah
 			break ;
@@ -158,6 +159,11 @@ int main(int argc, char **argv, char **env)
 				continue ;
 			}
 			exec_cmd_line(stru, env);
+			if (stru->should_exit)
+			{
+				clean_cmd(stru);
+				break ;
+			}
 		}
 		clean_cmd(stru);
 	}
