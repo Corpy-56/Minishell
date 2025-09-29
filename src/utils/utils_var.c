@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 12:32:05 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/16 11:06:00 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/29 11:46:53 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ void	update_value(t_env *var, char *new_value)
 	{
 		tmp_str = ft_strjoin(var->name, "=");
 		var->str = ft_strjoin(tmp_str, new_value);
+		free(tmp_str);
 	}
 	else
 		var->str = ft_strdup(var->name);

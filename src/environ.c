@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:52:31 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/26 19:22:01 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/29 15:48:58 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,9 @@ char	*build_line(char *name, char *value)
 	char	*line;
 	size_t	name_len;
 	size_t	val_len;
-	
+
 	name_len = ft_strlen(name);
 	val_len = ft_strlen(value);
-	// line = ft_calloc(1, 1);
 	if (!name || !*name)
 		return (NULL);
 	if (!value)
@@ -87,7 +86,10 @@ char	*build_line(char *name, char *value)
 	}
 	line = malloc((name_len + 1) + (val_len + 1));
 	if (!line)
+	{
+		free(line);
 		return (NULL);
+	}
 	ft_memcpy(line, name, name_len);
 	line[name_len] = '=';
 	ft_memcpy((line + name_len + 1), value, val_len);
@@ -101,14 +103,13 @@ int	update_env(t_env *head, char *name, char *value, t_shell *stru)
 	t_env	*new_node;
 	t_env	*last;
 	char	*line;
-	
+
 	if (!head || !name || ft_strcmp(name, "") == 0)
 		return (-1);
 	node = find_var(head, name);
 	if (node)
 	{
 		update_value(node, value);
-		
 		if (name && ft_strcmp(name, "PATH") == 0)
 		{
 			if (node->path)

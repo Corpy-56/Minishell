@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/26 13:35:43 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/29 16:33:12 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ int main(int argc, char **argv, char **env)
 			syntax = ft_valid_syntax(stru->tokens);
 			if (syntax != 0)
 			{
-				stru->last_status = 258;
+				stru->last_status = 2;
 				clean_cmd(stru);
 				continue ;
 			}
