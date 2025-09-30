@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 21:35:08 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/29 16:40:39 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/30 16:12:28 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,25 @@ static bool	oldpwd_is_getcwd(char *oldpwd)
 	return (false);
 }
 
-int	ft_cd(char **args, t_shell *stru)
+static void	chdir_args(char **args, char *oldpwd, char *pwd)
+{
+	if (chdir(args[1]) != 0)
+	{
+		err_msg_cd(args[1]);
+		if (oldpwd_is_getcwd(oldpwd))
+			free(oldpwd);
+		return ;
+	}
+	if (!pwd)
+	{
+		err_msg_chdir(args);
+		free(pwd);
+	}
+}
+
+static void	chdir_home(char **args, t_shell *stru)
 {
 	char	*home;
-	char	*pwd;
-	char	*oldpwd;
-	char	*newpwd;
 
 	if (!args[1])
 	{
@@ -43,29 +56,25 @@ int	ft_cd(char **args, t_shell *stru)
 		if (!home)
 		{
 			ft_putstr_fd("minishell: cd: HOME not set\n", 2);
-			return (1);
+			return ;
 		}
 		chdir(home);
 	}
+}
+
+int	ft_cd(char **args, t_shell *stru)
+{
+	char	*pwd;
+	char	*oldpwd;
+	char	*newpwd;
+
+	chdir_home(args, stru);
 	oldpwd = get_env_value(stru->environ, "PWD");
 	if (!oldpwd)
 		oldpwd = getcwd(NULL, 0);
 	pwd = getcwd(NULL, 0);
 	if (args[1])
-	{
-		if (chdir(args[1]) != 0)
-		{
-			err_msg_cd(args[1]);
-			if (oldpwd_is_getcwd(oldpwd))
-				free(oldpwd);
-			return (1);
-		}
-		if (!pwd)
-		{
-			err_msg_chdir();
-			free(pwd);
-		}
-	}
+		chdir_args(args, oldpwd, pwd);
 	newpwd = getcwd(NULL, 0);
 	if (!newpwd)
 	{

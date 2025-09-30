@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/25 10:48:18 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/30 15:18:03 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,6 @@ t_cmd	**collect_maillons(t_cmd *head, int n)
 	status2 = waitpid(pid2, 0, 0);
 	sh->last_status = extract_exit_status(status2);
 } */
-
-
 
 void	run_pipes(t_cmd *head, t_shell *sh, char **env)
 {

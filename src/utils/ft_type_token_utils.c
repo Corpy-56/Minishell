@@ -6,15 +6,39 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:42:37 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/29 17:07:13 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/30 15:26:08 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static int	error_chevrons(t_tokens *p_actuel)
+{
+	if (ft_strncmp(p_actuel->str, ">>>>", 4) == 0)
+		return (err_msg_syntax(">>"), 2);
+	else if (ft_strncmp(p_actuel->str, ">>>", 3) == 0)
+		return (err_msg_syntax(">"), 2);
+	else if (ft_strncmp(p_actuel->str, "<<<<", 4) == 0)
+		return (err_msg_syntax("<<"), 2);
+	else if (ft_strncmp(p_actuel->str, "<<<", 3) == 0)
+		return (err_msg_syntax("newline"), 2);
+	else if (ft_strncmp(p_actuel->str, "><", 2) == 0)
+		return (err_msg_syntax("<"), 2);
+	else if (ft_strncmp(p_actuel->str, ">", 1) == 0
+		|| ft_strncmp(p_actuel->str, "<", 1) == 0)
+	{
+		if (p_actuel->next == NULL
+			|| ft_is_str_isprint(p_actuel->next->str) == 0)
+			return (err_msg_syntax("newline"), 2);
+		else if (ft_strncmp(p_actuel->next->str, ">", 1) == 0)
+			return (err_msg_syntax(">"), 2);
+	}
+	return (0);
+}
+
 int	ft_valid_syntax(t_tokens *token)
 {
-	t_tokens	*p_actuel;// je peux faire une fonction avec i qui affiche un message different en fonction de i
+	t_tokens	*p_actuel;
 
 	p_actuel = token;
 	if (p_actuel && ft_strncmp(p_actuel->str, "||", 2) == 0)
@@ -23,23 +47,12 @@ int	ft_valid_syntax(t_tokens *token)
 		return (err_msg_syntax("|"), 2);
 	while (p_actuel != NULL)
 	{
-		// if ((p_actuel->next == NULL && ft_strncmp(p_actuel->str, "|", 1) == 0))
-		// 	return (err_msg_syntax("|"), 2);
-		// else if (ft_strncmp(p_actuel->str, "||", 2) == 0)
-		// 	return (err_msg_syntax("||"), 2);
-		if (ft_strncmp(p_actuel->str, ">>>", 3) == 0)
-			return (err_msg_syntax(">"), 2);
-		else if (ft_strncmp(p_actuel->str, "<<<", 3) == 0)
-			return (err_msg_syntax("newline"), 2);
-		else if (ft_strncmp(p_actuel->str, "><", 2) == 0)
-			return (err_msg_syntax("<"), 2);
-		else if (ft_strncmp(p_actuel->str, ">", 1) == 0 || ft_strncmp(p_actuel->str, "<", 1) == 0)
-		{
-			if (p_actuel->next == NULL || ft_is_str_isprint(p_actuel->next->str) == 0)
-				return (err_msg_syntax("newline"), 2);
-			else if (ft_strncmp(p_actuel->next->str, ">", 1) == 0)
-				return (err_msg_syntax(">"), 2);
-		}
+		if ((p_actuel->next == NULL && ft_strncmp(p_actuel->str, "|", 1) == 0))
+			return (err_msg_syntax("|"), 2);
+		else if (ft_strncmp(p_actuel->str, "||", 2) == 0)
+			return (err_msg_syntax("||"), 2);
+		if (error_chevrons(p_actuel))
+			return (2);
 		p_actuel = p_actuel->next;
 	}
 	return (0);
@@ -91,7 +104,6 @@ t_cmd	*lexer_cmd(t_cmd *commande, t_tokens *p_actuel)
 
 	if (commande->cmd == NULL && is_assignment_word(p_actuel->str))
 		return (commande);
-
 	i = ft_nb_tokens(p_actuel);
 	j = 0;
 	if (commande->cmd == NULL)

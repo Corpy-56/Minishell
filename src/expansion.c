@@ -6,20 +6,24 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 18:16:15 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/23 14:21:57 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/30 15:25:01 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static void	free_dup_name(char *dup, char *name)
+{
+	free(dup);
+	free(name);
+}
+
 size_t	expand_var2(t_shell *stru, char *args, size_t i, char **str)
 {
 	size_t	start;
 	size_t	len_str;
-	char	*name;
-	char	*value;
-	char	*dup;
 
+	auto char *name, *value, *dup;
 	start = i;
 	len_str = ft_strlen(args);
 	while (i < len_str && (ft_isalnum(args[i]) || args[i] == '_'))
@@ -39,19 +43,10 @@ size_t	expand_var2(t_shell *stru, char *args, size_t i, char **str)
 	else
 		dup = ft_strdup("");
 	if (!dup)
-	{
-		free(value);
-		return (start);
-	}
+		return (free(value), start);
 	if (append_str(str, value) < 0)
-	{
-		free(dup);
-		free(name);
-		return (start);
-	}
-	free(dup);
-	free(name);
-	return (i);
+		return (free_dup_name(dup, name), start);
+	return (free_dup_name(dup, name), i);
 }
 
 static void	expand_exit_status(t_shell *stru, char **str)

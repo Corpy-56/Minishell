@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:09:43 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/24 13:47:22 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/30 16:51:15 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,26 +121,3 @@ int	main_variables(t_shell *stru)
 	}
 	return (0);
 }
-
-/* int	main_variables(t_shell *stru)
-{
-	int		i;
-
-	i = 0;
-	if (stru->tokens->args[0] && is_assignment_word(stru->tokens->args[0]))
-	{
-		while (stru->tokens->args[i]
-			&& is_assignment_word(stru->tokens->args[i]))
-		{
-			stru->local = create_local_var(stru->tokens->args[i], stru->local);
-			i++;
-		}
-		if (stru->tokens->args[i] == NULL)
-		{
-			free_tokens(stru->tokens);
-			stru->tokens = NULL;
-			return (1);
-		}
-	}
-	return (0);
-} */

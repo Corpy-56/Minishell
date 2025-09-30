@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/19 12:17:23 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/24 14:23:51 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/30 15:29:03 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,9 @@ void	err_msg_dir(char **argv, t_shell *stru)
 	stru->last_status = 126;
 }
 
-void	err_msg_chdir(void)
+void	err_msg_chdir(char **args)
 {
+	(void)args;
 	ft_putstr_fd("chdir: error retrieving current directory: : ", 2);
 	ft_putstr_fd("getcwd: cannot access parent directories: ", 2);
 	ft_putstr_fd("No such file or directory\n", 2);

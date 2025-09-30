@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 14:32:46 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/22 16:46:54 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/30 15:25:36 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	clean_cmd(t_shell *stru)
 void	clean_all(t_shell *stru)
 {
 	(void)stru;
-
 	clean_cmd(stru);
 	if (stru->environ)
 	{
@@ -48,5 +47,3 @@ void	clean_all(t_shell *stru)
 	}
 	clear_history();
 }
-
-

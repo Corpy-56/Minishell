@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/09/24 15:14:23 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/30 14:30:53 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,10 @@ void	run_external(t_cmd *cmd, t_shell *stru, char **env)
 		return ;
 	}
 	if (pid == 0)
+	{
 		exec_external(cmd, stru, env);
+		exit(127);
+	}
 	else
 	{
 		status = 0;

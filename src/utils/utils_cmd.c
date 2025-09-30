@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 16:59:00 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/22 16:46:16 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/30 15:26:32 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_cmd	*suppr_empty_cmd(t_cmd *head)
 
 	prev = NULL;
 	current = head;
-	while(current)
+	while (current)
 	{
 		if (current->cmd == NULL)
 		{

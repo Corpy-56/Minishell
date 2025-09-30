@@ -6,7 +6,7 @@
 #    By: skuor <skuor@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/08 16:18:45 by skuor             #+#    #+#              #
-#    Updated: 2025/09/26 12:39:02 by skuor            ###   ########.fr        #
+#    Updated: 2025/09/30 14:03:12 by skuor            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,8 +22,9 @@ BLTINS_DIR = $(SRC_DIR)builtins/
 UTILS_DIR = $(SRC_DIR)utils/
 LIBFT_DIR = ./libft/
 
-SRC_FILES = main.c ft_tokenisation.c variables.c environ.c expansion.c fields_splitting.c \
-			ft_type_token.c external_cmd.c exec.c error_msg.c ft_heredoc.c ft_signals.c
+SRC_FILES = main.c ft_tokenisation.c variables.c environ.c environ2.c fields_splitting.c \
+			ft_type_token.c external_cmd.c exec.c error_msg.c ft_heredoc.c ft_signals.c \
+			expansion.c
 
 BLTINS_FILES = ft_exit.c ft_pwd.c ft_env.c ft_echo.c ft_cd.c ft_unset.c ft_export.c
 

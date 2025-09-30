@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/26 15:31:49 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/30 15:29:23 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token);
 /* ********* environ ********* */
 t_env		*ft_duplicate_env(char **env, t_shell *stru);
 t_env		*create_env_node(char *str);
-int		update_env(t_env *head, char *name, char *value, t_shell *stru);
+int			update_env(t_env *head, char *name, char *value, t_shell *stru);
 
 
 /* ********* variables ********* */
@@ -65,7 +65,7 @@ void		split_all_tokens(t_tokens *head, t_shell *stru);
 
 /* ********* token_type ********* */
 t_cmd		*ft_type_token(t_cmd *commande, t_tokens *b_debut, t_shell *stru);
-t_tokens	*ft_type_token_2(t_tokens *p_actuel, t_cmd *commande, t_shell *stru);
+t_tokens	*ft_type_token_2(t_tokens *p_actuel, t_cmd *cmd, t_shell *stru);
 t_tokens	*ft_test_stdout(t_cmd *cmd, t_tokens *p_temp);
 t_tokens	*ft_test_stdin(t_cmd *commande, t_tokens *p_actuel);
 t_tokens	*ft_heredoc_lexer(t_tokens *p_actuel, t_cmd *commande);
@@ -142,7 +142,7 @@ int			ft_valid_syntax(t_tokens *token);
 
 /* ********* utils_builtins ********* */
 bool		is_builtin(t_cmd *commande);
-int		ft_test_bultins(t_cmd *commande, t_shell *stru);
+int			ft_test_bultins(t_cmd *commande, t_shell *stru);
 
 /* ********* utils_cmd ********* */
 t_cmd		*suppr_empty_cmd(t_cmd *head);
@@ -163,7 +163,7 @@ void		err_msg_cmd(char **argv, t_shell *stru);
 void		err_msg_export(char *argv);
 void		err_msg_syntax(char *c);
 void		err_msg_dir(char **argv, t_shell *stru);
-void		err_msg_chdir(void);
+void		err_msg_chdir(char **args);
 
 #endif
 

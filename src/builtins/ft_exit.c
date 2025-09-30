@@ -6,17 +6,11 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:01:37 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/26 11:47:57 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/30 16:52:30 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void ft_exit_d()
-{
-	write(1, "exit\n", 6);
-	exit (0);
-}
 
 static int	is_overflowing(long res, long neg, long digit)
 {
@@ -29,7 +23,6 @@ static int	is_overflowing(long res, long neg, long digit)
 static void	str_not_digit(const char *str, long neg, int i)
 {
 	(void)neg;
-
 	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
 		i++;
 	if (str[i] == '+' || str[i] == '-')
@@ -67,6 +60,15 @@ int	str_to_long(const char *str, long *out)
 	return (0);
 }
 
+void	err_msg_num(char **argv, t_shell *stru)
+{
+	ft_putstr_fd("minishell: exit: ", 2);
+	ft_putstr_fd(argv[1], 2);
+	ft_putstr_fd(": numeric argument required\n", 2);
+	stru->last_status = 2;
+	stru->should_exit = 1;
+}
+
 int	ft_exit(t_shell *stru, char **args)
 {
 	long	out;
@@ -75,17 +77,11 @@ int	ft_exit(t_shell *stru, char **args)
 	printf("exit\n");
 	if (!args[1])
 	{
-		// stru->last_status = 0;
 		stru->should_exit = 1;
 		return (0);
 	}
 	if (str_to_long(args[1], &out))
-	{
-		printf("bash: exit: %s: numeric argument required\n", args[1]);
-		stru->last_status = 2;
-		stru->should_exit = 1;
-		return (2);
-	}
+		return (err_msg_num(args, stru), 2);
 	if (args[2])
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
@@ -96,6 +92,5 @@ int	ft_exit(t_shell *stru, char **args)
 	if (stru->last_status < 0)
 		stru->last_status += 256;
 	stru->should_exit = 1;
-	// exit(out % 256);
 	return (stru->last_status);
 }

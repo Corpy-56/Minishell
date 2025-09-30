@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:56:23 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/24 13:48:05 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/30 14:02:16 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,21 +142,21 @@ t_tokens	*ft_heredoc_lexer(t_tokens *p_actuel, t_cmd *commande)
 // }
 
 
-t_tokens	*ft_type_token_2(t_tokens *p_actuel, t_cmd *commande, t_shell *stru)
+t_tokens	*ft_type_token_2(t_tokens *p_actuel, t_cmd *cmd, t_shell *stru)
 {
 	if (ft_strncmp(p_actuel->str, ">", 1) == 0)
-		p_actuel = ft_test_stdout(commande, p_actuel);
+		p_actuel = ft_test_stdout(cmd, p_actuel);
 	else if (ft_strncmp(p_actuel->str, "<", 2) == 0)
-		p_actuel = ft_test_stdin(commande, p_actuel);
+		p_actuel = ft_test_stdin(cmd, p_actuel);
 	else if (ft_strncmp(p_actuel->str, "<<", 3) == 0)
-		p_actuel = ft_heredoc_lexer(p_actuel, commande);
+		p_actuel = ft_heredoc_lexer(p_actuel, cmd);
 	else if (ft_is_str_isprint(p_actuel->str) == 1
 		&& ft_strncmp(p_actuel->str, "|", 2) != 0)
 	{
-		if (commande->cmd == NULL && is_assignment_word(p_actuel->str))
+		if (cmd->cmd == NULL && is_assignment_word(p_actuel->str))
 			stru->local = create_local_var(p_actuel->str, stru->local, stru);
 		else
-			lexer_cmd(commande, p_actuel);
+			lexer_cmd(cmd, p_actuel);
 	}
 	return (p_actuel);
 }
