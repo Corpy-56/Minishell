@@ -6,11 +6,18 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:42:37 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/30 15:26:08 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/01 16:11:09 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	err_msg_ambiguous(char **args)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(args[0], 2);
+	ft_putstr_fd(": ambiguous redirect\n", 2);
+}
 
 static int	error_chevrons(t_tokens *p_actuel)
 {
@@ -27,9 +34,10 @@ static int	error_chevrons(t_tokens *p_actuel)
 	else if (ft_strncmp(p_actuel->str, ">", 1) == 0
 		|| ft_strncmp(p_actuel->str, "<", 1) == 0)
 	{
-		if (p_actuel->next == NULL
-			|| ft_is_str_isprint(p_actuel->next->str) == 0)
+		if (p_actuel->next == NULL)
 			return (err_msg_syntax("newline"), 2);
+		else if (p_actuel->next->str == NULL || p_actuel->next->str[0] == '\0')
+			return (err_msg_ambiguous(&p_actuel->next->str), 1);
 		else if (ft_strncmp(p_actuel->next->str, ">", 1) == 0)
 			return (err_msg_syntax(">"), 2);
 	}

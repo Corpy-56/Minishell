@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/30 15:29:23 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/01 18:14:35 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ t_tokens	*ft_heredoc_lexer(t_tokens *p_actuel, t_cmd *commande);
 
 /* ********* extenal cmds ********* */
 void		exec_external(t_cmd *cmd, t_shell *stru, char **env);
-void		run_external(t_cmd *cmd, t_shell *stru, char **env);
+void		run_external(t_cmd *cmd, t_shell *stru, char **env, int fd);
 
 /* ********* exec ********* */
 void		exec_cmd_line(t_shell *stru, char **env);
@@ -164,6 +164,15 @@ void		err_msg_export(char *argv);
 void		err_msg_syntax(char *c);
 void		err_msg_dir(char **argv, t_shell *stru);
 void		err_msg_chdir(char **args);
+
+/* ********* utils exect redirections ********* */
+char 		*ft_expand_heredoc2(char *line, t_shell *stru);
+int			ft_expand_heredoc(int fd, t_shell *stru);
+int			ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru);
+void		ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd);
+
+/* ********* utils tests ********* */
+t_cmd		*ft_test_no_errors(t_cmd *commande);
 
 #endif
 

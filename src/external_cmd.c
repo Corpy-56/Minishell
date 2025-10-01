@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/09/30 14:30:53 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/01 18:09:53 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,31 @@ void	exec_external(t_cmd *cmd, t_shell *stru, char **env)
 		err_msg_cmd(argv, stru);
 }
 
-void	run_external(t_cmd *cmd, t_shell *stru, char **env)
+// void	run_external(t_cmd *cmd, t_shell *stru, char **env)
+// {
+// 	int		pid;
+// 	int		status;
+
+// 	pid = fork();
+// 	if (pid < 0)
+// 	{
+// 		stru->last_status = 1;
+// 		return ;
+// 	}
+// 	if (pid == 0)
+// 	{
+// 		exec_external(cmd, stru, env);
+// 		exit(stru->last_status);
+// 	}
+// 	else
+// 	{
+// 		status = 0;
+// 		waitpid(pid, &status, 0);
+// 		stru->last_status = extract_exit_status(status);
+// 	}
+// }
+
+void	run_external(t_cmd *cmd, t_shell *stru, char **env, int fd)
 {
 	int		pid;
 	int		status;
@@ -110,8 +134,13 @@ void	run_external(t_cmd *cmd, t_shell *stru, char **env)
 	}
 	if (pid == 0)
 	{
+		if (cmd->heredoc != NULL)
+		{
+			dup2(fd, STDIN_FILENO);
+			close(fd);
+		}
 		exec_external(cmd, stru, env);
-		exit(127);
+		exit(stru->last_status);
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 15:23:24 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/30 15:27:16 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/01 16:53:20 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,31 +46,39 @@ char	**args_from_tokens(t_tokens *token)
 	return (args);
 }
 
+void	ft_quote2(char *rl, int i, int quote1)
+{
+	while (rl[++i])
+	{
+		if (quote1 == 0 && rl[i++] == '\'')
+		{
+			while (rl[i] && rl[i] != '\'')
+				i++;
+			if (rl[i] == '\0')
+			{
+				quote1++;
+				break ;
+			}
+		}
+		else if (quote1 == 0 && rl[i++] == '\"')
+		{
+			while (rl[i] && rl[i] != '\"')
+				i++;
+			if (rl[i] == '\0')
+			{
+				quote1++;
+				break ;
+			}
+		}
+	}
+}
+
 void	ft_quote(char *rl, int i)
 {
 	int	quote1;
 
 	quote1 = 0;
-	while (rl[i])
-	{
-		if (quote1 == 0 && rl[i] == '\'')
-		{
-			i++;
-			while (rl[i] != '\'' && rl[i])
-				i++;
-			if (rl[i] == '\0')
-				quote1++;
-		}
-		else if (quote1 == 0 && rl[i] == '\"')
-		{
-			i++;
-			while (rl[i] != '\"' && rl[i])
-				i++;
-			if (rl[i] == '\0')
-				quote1++;
-		}
-		i++;
-	}
+	ft_quote2(rl, i, quote1);
 	if (quote1 != 0)
 		ft_error(1, "", NULL);// faire un autre message derreur ?? 
 }

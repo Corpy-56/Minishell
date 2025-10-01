@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 14:20:54 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/24 10:55:13 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/01 17:26:15 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,14 @@ char	**split_by_ifs(const char *str, const char *ifs)
 	size_t	j;
 	size_t	n_fields;
 	size_t	start;
-	char	**fields = NULL;
+	char	**fields;
 
 	i = 0;
 	j = 0;
+	fields = NULL;
 	if (str == NULL)
 	{
-		fields = ft_calloc(1, sizeof(char*));
+		fields = ft_calloc(1, sizeof(char *));
 		return (fields);
 	}
 	if (!ifs || !*ifs)
@@ -75,7 +76,7 @@ char	**split_by_ifs(const char *str, const char *ifs)
 		if (!str[i])
 			break ;
 		start = i;
-		while(str[i] && !is_ifs(str[i], ifs))
+		while (str[i] && !is_ifs(str[i], ifs))
 		{
 			if (is_quote(str[i]))
 				skip_quoted(str, &i);
@@ -83,7 +84,7 @@ char	**split_by_ifs(const char *str, const char *ifs)
 				i++;
 		}
 		fields[j] = ft_substr(str, start, (i - start));
-		if(!fields[j])
+		if (!fields[j])
 		{
 			free_fields(fields, j);
 			return (NULL);
@@ -94,18 +95,48 @@ char	**split_by_ifs(const char *str, const char *ifs)
 	return (fields);
 }
 
+void	no_fields(char **fields, t_tokens *curr, t_tokens *prev, t_tokens *head)
+{
+	t_tokens	*next;
+
+	next = curr->next;
+	free(curr->str);
+	free(curr);
+	if (prev == NULL)
+		head = next;
+	else
+		prev->next = next;
+	free_doublechar(fields);
+	curr = next;
+}
+
+void	while_fields(char **fields, size_t i, t_tokens *last)
+{
+	t_tokens	*new;
+
+	while (fields[i])
+	{
+		new = ft_calloc(1, sizeof(*new));
+		if (!new)
+		{
+			free_doublechar(fields);
+			return ;
+		}
+		new->str = ft_strdup(fields[i]);
+		new->next = last->next;
+		last->next = new;
+		last = new;
+		i++;
+	}
+}
 
 void	split_all_tokens(t_tokens *head, t_shell *stru)
 {
 	char		*ifs;
 	char		**fields;
-	t_tokens	*prev;
-	t_tokens	*current;
-	t_tokens	*next;
-	t_tokens	*last;
-	t_tokens	*new;
 	size_t		i;
-	
+
+	auto t_tokens * prev, *current, *last;
 	ifs = get_env_value(stru->environ, "IFS");
 	if (!ifs || !*ifs)
 		ifs = " \t\n";
@@ -124,40 +155,16 @@ void	split_all_tokens(t_tokens *head, t_shell *stru)
 			return ;
 		if (fields[0] == NULL)
 		{
-			next = current->next;
-			free(current->str);
-			free(current);
-			if (prev == NULL)
-				head = next;
-			else
-				prev->next = next;
-			free_doublechar(fields);
-			current = next;
+			no_fields(fields, current, prev, head);
 			continue ;
 		}
 		free(current->str);
 		current->str = ft_strdup(fields[0]);
 		if (!current->str)
-		{
-			free_doublechar(fields);
-			return ;
-		}
+			return (free_doublechar(fields));
 		last = current;
 		i = 1;
-		while (fields[i])
-		{
-			new = ft_calloc(1, sizeof(*new));
-			if (!new)
-			{
-				free_doublechar(fields);
-				return ;
-			}
-			new->str = ft_strdup(fields[i]);
-			new->next = last->next;
-			last->next = new;
-			last = new;
-			i++;
-		}
+		while_fields(fields, i, last);
 		free_doublechar(fields);
 		prev = last;
 		current = last->next;

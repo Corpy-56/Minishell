@@ -6,7 +6,7 @@
 #    By: skuor <skuor@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/08 16:18:45 by skuor             #+#    #+#              #
-#    Updated: 2025/09/30 14:03:12 by skuor            ###   ########.fr        #
+#    Updated: 2025/10/01 18:15:41 by skuor            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ BLTINS_FILES = ft_exit.c ft_pwd.c ft_env.c ft_echo.c ft_cd.c ft_unset.c ft_expor
 
 UTILS_FILES = utils.c utils_expan.c utils_tokens.c ft_type_token_utils.c \
 			  utils_builtins.c utils_cmd.c utils_quotes.c utils_var.c \
-			  free.c clean.c
+			  free.c clean.c ft_utils_exect_redirections.c ft_utils_tests.c \
 
 OBJ = 	$(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o)) \
 		$(addprefix $(OBJ_DIR), $(BLTINS_FILES:.c=.o)) \
