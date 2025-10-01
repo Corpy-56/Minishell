@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/01 16:21:31 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/01 17:33:34 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ t_env		*create_env_node(char *str);
 
 /* ********* variables ********* */
 t_env		*add_to_local(t_env *local, char *name, char *value);
-t_env		*create_local_var(char *args, t_env *local);
+t_env		*create_local_var(char *args, t_env *local, t_shell *stru);
 void		move_var_to_env(t_env **env, t_env **local, t_env *var);
 int			main_variables(t_shell *stru);
 

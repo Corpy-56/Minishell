@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:56:23 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/01 16:20:47 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/01 17:34:46 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ t_tokens	*ft_type_token_2(t_tokens *p_actuel, t_cmd *commande, t_shell *stru)
 		&& ft_strncmp(p_actuel->str, "|", 2) != 0)
 	{
 		if (commande->cmd == NULL && is_assignment_word(p_actuel->str))
-			stru->local = create_local_var(p_actuel->str, stru->local);
+			stru->local = create_local_var(p_actuel->str, stru->local, stru);
 		else
 			lexer_cmd(commande, p_actuel);
 	}

@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/01 14:57:01 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/01 17:38:43 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,12 +158,12 @@ void	exec_cmd_line(t_shell *stru, char **env)
 		if (is_builtin(head))
 		{
 			(void)ft_test_bultins(head, stru);
+			ft_close_fd(head, fd_stdin, fd_stdout, fd);
 			if (stru->should_exit)
 				return ;
 		}
 		else
 			run_external(head, stru, env, fd);
-		ft_close_fd(head, fd_stdin, fd_stdout, fd);
 	}
 	if (n >= 2)
 		run_pipes(head, stru, env);

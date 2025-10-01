@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   variables.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:09:43 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/23 19:31:57 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/01 17:32:55 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	move_var_to_env(t_env **env, t_env **local, t_env *var)
 	move_var_to_env2(env, current);
 }
 
-t_env	*create_local_var(char *args, t_env *local)
+t_env	*create_local_var(char *args, t_env *local, t_shell *stru)
 {
 	char	*name;
 	char	*value;
@@ -83,7 +83,7 @@ t_env	*create_local_var(char *args, t_env *local)
 	parse_args(args, &name, &value);
 	if (!is_assignment_word(args))
 	{
-		err_msg_cmd(&args);
+		err_msg_cmd(&args, stru);
 		free(name);
 		free(value);
 		return (local);
@@ -96,30 +96,6 @@ t_env	*create_local_var(char *args, t_env *local)
 	free(name);
 	free(value);
 	return (local);
-}
-
-int	main_variables(t_shell *stru)
-{
-	int		i;
-
-	i = 0;
-	if (stru->commande->args[0] && is_assignment_word(stru->commande->args[0]))
-	{
-		while (stru->commande->args[i]
-			&& is_assignment_word(stru->commande->args[i]))
-		{
-			stru->local = create_local_var(stru->commande->args[i],
-					stru->local);
-			i++;
-		}
-		if (stru->commande->args[i] == NULL)
-		{
-			free(stru->commande);
-			stru->commande = NULL;
-			return (1);
-		}
-	}
-	return (0);
 }
 
 /* int	main_variables(t_shell *stru)
