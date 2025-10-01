@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/25 15:00:11 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/01 14:48:14 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,17 @@ int	ft_test_bultins(t_cmd *commande, t_shell *stru)
 	else if (ft_strncmp(commande->cmd, "export", 5) == 0)
 		status = ft_export(commande->args, &stru->environ, &stru->local);
 	else
-		return (0);
+		return (1);
 	stru->last_status = status;
-	return (1);
+	return (0);
 }
 
 int main(int argc, char **argv, char **env)
 {
-	char *rl;
+	char 	*rl;
 	t_shell	*stru;
-	int	syntax;
+	int		syntax;
+	int		status;
 
 	(void)argc;
 	(void)argv;
@@ -55,9 +56,8 @@ int main(int argc, char **argv, char **env)
 		rl = readline("Minishell > ");
 		if (!rl)
 		{
-			stru->last_status = 1;
+			write(1, "exit\n", 5);
 			stru->should_exit = 1;
-			ft_exit_d(); // je suis pas sur voir avec Sarah
 			break ;
 		}
 		if (*rl)
@@ -71,12 +71,10 @@ int main(int argc, char **argv, char **env)
 		unquote_tokens(stru->tokens);
 		if (stru->tokens != NULL)
 		{
-			 //	if (main_variables(stru) == 1)
-			 //		continue ;
 			syntax = ft_valid_syntax(stru->tokens);
 			if (syntax != 0)
 			{
-				stru->last_status = 258;
+				stru->last_status = 2;
 				clean_cmd(stru);
 				continue ;
 			}
@@ -91,7 +89,9 @@ int main(int argc, char **argv, char **env)
 		}
 		clean_cmd(stru);
 	}
+	status = stru->last_status;
+	rl_clear_history ();
 	clean_all(stru);
 	free(stru);
-    return (0);
+	exit (status);
 }

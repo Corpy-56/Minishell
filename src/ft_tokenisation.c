@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:07:35 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/24 15:21:56 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/01 16:15:52 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,30 +20,39 @@ char	*ft_one_token_extra(char *rl, int i, t_tokens *token)
 	return (token->str);
 }
 
+int	ft_one_token2(char *rl, int i, t_tokens *token)
+{
+	if (rl[i] == '\'')
+	{
+		token->str = ft_strjoin_char(token->str, rl[i]);
+		while (rl[++i] != '\0' && rl[i] != '\'')
+			token->str = ft_strjoin_char(token->str, rl[i]);
+		if (rl[i] == '\'')
+			token->str = ft_strjoin_char(token->str, rl[i]);
+		return (i);
+	}
+	else if (rl[i] == '\"')
+	{
+		token->str = ft_strjoin_char(token->str, rl[i]);
+		while (rl[++i] != '\0' && rl[i] != '\"')
+		{
+			if (rl[i] == '$')
+				token->dollars += 1;
+			token->str = ft_strjoin_char(token->str, rl[i]);
+		}
+		if (rl[i] == '\"')
+			token->str = ft_strjoin_char(token->str, rl[i]);
+		return (i);
+	}
+	return (0);
+}
+
 int	ft_one_token(char *rl, int i, t_tokens *token)
 {
 	while (rl[i])
 	{
-		if (rl[i] == '\'')
-		{
-			token->str = ft_strjoin_char(token->str, rl[i]);
-			while (rl[++i] != '\0' && rl[i] != '\'')
-				token->str = ft_strjoin_char(token->str, rl[i]);
-			if (rl[i] == '\'')
-				token->str = ft_strjoin_char(token->str, rl[i]);
-		}
-		else if (rl[i] == '\"')
-		{
-			token->str = ft_strjoin_char(token->str, rl[i]);
-			while (rl[++i] != '\0' && rl[i] != '\"')
-			{
-				if (rl[i] == '$')
-					token->dollars += 1;
-				token->str = ft_strjoin_char(token->str, rl[i]);
-			}
-			if (rl[i] == '\"')
-				token->str = ft_strjoin_char(token->str, rl[i]);
-		}
+		if (rl[i] == '\'' || rl[i] == '\"')
+			i = ft_one_token2(rl, i, token);
 		else if (rl[i] == '<' || rl[i] == '>')
 		{
 			if (token->str == NULL)

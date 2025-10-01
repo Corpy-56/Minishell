@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/09/24 12:08:06 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/01 13:50:42 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ char	*find_in_path(char *name, t_shell *stru)
 			i++;
 			continue ;
 		}
-		// printf("%s\n", chosen_path);
 		return (chosen_path);
 	}
 	return (NULL);
@@ -101,6 +100,7 @@ void	run_external(t_cmd *cmd, t_shell *stru, char **env, int fd)
 	int		pid;
 	int		status;
 
+	(void)fd;
 	pid = fork();
 	if (pid < 0)
 	{
@@ -109,9 +109,13 @@ void	run_external(t_cmd *cmd, t_shell *stru, char **env, int fd)
 	}
 	if (pid == 0)
 	{
-		dup2(fd, STDIN_FILENO);
-		close(fd);
+		if (cmd->heredoc != NULL)
+		{
+			dup2(fd, STDIN_FILENO);
+			close(fd);
+		}
 		exec_external(cmd, stru, env);
+		exit(127);
 	}
 	else
 	{

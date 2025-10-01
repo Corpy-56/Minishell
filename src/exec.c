@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/25 16:45:56 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/01 14:57:01 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,58 +44,6 @@ t_cmd	**collect_maillons(t_cmd *head, int n)
 	return (cmds);
 }
 
-/* void	run_two(t_cmd *cmd_a, t_cmd *cmd_b, t_shell *sh, char **env)
-{
-	int	pipefd[2];
-	int	pid1;
-	int	pid2;
-	int	status1;
-	int	status2;
-
-	pipe(pipefd);
-	if (pipe(pipefd) == -1)
-		exit(1);
-	pid1 = fork();
-	if (pid1 == 0)
-	{
-		dup2(pipefd[1], STDOUT_FILENO);
-		if (dup2(pipefd[1], STDOUT_FILENO) == -1)
-			exit(1);
-		close(pipefd[0]);
-		close(pipefd[1]);
-		if (is_builtin(cmd_a))
-			exit(ft_test_bultins(cmd_a, sh));
-		else
-		{
-			exec_external(cmd_a, sh, env);
-			exit(127);
-		}
-	}
-	pid2 = fork();
-	if (pid2 == 0)
-	{
-		dup2(pipefd[0], STDIN_FILENO);
-		if (dup2(pipefd[0], STDIN_FILENO) == -1)
-			exit(1);
-		close(pipefd[1]);
-		close(pipefd[0]);
-		if (is_builtin(cmd_b))
-			exit(ft_test_bultins(cmd_b, sh));
-		else
-		{
-			exec_external(cmd_b, sh, env);
-			exit(127);
-		}
-	}
-	close(pipefd[0]);
-	close(pipefd[1]);
-	status1 = waitpid(pid1, 0, 0);
-	status2 = waitpid(pid2, 0, 0);
-	sh->last_status = extract_exit_status(status2);
-} */
-
-
-
 void	run_pipes(t_cmd *head, t_shell *sh, char **env)
 {
 	int		fd[2];
@@ -107,7 +55,11 @@ void	run_pipes(t_cmd *head, t_shell *sh, char **env)
 	int		status;
 	int		last_pid;
 	t_cmd	**cmds;
-
+//	int fd_test;
+	
+//	auto int fd_stdin = dup(0), fd_stdout;
+//	fd_stdout = dup(1);
+	//fd_test = 0;
 	n = count_maillons(head);
 	prev_read = -1;
 	cmds = collect_maillons(head, n);
@@ -139,14 +91,17 @@ void	run_pipes(t_cmd *head, t_shell *sh, char **env)
 				close(fd[0]);
 				close(fd[1]);
 			}
-			//je peux mettre les heredocs + redirections 
+			//je peux mettre les heredocs + redirections
+			//fd_test = ft_first_ft_redirections(head, fd_test, sh);
 			if (is_builtin(cmds[i]))
 				exit(ft_test_bultins(cmds[i], sh));
 			else
 			{
 				exec_external(cmds[i], sh, env);
+			//	ft_close_fd(head, fd_stdin, fd_stdout, fd_test);
 				exit(127);
 			}
+			//ft_close_fd(head, fd_stdin, fd_stdout, fd_test);
 		}
 		pids[i] = pid;
 		if (prev_read != -1)
@@ -186,93 +141,12 @@ static void	reconstruct_path_dirs(t_shell *stru)
 	}
 }
 
-char *ft_expand_heredoc2(char *line, t_shell *stru)
-{
-	char	*str;
-	size_t i;
-	size_t	len_str;
-	size_t	start;
-	size_t	j;
-
-	i = 0;
-	str = ft_calloc(1, 1);
-	if (!str)
-		return (NULL);
-	len_str = ft_strlen(line);
-	start = 0;
-	while (i < len_str)
-	{
-		if (line[i] == '$')
-		{
-			j = start;
-			while (j < i)
-			{
-				if (append_char(&str, line[j]) < 0)
-				{
-					free(str);
-					return (NULL);
-				}
-				j++;
-			}
-			i = expand_var2(stru, line, i + 1, &str);
-		//	str = ft_strjoin_char(str, '\n');
-			start = i;
-		}
-		else
-			i++;
-	}
-	j = start;
-	while (j < i)
-	{
-		if (append_char(&str, line[j]) < 0)
-		{
-			free(str);
-			return (NULL);
-		}
-		j++;
-	}
-	return (str);
-}
-
-int ft_expand_heredoc(int fd, t_shell *stru)
-{
-	char *line;
-	int new_fd;
-	char *temp;
-
-	new_fd = open(".files_expand", O_CREAT | O_RDWR | O_TRUNC, 0600);
-	while(1)
-	{
-		line = get_next_line(fd);
-		if (line == NULL)
-		{
-			close(fd);
-			close(new_fd);
-			new_fd = open(".files_expand", O_CREAT | O_RDWR, 0600);
-			unlink(".files_expand");
-			return (new_fd) ;
-		}
-		temp = ft_expand_heredoc2(line, stru);
-		write(new_fd, temp, ft_strlen(line));
-		if (ft_strcmp(temp, line) != 0)
-			write(new_fd, "\n", 1);
-		free(temp);
-		free(line);
-	}
-	return (-1);
-}
-
 void	exec_cmd_line(t_shell *stru, char **env)
 {
 	t_cmd	*head;
-	int		n;
-	int	fd_stdin;
-	int fd_stdout;
-	int fd;
 
-	fd_stdin = dup(0);
+	auto int n, fd_stdin = dup(0), fd_stdout, fd = 0;
 	fd_stdout = dup(1);
-	fd = 0;
 	reconstruct_path_dirs(stru);
 	head = stru->commande;
 	n = count_maillons(head);
@@ -280,46 +154,18 @@ void	exec_cmd_line(t_shell *stru, char **env)
 		return ;
 	if (n == 1)
 	{
-		if (head->heredoc != NULL)
-		{
-			fd = ft_setup_heredoc(head);
-			if (fd == -1)
-				return ;//il y a une erreur
-			fd = ft_expand_heredoc(fd, stru); // je dois faire une sortit derreur je pense
-		}
-		if (head->fd_out_put1 != -2)
-		{
-			dup2(head->fd_out_put1, STDOUT_FILENO);
-			close(head->fd_out_put1);
-		}
-		if (head->fd_out_put2 != -2)
-		{
-			dup2(head->fd_out_put2, STDOUT_FILENO);
-			close(head->fd_out_put2);
-		}
-		if (head->fd_int_put != -2)
-		{
-			dup2(head->fd_int_put, SIGINT);
-			close(head->fd_int_put);
-		}
+		fd = ft_first_ft_redirections(head, fd, stru);
 		if (is_builtin(head))
 		{
-			stru->last_status = ft_test_bultins(head, stru);
+			(void)ft_test_bultins(head, stru);
 			if (stru->should_exit)
 				return ;
 		}
 		else
 			run_external(head, stru, env, fd);
-		dup2(fd_stdout, 1);
-		dup2(fd_stdin, 0);
-		close(fd);
-		close(fd_stdout);
-		close(fd_stdin);
-		return ;
+		ft_close_fd(head, fd_stdin, fd_stdout, fd);
 	}
 	if (n >= 2)
-	{
 		run_pipes(head, stru, env);
-		return ;
-	}
+	return ;
 }

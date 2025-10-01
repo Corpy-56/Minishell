@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_token.c                                      :+:      :+:    :+:   */
+/*   utils_tokens.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 15:23:24 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/22 19:34:06 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/01 16:18:14 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,25 +25,17 @@ int	count_tokens(t_tokens *token)
 	return (count);
 }
 
-char	**args_from_tokens(t_tokens *token)
+void	ft_initialization_commande(t_cmd *commande)
 {
-	int		i;
-	int		count;
-	char	**args;
-
-	i = 0;
-	count = count_tokens(token);
-	args = malloc(sizeof(char *) * (count + 1));
-	if (!args)
-		return (NULL);
-	while (token)
-	{
-		args[i] = ft_strdup(token->str);
-		i++;
-		token = token->next;
-	}
-	args[i] = NULL;
-	return (args);
+	commande->args = NULL;
+	commande->cmd = NULL;
+	commande->heredoc = NULL;
+	commande->fd_int_put = -2;
+	commande->next = NULL;
+	commande->fd_out_put1 = -2;
+	commande->fd_out_put2 = -2;
+	commande->next = NULL;
+	return ;
 }
 
 void	ft_quote(char *rl, int i)

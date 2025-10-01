@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:56:23 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/25 16:25:49 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/01 16:20:47 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ t_tokens	*ft_test_stdout(t_cmd *cmd, t_tokens *p_temp)
 		if (cmd->fd_out_put1 != -2)
 			close(cmd->fd_out_put1);
 		if (p_a->next->str != NULL)
-			cmd->fd_out_put1 = open(p_a->next->str, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			cmd->fd_out_put1 = open(p_a->next->str,
+					O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		if (cmd->fd_out_put1 == -1)
 			ft_error(1, ": Permission denied\n", p_a->next->str);
 	}
@@ -31,7 +32,8 @@ t_tokens	*ft_test_stdout(t_cmd *cmd, t_tokens *p_temp)
 		if (cmd->fd_out_put2 != -2)
 			close(cmd->fd_out_put2);
 		if (p_a->next->str != NULL)
-			cmd->fd_out_put2 = open(p_a->next->str, O_CREAT | O_WRONLY | O_APPEND, 0644);
+			cmd->fd_out_put2 = open(p_a->next->str, O_CREAT
+					| O_WRONLY | O_APPEND, 0644);
 		if (cmd->fd_out_put2 == -1)
 			ft_error(1, ": Permission denied\n", p_a->next->str);
 	}
@@ -51,15 +53,9 @@ t_tokens	*ft_test_stdin(t_cmd *commande, t_tokens *p_actuel)
 		if (j != 0)
 			ft_error(1, ": No such file or directory\n", p_actuel->next->str);
 		if (j == 0)
-		{
-			j = access(p_actuel->next->str, X_OK);
-			if (j != 0)
-				ft_error(1, ": Permission denied\n", p_actuel->next->str);
-		}
-		if (j == 0)
 			commande->fd_int_put = open(p_actuel->next->str, O_RDONLY, 0777);
 		if (commande->fd_int_put == -1)
-			ft_error(1, ": No such file or directory\n", p_actuel->next->str);
+			ft_error(1, ": Permission denied\n", p_actuel->next->str);
 	}
 	return (p_actuel->next);
 }
@@ -136,6 +132,6 @@ t_cmd	*ft_type_token(t_cmd *commande, t_tokens *b_debut, t_shell *stru)
 		p_actuel = p_actuel->next;
 	}
 	commande = a_debut;
-	//ft_printf_a_debut(a_debut);
+	commande = ft_test_no_errors(commande);
 	return (commande);
 }

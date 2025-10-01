@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/24 15:16:10 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/01 16:21:31 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,11 +157,20 @@ void		clean_cmd(t_shell *stru);
 void		clean_all(t_shell *stru);
 
 /* ********* error msg ********* */
-void		err_msg_cmd(char **argv);
+void		err_msg_cmd(char **argv, t_shell *stru);
 void		err_msg_export(char *argv);
 void		err_msg_syntax(char *c);
-// int			err_msg_synt(char *c);
-void		err_msg_dir(char **argv);
+void		err_msg_dir(char **argv, t_shell *stru);
+void		err_msg_chdir(char **args);
+
+/* ********* utils exect redirections ********* */
+char 		*ft_expand_heredoc2(char *line, t_shell *stru);
+int			ft_expand_heredoc(int fd, t_shell *stru);
+int			ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru);
+void		ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd);
+
+/* ********* utils tests ********* */
+t_cmd	*ft_test_no_errors(t_cmd *commande);
 
 #endif
 
