@@ -89,6 +89,34 @@ t_tokens	*ft_creat_token(char *rl, int i)
 	return (token);
 }
 
+// t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
+// {
+// 	int	i;
+
+// 	auto t_tokens * a_debut = NULL, *fin = NULL;
+// 	i = 0;
+// 	token = NULL;
+// 	i = white_space(rl, i);
+// 	ft_quote(rl, i);
+// 	while (rl[i] && i != -1)
+// 	{
+// 		token = ft_creat_token(rl, i);
+// 		if (rl[i] != 9 && rl[i] != 32 && rl[i])
+// 			i = ft_one_token(rl, i, token);
+// 		token->next = NULL;
+// 		if (token == NULL)
+// 			return (NULL);
+// 		if (a_debut == NULL)
+// 			a_debut = token;
+// 		else
+// 			fin->next = token;
+// 		fin = token;
+// 		if (rl[i])
+// 			i++;
+// 	}
+// 	return (a_debut);
+// }
+
 t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
 {
 	int	i;
@@ -97,11 +125,12 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
 	i = 0;
 	token = NULL;
 	i = white_space(rl, i);
-	ft_quote(rl, i);
-	while (rl[i] && i != -1)
+	if (i <= 0)
+		ft_quote(rl, i);
+	while (i != -1 && rl[i])
 	{
 		token = ft_creat_token(rl, i);
-		if (rl[i] != 9 && rl[i] != 32 && rl[i])
+		if (rl[i] && rl[i] != 9 && rl[i] != 32)
 			i = ft_one_token(rl, i, token);
 		token->next = NULL;
 		if (token == NULL)
