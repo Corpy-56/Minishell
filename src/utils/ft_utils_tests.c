@@ -1,23 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   ft_utils_tests.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/11 11:04:02 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/27 18:14:34 by skuor            ###   ########.fr       */
+/*   Created: 2025/09/10 13:56:23 by agouin            #+#    #+#             */
+/*   Updated: 2025/10/01 16:22:43 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_pwd(char **args)
+t_cmd	*ft_test_no_errors(t_cmd *commande)
 {
-	char	*pwd;
+	t_cmd	*a;
 
-	(void)args;
-	pwd = getcwd(NULL, 0);
-	printf("%s\n", pwd);
-	return (0);
+	a = commande;
+	while (a)
+	{
+		if (a->fd_int_put == -1 || a->fd_out_put1 == -1 || a->fd_out_put2 == -1)
+			return (NULL);
+		a = a->next;
+	}
+	return (commande);
 }

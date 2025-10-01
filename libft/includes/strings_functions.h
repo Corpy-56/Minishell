@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:44:14 by skuor             #+#    #+#             */
-/*   Updated: 2025/05/06 11:50:47 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/14 14:05:46 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define STRINGS_FUNCTIONS_H
 
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_strcmp(const char *s1, const char *s2);
 
 size_t	ft_strlen(const char *s);
 size_t	ft_strlcpy(char *dst, const char *src, size_t siz);
@@ -32,5 +33,7 @@ char	**ft_split(char const *s, char c);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char	**ft_array_dup(char **array);
 char	*get_next_line(int fd);
+char	*ft_strjoin_free(char const *s1, char const *s2);
+
 
 #endif

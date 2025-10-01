@@ -1,23 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   ft_strjoin_free.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/11 11:04:02 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/27 18:14:34 by skuor            ###   ########.fr       */
+/*   Created: 2024/11/19 17:22:27 by skuor             #+#    #+#             */
+/*   Updated: 2025/05/02 11:10:23 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	ft_pwd(char **args)
+char	*ft_strjoin_free(char const *s1, char const *s2)
 {
-	char	*pwd;
+	char	*str;
+	int		i;
+	int		j;
 
-	(void)args;
-	pwd = getcwd(NULL, 0);
-	printf("%s\n", pwd);
-	return (0);
+	i = 0;
+	j = 0;
+	if (s1 == NULL && s2 == NULL)
+		return (0);
+	str = malloc(sizeof(char) * ((ft_strlen(s1) + ft_strlen(s2)) + 1));
+	if (!str)
+		return (NULL);
+	while (s1[i])
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+	{
+		str[i + j] = s2[j];
+		j++;
+	}
+	str[i + j] = '\0';
+	free((char *)s1);
+	return (str);
 }

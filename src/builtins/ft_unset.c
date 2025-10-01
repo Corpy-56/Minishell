@@ -6,27 +6,11 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 16:14:05 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/31 17:46:08 by skuor            ###   ########.fr       */
+/*   Updated: 2025/08/27 18:13:52 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	check_valid_var(char *str)
-{
-	int	i;
-
-	if (!ft_isalpha(str[0]) && str[0] != '_')
-		return (1);
-	i = 1;
-	while (str[i])
-	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (1);
-		i++;
-	}
-	return (0);
-}
 
 void	remove_var(t_shell *stru, char *var)
 {
@@ -53,7 +37,6 @@ void	remove_var(t_shell *stru, char *var)
 	}
 }
 
-
 int	ft_unset(t_shell *stru, char **args)
 {
 	int	i;
@@ -62,11 +45,8 @@ int	ft_unset(t_shell *stru, char **args)
 	while (args[i])
 	{
 		if (check_valid_var(args[i]))
-		{
-			//printf("Error\n");
 			remove_var(stru, args[i]);
-		}
 		i++;
 	}
-	return 0;
+	return (0);
 }

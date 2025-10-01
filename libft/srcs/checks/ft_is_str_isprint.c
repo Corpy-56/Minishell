@@ -1,23 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   ft_is_str_isprint.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/11 11:04:02 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/27 18:14:34 by skuor            ###   ########.fr       */
+/*   Created: 2025/05/05 11:32:53 by skuor             #+#    #+#             */
+/*   Updated: 2025/09/10 14:12:40 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	ft_pwd(char **args)
+int	ft_is_str_isprint(char *str)
 {
-	char	*pwd;
+	int	i;
+	int	j;
 
-	(void)args;
-	pwd = getcwd(NULL, 0);
-	printf("%s\n", pwd);
+	j = 1;
+	i = 0;
+	while (str[i] && j == 1)
+	{
+		j = ft_isprint(str[i]);
+		i++;
+	}
+	if (j == 1)
+		return (1);
 	return (0);
 }

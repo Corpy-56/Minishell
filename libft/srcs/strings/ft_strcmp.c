@@ -1,23 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/11 11:04:02 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/27 18:14:34 by skuor            ###   ########.fr       */
+/*   Created: 2025/08/14 13:59:43 by skuor             #+#    #+#             */
+/*   Updated: 2025/08/14 14:02:36 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	ft_pwd(char **args)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	char	*pwd;
+	int	i;
 
-	(void)args;
-	pwd = getcwd(NULL, 0);
-	printf("%s\n", pwd);
+	i = 0;
+	while (s1[i] || s2[i])
+	{
+		if (s1[i] > s2[i] || s1[i] < s2[i])
+			return (s1[i] - s2[i]);
+		i++;
+	}
 	return (0);
 }

@@ -3,191 +3,116 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tokenisation.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:07:35 by agouin            #+#    #+#             */
-/*   Updated: 2025/07/30 15:08:58 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/01 16:15:52 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_strjoin_char(char *str, const char c)
+char	*ft_one_token_extra(char *rl, int i, t_tokens *token)
 {
-	int		i;
-	char	*joined;
-
-	if (str == NULL)
-	{
-		joined = ft_calloc(2, 1);
-		if (joined == NULL)
-			return (NULL);
-		joined[0] = c;
-		joined[1] = '\0';
-		return (joined);
-	}
-	joined = ft_calloc(ft_strlen(str) + 2, 1);
-	if (joined == NULL)
-	{
-		free(str);
-		return (NULL);
-	}
-	i = -1;
-	while (str[++i])
-		joined[i] = str[i];
-	joined[i++] = c;
-	joined[i] = '\0';
-	free(str);
-	return (joined);
+	if (rl[i] == '$')
+		token->dollars += 1;
+	token->str = ft_strjoin_char(token->str, rl[i]);
+	return (token->str);
 }
 
-void	ft_quote(char *rl, int i)
+int	ft_one_token2(char *rl, int i, t_tokens *token)
 {
-	int	quote1;
+	if (rl[i] == '\'')
+	{
+		token->str = ft_strjoin_char(token->str, rl[i]);
+		while (rl[++i] != '\0' && rl[i] != '\'')
+			token->str = ft_strjoin_char(token->str, rl[i]);
+		if (rl[i] == '\'')
+			token->str = ft_strjoin_char(token->str, rl[i]);
+		return (i);
+	}
+	else if (rl[i] == '\"')
+	{
+		token->str = ft_strjoin_char(token->str, rl[i]);
+		while (rl[++i] != '\0' && rl[i] != '\"')
+		{
+			if (rl[i] == '$')
+				token->dollars += 1;
+			token->str = ft_strjoin_char(token->str, rl[i]);
+		}
+		if (rl[i] == '\"')
+			token->str = ft_strjoin_char(token->str, rl[i]);
+		return (i);
+	}
+	return (0);
+}
 
-	quote1 = 0;
+int	ft_one_token(char *rl, int i, t_tokens *token)
+{
 	while (rl[i])
 	{
-		if (quote1 == 0 && rl[i] == '\'')
+		if (rl[i] == '\'' || rl[i] == '\"')
+			i = ft_one_token2(rl, i, token);
+		else if (rl[i] == '<' || rl[i] == '>')
 		{
-			i++;
-			while (rl[i] != '\'' && rl[i])
-				i++;
-			if (rl[i] == '\0')
-				quote1++;
+			if (token->str == NULL)
+			{
+				while ((rl[i] == '<' || rl[i] == '>') && rl[i])
+				{
+					token->str = ft_strjoin_char(token->str, rl[i]);
+					i++;
+				}
+			}
+			return (i -1);
 		}
-		else if (quote1 == 0 && rl[i] == '\"')
-		{
-			i++;
-			while (rl[i] != '\"' && rl[i])
-				i++;
-			if (rl[i] == '\0')
-				quote1++;
-		}
+		else if (rl[i] != 9 && rl[i] != 32 && rl[i])
+			token->str = ft_one_token_extra(rl, i, token);
+		else if ((rl[i] != '<' || rl[i] != '>') && token->str == NULL)
+			token->str = ft_strjoin_char(token->str, rl[i]);
+		else if (rl[i] == 9 || rl[i] == 32 || rl[i] == '\0')
+			return (i);
 		i++;
 	}
-	if (quote1 != 0)
-		ft_error(1, "", NULL);// faire un autre message derreur ?? 
+	return (i);
 }
 
-t_tokens	*ft_creat_token(char *temp)
+t_tokens	*ft_creat_token(char *rl, int i)
 {
 	t_tokens	*token;
 
 	token = ft_calloc(sizeof(t_tokens), 1);
-	if (!token)
+	if (token == NULL)
 		return (NULL);
-	if (temp)
-		token->str = ft_strdup(temp);
-	else
+	if (i == 0 || rl[i - 1] == 9 || rl[i - 1] == 32)
 		token->str = NULL;
-	token->next = NULL;
+	token->dollars = 0;
 	return (token);
-}
-
-char	*ft_tokenisation_quote(char *rl, char *temp, int i)
-{
-	char	quote;
-
-	if (rl[i] == '\"' || rl[i] == '\'')
-	{
-		quote = rl[i++];
-		temp = ft_strjoin_char(temp, quote);
-		while (rl[i] && rl[i] != quote)
-			temp = ft_strjoin_char(temp, rl[i++]);
-		if (rl[i++] == quote)
-			temp = ft_strjoin_char(temp, quote);
-	}
-	else if ((rl[i] == '<' || rl[i] == '>'))
-	{
-		while ((rl[i] == '<' || rl[i] == '>') && rl[i])
-			temp = ft_strjoin_char(temp, rl[i++]);
-	}
-	else if (rl[i] == '|')
-	{
-		while (rl[i] == '|' && rl[i])
-			temp = ft_strjoin_char(temp, rl[i++]);
-	}
-	return (temp);
 }
 
 t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
 {
-	int			i;
-	char		*temp;
-	t_tokens	*a_debut;
-	t_tokens	*fin;
+	int	i;
 
+	auto t_tokens * a_debut = NULL, *fin = NULL;
 	i = 0;
-	fin = NULL;
-	a_debut = NULL;
 	token = NULL;
-	temp = NULL;
+	i = white_space(rl, i);
 	ft_quote(rl, i);
-	while (rl[i])
+	while (rl[i] && i != -1)
 	{
-		while (rl[i] == 32 || rl[i] == 9)
-			i++;
-		if (!rl[i])
-			break ;
-		if (rl[i] == '\"' || rl[i] == '\'' || rl[i] == '<'
-			|| rl[i] == '>' || rl[i] == '|')
-		{
-			temp = ft_tokenisation_quote(rl, temp, i);
-			i = ft_strlen(temp) + i;
-		}
+		token = ft_creat_token(rl, i);
+		if (rl[i] != 9 && rl[i] != 32 && rl[i])
+			i = ft_one_token(rl, i, token);
+		token->next = NULL;
+		if (token == NULL)
+			return (NULL);
+		if (a_debut == NULL)
+			a_debut = token;
 		else
-		{
-			while (rl[i] && rl[i] != 32 && rl[i] != 9 && rl[i] != '<'
-				&& rl[i] != '>' && rl[i] != '|' && rl[i] != '\''
-				&& rl[i] != '\"')
-				temp = ft_strjoin_char(temp, rl[i++]);
-		}
-		if (temp)
-		{
-			token = ft_creat_token(temp);
-			free(temp);
-			temp = NULL;
-			if (!a_debut)
-				a_debut = token;
-			else
-				fin->next = token;
-			fin = token;
-		}
+			fin->next = token;
+		fin = token;
+		if (rl[i])
+			i++;
 	}
 	return (a_debut);
-}
-
-int	count_tokens(t_tokens *token)
-{
-	int	count;
-
-	count = 0;
-	while (token)
-	{
-		count++;
-		token = token->next;
-	}
-	return (count);
-}
-
-char **args_from_tokens(t_tokens *token)
-{
-	int		i;
-	int		count;
-	char	**args;
-
-	i = 0;
-	count = count_tokens(token);
-	args = malloc(sizeof(char *) * (count + 1));
-	if (!args)
-		return (NULL);
-	while (token)
-	{
-		args[i] = ft_strdup(token->str);
-		i++;
-		token = token->next;
-	}
-	args[i] = NULL;
-	return (args);
 }

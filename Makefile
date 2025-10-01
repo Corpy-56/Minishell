@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: skuor <skuor@student.42.fr>                +#+  +:+       +#+         #
+#    By: agouin <agouin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/08 16:18:45 by skuor             #+#    #+#              #
-#    Updated: 2025/07/30 16:22:44 by skuor            ###   ########.fr        #
+#    Updated: 2025/10/01 16:21:53 by agouin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,13 +19,21 @@ SRC_DIR = ./src/
 OBJ_DIR = ./objects/
 INC_DIR = ./includes/
 BLTINS_DIR = $(SRC_DIR)builtins/
+UTILS_DIR = $(SRC_DIR)utils/
 LIBFT_DIR = ./libft/
 
-SRC_FILES = main.c ft_tokenisation.c environ.c utils.c
-BLTINS_FILES = ft_exit.c ft_pwd.c ft_env.c ft_echo.c ft_cd.c ft_unset.c
+SRC_FILES = main.c ft_tokenisation.c variables.c environ.c expansion.c fields_splitting.c \
+			ft_type_token.c external_cmd.c exec.c error_msg.c ft_heredoc.c ft_signals.c
+
+BLTINS_FILES = ft_exit.c ft_pwd.c ft_env.c ft_echo.c ft_cd.c ft_unset.c ft_export.c
+
+UTILS_FILES = utils.c utils_expan.c utils_tokens.c ft_type_token_utils.c \
+			  utils_builtins.c utils_cmd.c utils_quotes.c utils_var.c \
+			  free.c clean.c ft_utils_exect_redirections.c ft_utils_tests.c
 
 OBJ = 	$(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o)) \
-		$(addprefix $(OBJ_DIR), $(BLTINS_FILES:.c=.o))
+		$(addprefix $(OBJ_DIR), $(BLTINS_FILES:.c=.o)) \
+		$(addprefix $(OBJ_DIR), $(UTILS_FILES:.c=.o))
 
 INC_H = -I $(INC_DIR) -I $(LIBFT_DIR)/includes/
 
@@ -39,9 +47,13 @@ $(NAME): $(OBJ)
 	@$(CC) $(CFLAGS) $(INC_H) $(OBJ) -L$(LIBFT_DIR) -lft -lreadline -o $(NAME)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJ_DIR)
+#	@echo "Compiling $<"
 	@$(CC) $(CFLAGS) $(INC_H) -c -o $@ $<
 
 $(OBJ_DIR)%.o: $(BLTINS_DIR)%.c | $(OBJ_DIR)
+	@$(CC) $(CFLAGS) $(INC_H) -c -o $@ $<
+
+$(OBJ_DIR)%.o: $(UTILS_DIR)%.c | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) $(INC_H) -c -o $@ $<
 
 clean:

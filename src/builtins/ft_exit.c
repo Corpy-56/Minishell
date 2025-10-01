@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:01:37 by skuor             #+#    #+#             */
-/*   Updated: 2025/07/30 15:12:46 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/01 14:33:55 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,16 @@
 
 static int	is_overflowing(long res, long neg, long digit)
 {
-	if (neg == 1) // 9223372036854775807 & 9223372036854775808 ok 
+	if (neg == 1)
 		return (res > (LONG_MAX - digit) / 10);
 	else
 		return (res > (-(LONG_MIN + digit)) / 10);
 }
 
-int	str_to_long(const char *str, long *out)
+static void	str_not_digit(const char *str, long neg, int i)
 {
-	int			i;
-	long		neg;
-	long		res;
-	long 		digit;
+	(void)neg;
 
-	i = 0;
-	neg = 1;
-	res = 0;
 	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
 		i++;
 	if (str[i] == '+' || str[i] == '-')
@@ -38,6 +32,19 @@ int	str_to_long(const char *str, long *out)
 			neg = -1;
 		i++;
 	}
+}
+
+int	str_to_long(const char *str, long *out)
+{
+	int			i;
+	long		neg;
+	long		res;
+	long		digit;
+
+	i = 0;
+	neg = 1;
+	res = 0;
+	str_not_digit(str, neg, i);
 	if (!str[i])
 		return (1);
 	while (str[i] >= '0' && str[i] <= '9')
@@ -54,25 +61,31 @@ int	str_to_long(const char *str, long *out)
 	return (0);
 }
 
-
-int	ft_exit(char **args)
+int	ft_exit(t_shell *stru, char **args)
 {
-	long	result;
+	long	out;
 
 	printf("exit\n");
 	if (!args[1])
-		exit(0);
-	if (str_to_long(args[1], &result))
+	{
+		stru->last_status = 0;
+		stru->should_exit = 1;
+		return (0);
+	}
+	if (str_to_long(args[1], &out))
 	{
 		printf("bash: exit: %s: numeric argument required\n", args[1]);
-		exit(2);
+		stru->last_status = 2;
+		stru->should_exit = 1;
 	}
 	if (args[2])
 	{
-		printf("bash: exit: too many arguments\n");
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		return (1);
 	}
-	exit(result % 256);
+	stru->last_status = out % 256;
+	if (stru->last_status < 0)
+		stru->last_status += 256;
+	stru->should_exit = 1;
 	return (0);
 }
-
