@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/01 18:14:35 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/02 17:26:51 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ t_tokens	*ft_heredoc_lexer(t_tokens *p_actuel, t_cmd *commande);
 /* ********* extenal cmds ********* */
 void		exec_external(t_cmd *cmd, t_shell *stru, char **env);
 void		run_external(t_cmd *cmd, t_shell *stru, char **env, int fd);
+// void		run_external(t_cmd *cmd, t_shell *stru, char **env);
 
 /* ********* exec ********* */
 void		exec_cmd_line(t_shell *stru, char **env);

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/01 12:25:59 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/02 18:33:03 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ void	signal_handler1(int signum)
 	(void)signum;
 	write(1, "\nMinishell : ", 14);
 	write(1, "\n", 1);
-	rl_replace_line("", 0);//efface la ligne
-	rl_on_new_line();//remet une ligne 
-	rl_redisplay();// reaffiche le prompt propremment              SIGQUIT pour controle (\)
+	// rl_replace_line("", 0);//efface la ligne
+	// rl_on_new_line();//remet une ligne 
+	// rl_redisplay();// reaffiche le prompt propremment              SIGQUIT pour controle (\)
 }
 
 void	ft_signal(void)

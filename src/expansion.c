@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 18:16:15 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/30 15:25:01 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/02 18:54:59 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,48 @@ size_t	expand_var2(t_shell *stru, char *args, size_t i, char **str)
 		return (free_dup_name(dup, name), start);
 	return (free_dup_name(dup, name), i);
 }
+
+// size_t	expand_var2(t_shell *stru, char *args, size_t i, char **str)
+// {
+// 	size_t	start;
+// 	size_t	len_str;
+// 	char	*name;
+// 	char	*value;
+// 	char	*dup;
+
+// 	start = i;
+// 	len_str = ft_strlen(args);
+// 	while (i < len_str && (ft_isalnum(args[i]) || args[i] == '_'))
+// 		i++;
+// 	if (i == start)
+// 	{
+// 		if (append_char(str, '$') < 0)
+// 			return (start);
+// 		return (start);
+// 	}
+// 	name = ft_substr(args, start, i - start);
+// 	value = get_env_value(stru->environ, name);
+// 	if (!value && stru->local)
+// 		value = get_env_value(stru->local, name);
+// 	if (value)
+// 		dup = ft_strdup(value);
+// 	else
+// 		dup = ft_strdup("");
+// 	if (!dup)
+// 	{
+// 		free(dup);
+// 		return (start);
+// 	}
+// 	if (append_str(str, value) < 0)
+// 	{
+// 		free(dup);
+// 		free(name);
+// 		return (start);
+// 	}
+// 	free(dup);
+// 	free(name);
+// 	return (i);
+// }
 
 static void	expand_exit_status(t_shell *stru, char **str)
 {
