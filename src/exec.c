@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/01 17:38:43 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/03 17:39:33 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,24 @@ t_cmd	**collect_maillons(t_cmd *head, int n)
 	return (cmds);
 }
 
+//int	ft_test_heredoc_pipes(int i, int n, t_cmd *head, t_shell *sh)
+//{
+//	int fd;
+
+//	fd = 0;
+//	while (i < n)
+//	{
+//		if (head->heredoc[i] != NULL)
+//		{
+//			fd = ft_setup_heredoc(head);
+//			if (fd == -1)
+//				return (fd);
+//			fd = ft_expand_heredoc(fd, sh);
+//		}
+//		i++;
+//	}
+//}
+
 void	run_pipes(t_cmd *head, t_shell *sh, char **env)
 {
 	int		fd[2];
@@ -55,11 +73,11 @@ void	run_pipes(t_cmd *head, t_shell *sh, char **env)
 	int		status;
 	int		last_pid;
 	t_cmd	**cmds;
-//	int fd_test;
+	int fd_test;
 	
 //	auto int fd_stdin = dup(0), fd_stdout;
 //	fd_stdout = dup(1);
-	//fd_test = 0;
+	fd_test = 0;
 	n = count_maillons(head);
 	prev_read = -1;
 	cmds = collect_maillons(head, n);
@@ -67,6 +85,7 @@ void	run_pipes(t_cmd *head, t_shell *sh, char **env)
 	if (!cmds || !pids)
 		return ;
 	i = 0;
+	//ft_test_heredoc_pipes(i, n, head, sh);
 	while (i < n)
 	{
 		if (i < (n - 1))
@@ -92,7 +111,7 @@ void	run_pipes(t_cmd *head, t_shell *sh, char **env)
 				close(fd[1]);
 			}
 			//je peux mettre les heredocs + redirections
-			//fd_test = ft_first_ft_redirections(head, fd_test, sh);
+			fd_test = ft_first_ft_redirections(cmds[i], fd_test, sh);
 			if (is_builtin(cmds[i]))
 				exit(ft_test_bultins(cmds[i], sh));
 			else
@@ -155,15 +174,17 @@ void	exec_cmd_line(t_shell *stru, char **env)
 	if (n == 1)
 	{
 		fd = ft_first_ft_redirections(head, fd, stru);
+		if (fd == -1)
+			return ;
 		if (is_builtin(head))
 		{
 			(void)ft_test_bultins(head, stru);
-			ft_close_fd(head, fd_stdin, fd_stdout, fd);
 			if (stru->should_exit)
 				return ;
 		}
 		else
 			run_external(head, stru, env, fd);
+		ft_close_fd(head, fd_stdin, fd_stdout, fd);
 	}
 	if (n >= 2)
 		run_pipes(head, stru, env);

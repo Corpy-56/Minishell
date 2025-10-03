@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/01 17:36:03 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/03 16:59:45 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,23 +85,30 @@ void	exec_external(t_cmd *cmd, t_shell *stru, char **env)
 		return ;
 	}
 	if (ft_strchr(argv[0], '/'))
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		execve(argv[0], argv, env);
+	}
 	path_val = get_env_value(stru->environ, "PATH");
 	if (path_val == NULL)
 		err_msg_cmd(argv, stru);
 	chosen_path = find_in_path(argv[0], stru);
 	if (chosen_path)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		execve(chosen_path, argv, env);
+	}
 	else
 		err_msg_cmd(argv, stru);
 }
 
-void	run_external(t_cmd *cmd, t_shell *stru, char **env, int fd)
+void	run_external(t_cmd *cmd, t_shell *stru, char **env, int f)
 {
 	int		pid;
 	int		status;
 
-	(void)fd;
 	pid = fork();
 	if (pid < 0)
 	{
@@ -112,8 +119,8 @@ void	run_external(t_cmd *cmd, t_shell *stru, char **env, int fd)
 	{
 		if (cmd->heredoc != NULL)
 		{
-			dup2(fd, STDIN_FILENO);
-			close(fd);
+			dup2(f, STDIN_FILENO);
+			close(f);
 		}
 		exec_external(cmd, stru, env);
 		exit(127);
@@ -122,6 +129,17 @@ void	run_external(t_cmd *cmd, t_shell *stru, char **env, int fd)
 	{
 		status = 0;
 		waitpid(pid, &status, 0);
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+		{
+			ft_close_fd(cmd, fd->fd_in, fd->fd_out, f);
+			write(1, "\n", 1);
+			//close(0);je peux essayer plus tard
+			//rl_replace_line("", 0);//efface la ligne
+			//rl_on_new_line();//remet une ligne 
+			//rl_redisplay();
+			return ;
+		}
+	//	signal_handler1(1);
 		stru->last_status = extract_exit_status(status);
 	}
 }

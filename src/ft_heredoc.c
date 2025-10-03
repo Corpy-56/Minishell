@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/24 12:09:09 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/03 17:35:47 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	signal_handler(int signum, siginfo_t *info, void *context)
 	(void)info;
 	(void)context;
 	write(1, "\n", 1);
+//	close(0);// comme ca je peux free tout avant de tout reafficher 
 	exit(130);
 }
 
@@ -85,6 +86,9 @@ int	ft_setup_heredoc(t_cmd *commande)
 	{
 		waitpid(pid, &status, 0);
 		sigaction(SIGINT, &old_signale, NULL);
+		int exit_code = WEXITSTATUS(status);
+   		if (exit_code == 130)
+			return (-1);
 		fd = open(".files", O_RDONLY);
 		unlink(".files");
 		return (fd);

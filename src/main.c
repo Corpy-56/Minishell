@@ -6,12 +6,14 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/01 16:31:17 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/03 15:39:05 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "minishell.h"
+
+t_fd	*fd = NULL;
 
 int	ft_test_bultins(t_cmd *commande, t_shell *stru)
 {
@@ -38,6 +40,17 @@ int	ft_test_bultins(t_cmd *commande, t_shell *stru)
 	return (0);
 }
 
+void 	ft_init_fd1(void)
+{
+	fd = ft_calloc(1, sizeof(t_fd));
+	fd->fd_in = dup(0);
+	fd->fd_out = dup (1);
+	fd->fd = 5;
+	fd->fd_out_put1 = -2;
+	fd->fd_out_put2 = -2;
+	fd->fd_int_put = -2;
+}
+
 int main(int argc, char **argv, char **env)
 {
 	char 	*rl;
@@ -51,10 +64,11 @@ int main(int argc, char **argv, char **env)
 	if (stru == NULL)
 		return (0);
 	stru->environ = ft_duplicate_env(env, stru);
+	ft_init_fd1();
 	while (!stru->should_exit)
 	{
 		ft_signal();
-		rl = readline("Minishell > ");
+		rl = readline("\033[32mMinishell : \033[0m");
 		if (!rl)
 		{
 			write(1, "exit\n", 5);
