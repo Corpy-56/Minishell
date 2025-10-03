@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 15:23:24 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/02 12:39:04 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/03 14:17:00 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,41 +46,32 @@ char	**args_from_tokens(t_tokens *token)
 	return (args);
 }
 
-void	ft_quote2(char *rl, int i, int quote1)
+int	ft_quote(char *rl)
 {
-	while (rl[++i])
+	size_t	i;
+
+	i = 0;
+	while (rl[i])
 	{
-		if (quote1 == 0 && rl[i++] == '\'')
+		if (rl[i] == '\'')
 		{
+			i++;
 			while (rl[i] && rl[i] != '\'')
 				i++;
 			if (rl[i] == '\0')
-			{
-				quote1++;
-				break ;
-			}
+				return (1);
 		}
-		else if (quote1 == 0 && rl[i++] == '\"')
+		else if (rl[i] == '\"')
 		{
+			i++;
 			while (rl[i] && rl[i] != '\"')
 				i++;
 			if (rl[i] == '\0')
-			{
-				quote1++;
-				break ;
-			}
+				return (1);
 		}
+		i++;
 	}
-}
-
-void	ft_quote(char *rl, int i)
-{
-	int	quote1;
-
-	quote1 = 0;
-	ft_quote2(rl, i, quote1);
-	if (quote1 != 0)
-		ft_error(1, "", NULL);// faire un autre message derreur ?? 
+	return (0);
 }
 
 char	*ft_strjoin_char(char *str, const char c)

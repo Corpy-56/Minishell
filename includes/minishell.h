@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/02 17:26:51 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/03 16:52:28 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 int			ft_cd(char **args, t_shell *stru);
 int			ft_echo(char **args);
 int			ft_env(t_env *env);
-int			ft_exit(t_shell *stru, char **args);
+int			ft_exit(t_shell *stru, char **args, bool cmd_seule);
 int			ft_export(char **args, t_env **env, t_env **local);
 int			ft_pwd(char **args, t_shell *stru);
 int			ft_unset(t_shell *stru, char **args);
@@ -61,7 +61,6 @@ int			main_variables(t_shell *stru);
 char		*expand_var(t_tokens *token, t_shell *stru, size_t i);
 size_t		expand_var2(t_shell *stru, char *args, size_t i, char **str);
 void		main_expand(t_shell *stru);
-void		split_all_tokens(t_tokens *head, t_shell *stru);
 
 /* ********* token_type ********* */
 t_cmd		*ft_type_token(t_cmd *commande, t_tokens *b_debut, t_shell *stru);
@@ -92,7 +91,7 @@ void		ft_exit_d(void);
 /* ********* fields_splitting ********* */
 size_t		count_fields(const char *str, const char *ifs);
 char		**split_by_ifs(const char *str, const char *ifs);
-void		split_all_tokens(t_tokens *head, t_shell *stru);
+void		split_all_tokens(t_tokens **head, t_shell *stru);
 
 
 /* ********* main ********* */
@@ -124,7 +123,7 @@ char		**split_by_ifs(const char *str, const char *ifs);
 /* ********* utils_token ********* */
 int			count_tokens(t_tokens *token);
 char		**args_from_tokens(t_tokens *token);
-void		ft_quote(char *rl, int i);
+int			ft_quote(char *rl);
 char		*ft_strjoin_char(char *str, const char c);
 int			white_space(char *str, int i);
 
@@ -143,7 +142,7 @@ int			ft_valid_syntax(t_tokens *token);
 
 /* ********* utils_builtins ********* */
 bool		is_builtin(t_cmd *commande);
-int			ft_test_bultins(t_cmd *commande, t_shell *stru);
+int			ft_test_bultins(t_cmd *commande, t_shell *stru, bool cmd_seule);
 
 /* ********* utils_cmd ********* */
 t_cmd		*suppr_empty_cmd(t_cmd *head);

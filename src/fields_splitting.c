@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 14:20:54 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/01 17:26:15 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/03 14:57:34 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	**split_by_ifs(const char *str, const char *ifs)
 		return (NULL);
 	while (str[i])
 	{
-		if (str[i] && is_ifs(str[i], ifs))
+		while (str[i] && is_ifs(str[i], ifs))
 			i++;
 		if (!str[i])
 			break ;
@@ -95,19 +95,21 @@ char	**split_by_ifs(const char *str, const char *ifs)
 	return (fields);
 }
 
-void	no_fields(char **fields, t_tokens *curr, t_tokens *prev, t_tokens *head)
+void	no_fields(char **fs, t_tokens **pcur, t_tokens *prev, t_tokens **head)
 {
+	t_tokens	*curr;
 	t_tokens	*next;
 
+	curr = *pcur;
 	next = curr->next;
-	free(curr->str);
-	free(curr);
 	if (prev == NULL)
-		head = next;
+		*head = next;
 	else
 		prev->next = next;
-	free_doublechar(fields);
-	curr = next;
+	free(curr->str);
+	free(curr);
+	free_doublechar(fs);
+	*pcur = next;
 }
 
 void	while_fields(char **fields, size_t i, t_tokens *last)
@@ -130,10 +132,11 @@ void	while_fields(char **fields, size_t i, t_tokens *last)
 	}
 }
 
-void	split_all_tokens(t_tokens *head, t_shell *stru)
+void	split_all_tokens(t_tokens **head, t_shell *stru)
 {
 	char		*ifs;
 	char		**fields;
+	char		*new_field;
 	size_t		i;
 
 	auto t_tokens * prev, *current, *last;
@@ -141,7 +144,7 @@ void	split_all_tokens(t_tokens *head, t_shell *stru)
 	if (!ifs || !*ifs)
 		ifs = " \t\n";
 	prev = NULL;
-	current = head;
+	current = *head;
 	while (current)
 	{
 		if (is_operator(current->str))
@@ -155,13 +158,17 @@ void	split_all_tokens(t_tokens *head, t_shell *stru)
 			return ;
 		if (fields[0] == NULL)
 		{
-			no_fields(fields, current, prev, head);
+			no_fields(fields, &current, prev, head);
 			continue ;
 		}
+		new_field = ft_strdup(fields[0]);
+		if (!new_field)
+		{
+			free_doublechar(fields);
+			return ;
+		}
 		free(current->str);
-		current->str = ft_strdup(fields[0]);
-		if (!current->str)
-			return (free_doublechar(fields));
+		current->str = new_field;
 		last = current;
 		i = 1;
 		while_fields(fields, i, last);

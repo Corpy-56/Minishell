@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:07:35 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/02 19:17:36 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/03 14:17:39 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,18 +106,37 @@ int	ft_one_token(char *rl, int i, t_tokens *token)
 	return (i);
 }
 
+// t_tokens	*ft_creat_token(char *rl, int i)
+// {
+// 	t_tokens	*token;
+
+// 	token = ft_calloc(sizeof(t_tokens), 1);
+// 	if (token == NULL)
+// 		return (NULL);
+// 	if (i == 0 || rl[i - 1] == 9 || rl[i - 1] == 32)
+// 		token->str = NULL;
+// 	token->dollars = 0;
+// 	return (token);
+// }
+
 t_tokens	*ft_creat_token(char *rl, int i)
 {
 	t_tokens	*token;
+	(void)rl;
+	(void)i;
 
 	token = ft_calloc(sizeof(t_tokens), 1);
 	if (token == NULL)
 		return (NULL);
-	if (i == 0 || rl[i - 1] == 9 || rl[i - 1] == 32)
-		token->str = NULL;
+	// if (i == 0 || rl[i - 1] == 9 || rl[i - 1] == 32)
+	// 	token->str = NULL;
+	token->str = NULL;
 	token->dollars = 0;
+	token->next = NULL;
 	return (token);
 }
+
+
 
 t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
 {
@@ -128,7 +147,7 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
 	token = NULL;
 	i = white_space(rl, i);					
 	if (i <= 0)
-		ft_quote(rl, i);
+		ft_quote(rl);
 	while (i != -1 && rl[i])
 	{
 		i = white_space(rl, i);
@@ -137,10 +156,10 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
 		token = ft_creat_token(rl, i);
 		// if (rl[i] && rl[i] != 9 && rl[i] != 32)
 			// i = ft_one_token(rl, i, token);
-		i = ft_one_token(rl, i, token);
 		if (token == NULL)
 			return (NULL);
 		token->next = NULL;
+		i = ft_one_token(rl, i, token);
 		if (a_debut == NULL)
 			a_debut = token;
 		else
@@ -148,6 +167,7 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token)
 		fin = token;
 		if (rl[i])
 			i++;
+		i = white_space(rl, i);
 	}
 	return (a_debut);
 }

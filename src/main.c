@@ -6,13 +6,13 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/02 17:09:52 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/03 16:51:51 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_test_bultins(t_cmd *commande, t_shell *stru)
+int	ft_test_bultins(t_cmd *commande, t_shell *stru, bool cmd_seule)
 {
 	int	status;
 
@@ -26,7 +26,7 @@ int	ft_test_bultins(t_cmd *commande, t_shell *stru)
 	else if (ft_strncmp(commande->cmd, "env", 4) == 0)
 		status = ft_env(stru->environ);
 	else if (ft_strncmp(commande->cmd, "exit", 5) == 0)
-		status = ft_exit(stru, commande->args);
+		status = ft_exit(stru, commande->args, cmd_seule);
 	else if (ft_strncmp(commande->cmd, "unset", 5) == 0)
 		status = ft_unset(stru, commande->args);
 	else if (ft_strncmp(commande->cmd, "export", 5) == 0)
@@ -97,7 +97,7 @@ int main(int argc, char **argv, char **env)
 			continue ;
 		// stru->tokens->args = args_from_tokens(stru->tokens);
 		main_expand(stru);
-		split_all_tokens(stru->tokens, stru);
+		split_all_tokens(&stru->tokens, stru);
 		unquote_tokens(stru->tokens);
 		if (stru->tokens != NULL)
 		{

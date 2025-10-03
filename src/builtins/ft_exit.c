@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:01:37 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/30 16:52:30 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/03 16:58:22 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,28 +69,72 @@ void	err_msg_num(char **argv, t_shell *stru)
 	stru->should_exit = 1;
 }
 
-int	ft_exit(t_shell *stru, char **args)
+// int	ft_exit(t_shell *stru, char **args)
+// {
+// 	long	out;
+
+// 	out = 0;
+// 	printf("exit\n");
+// 	if (!args[1])
+// 	{
+// 		stru->should_exit = 1;
+// 		return (0);
+// 	}
+// 	if (str_to_long(args[1], &out))
+// 		return (err_msg_num(args, stru), 2);
+// 	if (args[2])
+// 	{
+// 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+// 		stru->last_status = 1;
+// 		return (1);
+// 	}
+// 	stru->last_status = out % 256;
+// 	if (stru->last_status < 0)
+// 		stru->last_status += 256;
+// 	stru->should_exit = 1;
+// 	return (stru->last_status);
+// }
+
+int	ft_exit(t_shell *stru, char **args, bool cmd_seule)
 {
 	long	out;
 
 	out = 0;
-	printf("exit\n");
 	if (!args[1])
 	{
-		stru->should_exit = 1;
-		return (0);
+		if (cmd_seule)
+		{
+			if (isatty(STDIN_FILENO))
+				printf("exit\n");
+			stru->should_exit = 1;
+			return (0);
+		}
 	}
 	if (str_to_long(args[1], &out))
-		return (err_msg_num(args, stru), 2);
+	{
+		if (cmd_seule)
+		{
+			if (isatty(STDIN_FILENO))
+				printf("exit\n");
+			err_msg_num(args, stru);
+		}
+		return (2);
+	}
 	if (args[2])
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
-		stru->last_status = 1;
+		if (cmd_seule)
+			stru->last_status = 1;
 		return (1);
 	}
 	stru->last_status = out % 256;
 	if (stru->last_status < 0)
 		stru->last_status += 256;
-	stru->should_exit = 1;
+	if (cmd_seule)
+	{
+		if (isatty(STDIN_FILENO))
+			printf("exit\n");
+		stru->should_exit = 1;
+	}	
 	return (stru->last_status);
 }
