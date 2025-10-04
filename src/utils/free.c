@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 14:50:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/30 15:25:48 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/04 13:19:23 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,19 @@ void	free_tokens(t_tokens *token)
 	}
 }
 
+void	free_redirs(t_redir *redir)
+{
+	t_redir	*next;
+	
+	while (redir)
+	{
+		next = redir->next;
+		free(redir->target);
+		free(redir);
+		redir = next;
+	}
+}
+
 void	free_cmds(t_cmd *cmd)
 {
 	t_cmd	*next;
@@ -58,6 +71,10 @@ void	free_cmds(t_cmd *cmd)
 		next = cmd->next;
 		free_doublechar(cmd->args);
 		free(cmd->cmd);
+		if (cmd->heredoc)
+			free_doublechar(cmd->heredoc);
+		if (cmd->redirs)
+			free_redirs(cmd->redirs);
 		free(cmd);
 		cmd = next;
 	}

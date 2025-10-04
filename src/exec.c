@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/03 17:06:44 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/04 13:01:23 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,18 +59,39 @@ void	run_pipes(t_cmd *head, t_shell *sh, char **env)
 	n = count_maillons(head);
 	prev_read = -1;
 	cmds = collect_maillons(head, n);
-	pids = malloc(sizeof(pid_t) * n);
-	if (!cmds || !pids)
+	if (!cmds)
 		return ;
+	pids = malloc(sizeof(pid_t) * n);
+	if (!pids)
+		return (free(cmds));
 	i = 0;
 	while (i < n)
 	{
 		if (i < (n - 1))
 		{
 			if (pipe(fd) == -1)
+			{
+				if (prev_read != -1)
+					close (prev_read);
+				free(pids);
+				free(cmds);
 				exit(1);
+			}
 		}
 		pid = fork();
+		if (pid == -1)
+		{
+			if (i < n - 1)
+			{
+				close(fd[0]);
+				close(fd[1]);
+			}
+			if (prev_read != -1)
+				close(prev_read);
+			free(pids);
+			free(cmds);
+			exit (1);
+		}
 		if (pid == 0)
 		{
 			if (prev_read != -1)
@@ -108,13 +129,87 @@ void	run_pipes(t_cmd *head, t_shell *sh, char **env)
 		last_pid = 0;
 		waitpid(pids[i], &status, 0);
 		if (i == (n - 1))
-			last_pid = extract_exit_status(last_pid);
+			last_pid = extract_exit_status(status);
 		i++;
 	}
 	if (prev_read != -1)
 		close(prev_read);
 	sh->last_status = last_pid;
+	free(pids);
+	free(cmds);
 }
+
+// void	run_pipes(t_cmd *head, t_shell *sh, char **env)
+// {
+// 	int		fd[2];
+// 	pid_t	*pids;
+// 	pid_t	pid;
+// 	int		i;
+// 	int		n;
+// 	int		prev_read;
+// 	int		status;
+// 	int		last_pid;
+// 	t_cmd	**cmds;
+
+// 	n = count_maillons(head);
+// 	prev_read = -1;
+// 	cmds = collect_maillons(head, n);
+// 	pids = malloc(sizeof(pid_t) * n);
+// 	if (!cmds || !pids)
+// 		return ;
+// 	i = 0;
+// 	while (i < n)
+// 	{
+// 		if (i < (n - 1))
+// 		{
+// 			if (pipe(fd) == -1)
+// 				exit(1);
+// 		}
+// 		pid = fork();
+// 		if (pid == 0)
+// 		{
+// 			if (prev_read != -1)
+// 			{
+// 				if (dup2(prev_read, STDIN_FILENO) == -1)
+// 					exit(1);
+// 				close(prev_read);
+// 			}
+// 			if (i < (n - 1))
+// 			{
+// 				if (dup2(fd[1], STDOUT_FILENO) == -1)
+// 					exit(1);
+// 				close(fd[0]);
+// 				close(fd[1]);
+// 			}
+// 			if (is_builtin(cmds[i]))
+// 				exit(ft_test_bultins(cmds[i], sh, false));
+// 			else
+// 			{
+// 				exec_external(cmds[i], sh, env);
+// 				exit(127);
+// 			}
+// 		}
+// 		pids[i] = pid;
+// 		if (prev_read != -1)
+// 			close(prev_read);
+// 		if (i < (n - 1))
+// 		{
+// 			close(fd[1]);
+// 			prev_read = fd[0];
+// 		}
+// 		else
+// 			prev_read = -1;
+// 		status = 0;
+// 		last_pid = 0;
+// 		waitpid(pids[i], &status, 0);
+// 		if (i == (n - 1))
+// 			last_pid = extract_exit_status(status);
+// 		i++;
+// 	}
+// 	if (prev_read != -1)
+// 		close(prev_read);
+// 	sh->last_status = last_pid;
+// }
 
 static void	reconstruct_path_dirs(t_shell *stru)
 {

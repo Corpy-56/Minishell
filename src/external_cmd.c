@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/02 17:08:56 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/04 11:34:31 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,14 @@ char	*find_in_path(char *name, t_shell *stru)
 	return (NULL);
 }
 
+void	err_msg_file_or_dir(char **argv, t_shell *stru)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(argv[0], 2);
+	ft_putstr_fd(": No such file or directory\n", 2);
+	stru->last_status = 127;
+}
+
 void	exec_external(t_cmd *cmd, t_shell *stru, char **env)
 {
 	struct stat	info;
@@ -86,40 +94,21 @@ void	exec_external(t_cmd *cmd, t_shell *stru, char **env)
 		return ;
 	}
 	if (ft_strchr(argv[0], '/'))
-		execve(argv[0], argv, env);
+	{
+		if (stat(argv[0], &info) != 0)
+			return (err_msg_file_or_dir(argv, stru));
+		else
+			execve(argv[0], argv, env);
+	}
 	path_val = get_env_value(stru->environ, "PATH");
 	if (path_val == NULL)
-		err_msg_cmd(argv, stru);
+		err_msg_file_or_dir(argv, stru);
 	chosen_path = find_in_path(argv[0], stru);
 	if (chosen_path)
 		execve(chosen_path, argv, env);
 	else
 		err_msg_cmd(argv, stru);
 }
-
-// void	run_external(t_cmd *cmd, t_shell *stru, char **env)
-// {
-// 	int		pid;
-// 	int		status;
-
-// 	pid = fork();
-// 	if (pid < 0)
-// 	{
-// 		stru->last_status = 1;
-// 		return ;
-// 	}
-// 	if (pid == 0)
-// 	{
-// 		exec_external(cmd, stru, env);
-// 		exit(stru->last_status);
-// 	}
-// 	else
-// 	{
-// 		status = 0;
-// 		waitpid(pid, &status, 0);
-// 		stru->last_status = extract_exit_status(status);
-// 	}
-// }
 
 void	run_external(t_cmd *cmd, t_shell *stru, char **env, int fd)
 {

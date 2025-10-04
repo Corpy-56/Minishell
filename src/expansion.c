@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 18:16:15 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/03 14:59:53 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/04 12:39:53 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ size_t	expand_var2(t_shell *stru, char *args, size_t i, char **str)
 	else
 		dup = ft_strdup("");
 	if (!dup)
-		return (free(value), start);
+		return (free(name), start);
 	if (append_str(str, value) < 0)
 		return (free_dup_name(dup, name), start);
 	return (free_dup_name(dup, name), i);

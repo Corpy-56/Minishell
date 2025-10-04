@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/03 16:51:51 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/04 10:57:43 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	ft_test_bultins(t_cmd *commande, t_shell *stru, bool cmd_seule)
 	else
 		return (1);
 	stru->last_status = status;
-	return (0);
+	return (status);
 }
 
 /* void	ft_on_exect(t_cmd *commande, t_shell *stru)
@@ -125,7 +125,7 @@ int main(int argc, char **argv, char **env)
 		clean_cmd(stru);
 	}
 	status = stru->last_status;
-	rl_clear_history ();
+	clear_history ();
 	clean_all(stru);
 	free(stru);
 	exit (status);

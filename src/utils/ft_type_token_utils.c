@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:42:37 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/03 11:41:45 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/04 12:43:31 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,11 @@ static int	error_chevrons(t_tokens *p_actuel)
 		|| ft_strncmp(p_actuel->str, "<", 1) == 0)
 	{
 		if (p_actuel->next == NULL)
-			return (err_msg_syntax("newline"), 2);
-		// else if (ft_is_str_isprint(p_actuel->next->str) == 0 || p_actuel->str == NULL)
-		// 	return (err_msg_ambiguous(&p_actuel->str), 1);
-		// if (p_actuel->next->str == NULL )
-		// 	return (err_msg_syntax("test"), 2);
-		else if (ft_strncmp(p_actuel->next->str, ">", 1) == 0)
-			return (err_msg_syntax(">"), 2);
+			return (err_msg_syntax("newline1"), 2);
+		if (p_actuel->next->str == NULL)
+			return (err_msg_syntax("newline2"), 2);
+		else if (ft_strncmp(p_actuel->next->str, ">", 1) == 0 || ft_strncmp(p_actuel->next->str, "<", 1) == 0)
+			return (err_msg_syntax(p_actuel->next->str), 2);
 	}
 	return (0);
 }
