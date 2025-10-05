@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:52:31 by agouin            #+#    #+#             */
-/*   Updated: 2025/09/30 13:56:11 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/05 15:31:39 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ static char	*build_line(char *name, char *value)
 	size_t	name_len;
 	size_t	val_len;
 
-	name_len = ft_strlen(name);
-	val_len = ft_strlen(value);
+	
 	if (!name || !*name)
 		return (NULL);
 	if (!value)
@@ -27,6 +26,8 @@ static char	*build_line(char *name, char *value)
 		line = ft_strdup(name);
 		return (line);
 	}
+	name_len = ft_strlen(name);
+	val_len = ft_strlen(value);
 	line = malloc((name_len + 1) + (val_len + 1));
 	if (!line)
 	{
@@ -52,7 +53,7 @@ static void	update_env2(t_env *node, char *name, t_shell *stru)
 		node->path = NULL;
 	if (stru)
 	{
-	stru->path_node = node;
+		stru->path_node = node;
 		if (stru->path_dirs)
 			free_doublechar(stru->path_dirs);
 		if (node->value)

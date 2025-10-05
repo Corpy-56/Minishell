@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/04 11:34:31 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/05 16:30:56 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,7 @@ char	*find_in_path(char *name, t_shell *stru)
 	return (NULL);
 }
 
-void	err_msg_file_or_dir(char **argv, t_shell *stru)
-{
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(argv[0], 2);
-	ft_putstr_fd(": No such file or directory\n", 2);
-	stru->last_status = 127;
-}
+
 
 void	exec_external(t_cmd *cmd, t_shell *stru, char **env)
 {
@@ -98,14 +92,22 @@ void	exec_external(t_cmd *cmd, t_shell *stru, char **env)
 		if (stat(argv[0], &info) != 0)
 			return (err_msg_file_or_dir(argv, stru));
 		else
+		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
 			execve(argv[0], argv, env);
+		}
 	}
 	path_val = get_env_value(stru->environ, "PATH");
 	if (path_val == NULL)
-		err_msg_file_or_dir(argv, stru);
+		return (err_msg_file_or_dir(argv, stru));
 	chosen_path = find_in_path(argv[0], stru);
 	if (chosen_path)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		execve(chosen_path, argv, env);
+	}
 	else
 		err_msg_cmd(argv, stru);
 }

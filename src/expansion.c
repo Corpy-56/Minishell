@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 18:16:15 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/04 12:39:53 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/05 17:37:59 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,27 @@ static void	free_dup_name(char *dup, char *name)
 	free(name);
 }
 
+size_t	i_equal_start(char **str, size_t *start)
+{
+	if (append_char(str, '$') < 0)
+		return (*start);
+	return (*start);
+}
+
 size_t	expand_var2(t_shell *stru, char *args, size_t i, char **str)
 {
 	size_t	start;
 	size_t	len_str;
-
-	auto char *name, *value, *dup;
+	char 	*name;
+	char	*value;
+	char	*dup;
+	
 	start = i;
 	len_str = ft_strlen(args);
 	while (i < len_str && (ft_isalnum(args[i]) || args[i] == '_'))
 		i++;
 	if (i == start)
-	{
-		if (append_char(str, '$') < 0)
-			return (start);
-		return (start);
-	}
+		i_equal_start(str, &start);
 	name = ft_substr(args, start, i - start);
 	value = get_env_value(stru->environ, name);
 	if (!value && stru->local)
@@ -44,7 +49,7 @@ size_t	expand_var2(t_shell *stru, char *args, size_t i, char **str)
 		dup = ft_strdup("");
 	if (!dup)
 		return (free(name), start);
-	if (append_str(str, value) < 0)
+	if (append_str(str, dup) < 0)
 		return (free_dup_name(dup, name), start);
 	return (free_dup_name(dup, name), i);
 }
@@ -108,24 +113,6 @@ char	*expand_var(t_tokens *token, t_shell *stru, size_t i)
 	}
 	return (str);
 }
-
-// void	main_expand(t_shell *stru)
-// {
-// 	t_tokens	*token;
-// 	char		*expanded;
-
-// 	token = stru->tokens;
-// 	while (token)
-// 	{
-// 		expanded = expand_var(token, stru, 0);
-// 		if (expanded)
-// 		{
-// 			free(token->str);
-// 			token->str = expanded;
-// 		}
-// 		token = token->next;
-// 	}
-// }
 
 void	main_expand(t_shell *stru)
 {

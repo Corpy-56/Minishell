@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/16 11:44:48 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/05 16:58:08 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,18 @@ typedef struct s_tokens
 	int				type_i;
 	struct s_tokens	*next;	
 }					t_tokens;
+
+typedef struct s_fd
+{
+	int				fd;
+	int				fd_out;
+	int				fd_in;
+	int				fd_out_put1;
+	int				fd_out_put2;
+	int				fd_int_put;
+}					t_fd;
+
+extern t_fd *fd;
 
 typedef struct s_shell
 {

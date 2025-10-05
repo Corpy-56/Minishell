@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 15:23:24 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/03 14:17:00 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/05 16:16:33 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,27 +23,6 @@ int	count_tokens(t_tokens *token)
 		token = token->next;
 	}
 	return (count);
-}
-
-char	**args_from_tokens(t_tokens *token)
-{
-	int		i;
-	int		count;
-	char	**args;
-
-	i = 0;
-	count = count_tokens(token);
-	args = malloc(sizeof(char *) * (count + 1));
-	if (!args)
-		return (NULL);
-	while (token)
-	{
-		args[i] = ft_strdup(token->str);
-		i++;
-		token = token->next;
-	}
-	args[i] = NULL;
-	return (args);
 }
 
 int	ft_quote(char *rl)

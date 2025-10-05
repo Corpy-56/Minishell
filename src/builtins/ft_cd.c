@@ -6,18 +6,11 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 21:35:08 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/30 16:12:28 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/05 16:31:39 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	err_msg_cd(char *args)
-{
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(args, 2);
-	ft_putstr_fd(": No such file or directory\n", 2);
-}
 
 static bool	oldpwd_is_getcwd(char *oldpwd)
 {

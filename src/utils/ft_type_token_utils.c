@@ -6,18 +6,11 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:42:37 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/04 12:43:31 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/05 16:37:29 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	err_msg_ambiguous(char *args)
-{
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(args, 2);
-	ft_putstr_fd(": ambiguous redirect\n", 2);
-}
 
 static int	error_chevrons(t_tokens *p_actuel)
 {
@@ -80,19 +73,6 @@ int	ft_nb_tokens(t_tokens *p_actuel)
 		a_debut = a_debut->next;
 	}
 	return (i);
-}
-
-void	ft_initialization_commande(t_cmd *commande)
-{
-	commande->args = NULL;
-	commande->cmd = NULL;
-	commande->heredoc = NULL;
-	commande->fd_int_put = -2;
-	commande->next = NULL;
-	commande->fd_out_put1 = -2;
-	commande->fd_out_put2 = -2;
-	commande->next = NULL;
-	return ;
 }
 
 t_cmd	*ft_creat_token2(void)

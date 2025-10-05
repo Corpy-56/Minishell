@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/03 16:52:28 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/05 16:39:01 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int			ft_cd(char **args, t_shell *stru);
 int			ft_echo(char **args);
 int			ft_env(t_env *env);
 int			ft_exit(t_shell *stru, char **args, bool cmd_seule);
-int			ft_export(char **args, t_env **env, t_env **local);
+int			ft_export(char **args, t_env **env, t_env **local, t_shell *stru);
 int			ft_pwd(char **args, t_shell *stru);
 int			ft_unset(t_shell *stru, char **args);
 
@@ -42,14 +42,12 @@ int			ft_unset(t_shell *stru, char **args);
 
 /* ********* tokenisation ********* */
 int			count_tokens(t_tokens *token);
-char		**args_from_tokens(t_tokens *token);
 t_tokens	*ft_tokenisation(char *rl, t_tokens *token);
 
 /* ********* environ ********* */
 t_env		*ft_duplicate_env(char **env, t_shell *stru);
 t_env		*create_env_node(char *str);
 int			update_env(t_env *head, char *name, char *value, t_shell *stru);
-
 
 /* ********* variables ********* */
 t_env		*add_to_local(t_env *local, char *name, char *value);
@@ -122,7 +120,6 @@ char		**split_by_ifs(const char *str, const char *ifs);
 
 /* ********* utils_token ********* */
 int			count_tokens(t_tokens *token);
-char		**args_from_tokens(t_tokens *token);
 int			ft_quote(char *rl);
 char		*ft_strjoin_char(char *str, const char c);
 int			white_space(char *str, int i);
@@ -142,10 +139,19 @@ int			ft_valid_syntax(t_tokens *token);
 
 /* ********* utils_builtins ********* */
 bool		is_builtin(t_cmd *commande);
-int			ft_test_bultins(t_cmd *commande, t_shell *stru, bool cmd_seule);
+int			ft_exec_builtins(t_cmd *commande, t_shell *stru, bool cmd_seule);
 
 /* ********* utils_cmd ********* */
 t_cmd		*suppr_empty_cmd(t_cmd *head);
+
+/* ********* utils exect redirections ********* */
+char 		*ft_expand_heredoc2(char *line, t_shell *stru);
+int			ft_expand_heredoc(int fd, t_shell *stru);
+int			ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru);
+void		ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd);
+
+/* ********* utils tests ********* */
+t_cmd		*ft_test_no_errors(t_cmd *commande);
 
 /* ********* free ********* */
 void		free_tokens(t_tokens *token);
@@ -157,6 +163,7 @@ void		free_fields(char **fields, size_t i);
 /* ********* clean ********* */
 void		clean_cmd(t_shell *stru);
 void		clean_all(t_shell *stru);
+void		clean_children(t_shell *stru);
 
 /* ********* error msg ********* */
 void		err_msg_cmd(char **argv, t_shell *stru);
@@ -164,15 +171,14 @@ void		err_msg_export(char *argv);
 void		err_msg_syntax(char *c);
 void		err_msg_dir(char **argv, t_shell *stru);
 void		err_msg_chdir(char **args);
+void		err_msg_file_or_dir(char **argv, t_shell *stru);
+void		err_msg_cd(char *args);
+void		err_msg_num(char **argv, t_shell *stru);
+void		err_msg_ambiguous(char *args);
 
-/* ********* utils exect redirections ********* */
-char 		*ft_expand_heredoc2(char *line, t_shell *stru);
-int			ft_expand_heredoc(int fd, t_shell *stru);
-int			ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru);
-void		ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd);
-
-/* ********* utils tests ********* */
-t_cmd		*ft_test_no_errors(t_cmd *commande);
+/* ********* init ********* */
+void		ft_initialization_commande(t_cmd *commande);
+void 		ft_init_fd1(void);
 
 #endif
 

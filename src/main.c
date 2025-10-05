@@ -6,13 +6,13 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/04 10:57:43 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/05 17:00:11 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_test_bultins(t_cmd *commande, t_shell *stru, bool cmd_seule)
+int	ft_exec_builtins(t_cmd *commande, t_shell *stru, bool cmd_seule)
 {
 	int	status;
 
@@ -30,41 +30,12 @@ int	ft_test_bultins(t_cmd *commande, t_shell *stru, bool cmd_seule)
 	else if (ft_strncmp(commande->cmd, "unset", 5) == 0)
 		status = ft_unset(stru, commande->args);
 	else if (ft_strncmp(commande->cmd, "export", 5) == 0)
-		status = ft_export(commande->args, &stru->environ, &stru->local);
+		status = ft_export(commande->args, &stru->environ, &stru->local, stru);
 	else
 		return (1);
 	stru->last_status = status;
 	return (status);
 }
-
-/* void	ft_on_exect(t_cmd *commande, t_shell *stru)
-{
-	t_cmd	*a_debut;
-
-	a_debut = commande;
-	while (a_debut)
-	{
-		if (commande->cmd != NULL)
-			ft_test_bultins(commande, stru); //on peut aussi mettre le exceve
-		a_debut = a_debut->next;
-	}
-} */
-
-// void	ft_on_exect(t_cmd *commande, t_shell *stru, char **env)
-// {
-// 	t_cmd	*a_debut;
-
-// 	a_debut = commande;
-// 	while (a_debut)
-// 	{
-// 		if (commande->cmd != NULL)
-// 		{
-// 			if (!ft_test_bultins(commande, stru))
-// 				run_external(commande, stru, env);
-// 		}
-// 		a_debut = a_debut->next;
-// 	}
-// }
 
 int main(int argc, char **argv, char **env)
 {
@@ -79,6 +50,7 @@ int main(int argc, char **argv, char **env)
 	if (stru == NULL)
 		return (0);
 	stru->environ = ft_duplicate_env(env, stru);
+	// ft_init_fd1();
 	while (!stru->should_exit)
 	{
 		ft_signal();
@@ -95,7 +67,6 @@ int main(int argc, char **argv, char **env)
 		free(rl);
 		if (!stru->tokens)
 			continue ;
-		// stru->tokens->args = args_from_tokens(stru->tokens);
 		main_expand(stru);
 		split_all_tokens(&stru->tokens, stru);
 		unquote_tokens(stru->tokens);
@@ -125,7 +96,6 @@ int main(int argc, char **argv, char **env)
 		clean_cmd(stru);
 	}
 	status = stru->last_status;
-	clear_history ();
 	clean_all(stru);
 	free(stru);
 	exit (status);
