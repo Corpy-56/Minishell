@@ -6,21 +6,21 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 15:23:24 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/05 16:16:33 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/06 12:02:20 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	count_tokens(t_tokens *token)
+int	count_nodes(t_env *list)
 {
 	int	count;
 
 	count = 0;
-	while (token)
+	while (list)
 	{
 		count++;
-		token = token->next;
+		list = list->next;
 	}
 	return (count);
 }

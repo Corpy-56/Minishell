@@ -6,24 +6,24 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 11:51:21 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/05 17:11:26 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/06 11:57:02 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// void	print_exported_var(t_env *env)
-// {
-// 	t_env	*current;
+void	print_exported_var(t_env *env)
+{
+	t_env	*current;
 
-// 	current = env;
-// 	while (current)
-// 	{
-// 		if (current->value)
-// 			printf("export %s=\"%s\"\n", current->name, current->value);
-// 		current = current->next;
-// 	}
-// }
+	current = env;
+	while (current)
+	{
+		if (current->value)
+			printf("export %s=\"%s\"\n", current->name, current->value);
+		current = current->next;
+	}
+}
 
 static void	export2(t_env **env, t_env **local, char *name, char *value, t_shell *sh)
 {
@@ -60,8 +60,8 @@ int	ft_export(char **args, t_env **env, t_env **local, t_shell *stru)
 	char	*value;
 
 	name = NULL;
-	// if (!args[1])
-	// 	return (print_exported_var(*env), 0);
+	if (!args[1])
+		return (print_exported_var(*env), 0);
 	i = 0;
 	while (args[++i])
 	{

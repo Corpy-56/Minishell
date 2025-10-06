@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:52:31 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/05 15:31:39 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/06 12:19:11 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ static char	*build_line(char *name, char *value)
 	size_t	name_len;
 	size_t	val_len;
 
-	
 	if (!name || !*name)
 		return (NULL);
 	if (!value)

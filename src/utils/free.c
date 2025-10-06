@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 14:50:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/04 13:19:23 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/06 17:23:26 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	free_tokens(t_tokens *token)
 void	free_redirs(t_redir *redir)
 {
 	t_redir	*next;
-	
+
 	while (redir)
 	{
 		next = redir->next;

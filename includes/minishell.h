@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/05 16:39:01 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/06 15:31:11 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,14 @@ int			ft_unset(t_shell *stru, char **args);
 /* ******************************** SOURCES ******************************** */
 
 /* ********* tokenisation ********* */
-int			count_tokens(t_tokens *token);
 t_tokens	*ft_tokenisation(char *rl, t_tokens *token);
 
 /* ********* environ ********* */
 t_env		*ft_duplicate_env(char **env, t_shell *stru);
 t_env		*create_env_node(char *str);
 int			update_env(t_env *head, char *name, char *value, t_shell *stru);
+void		update_shlvl(t_env *env, t_shell *stru);
+char		**env_list_to_envp(t_env *env);
 
 /* ********* variables ********* */
 t_env		*add_to_local(t_env *local, char *name, char *value);
@@ -68,12 +69,12 @@ t_tokens	*ft_test_stdin(t_cmd *commande, t_tokens *p_actuel);
 t_tokens	*ft_heredoc_lexer(t_tokens *p_actuel, t_cmd *commande);
 
 /* ********* extenal cmds ********* */
-void		exec_external(t_cmd *cmd, t_shell *stru, char **env);
-void		run_external(t_cmd *cmd, t_shell *stru, char **env, int fd);
-// void		run_external(t_cmd *cmd, t_shell *stru, char **env);
+void		exec_external(t_cmd *cmd, t_shell *stru);
+void		run_external(t_cmd *cmd, t_shell *stru, int fd);
 
 /* ********* exec ********* */
-void		exec_cmd_line(t_shell *stru, char **env);
+// void		exec_cmd_line(t_shell *stru, char **env);
+void		exec_cmd_line(t_shell *stru);
 
 /* ********* ft_heredocs ********* */
 int			ft_setup_heredoc(t_cmd *commande);
@@ -90,7 +91,6 @@ void		ft_exit_d(void);
 size_t		count_fields(const char *str, const char *ifs);
 char		**split_by_ifs(const char *str, const char *ifs);
 void		split_all_tokens(t_tokens **head, t_shell *stru);
-
 
 /* ********* main ********* */
 int			main(int argc, char **argv, char **env);
@@ -119,10 +119,10 @@ int			extract_exit_status(int status);
 char		**split_by_ifs(const char *str, const char *ifs);
 
 /* ********* utils_token ********* */
-int			count_tokens(t_tokens *token);
 int			ft_quote(char *rl);
 char		*ft_strjoin_char(char *str, const char c);
 int			white_space(char *str, int i);
+int			count_nodes(t_env *list);
 
 /* ********* utils_quotes ********* */
 bool		is_quote(char quote);
@@ -145,7 +145,7 @@ int			ft_exec_builtins(t_cmd *commande, t_shell *stru, bool cmd_seule);
 t_cmd		*suppr_empty_cmd(t_cmd *head);
 
 /* ********* utils exect redirections ********* */
-char 		*ft_expand_heredoc2(char *line, t_shell *stru);
+char		*ft_expand_heredoc2(char *line, t_shell *stru);
 int			ft_expand_heredoc(int fd, t_shell *stru);
 int			ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru);
 void		ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd);
@@ -181,4 +181,3 @@ void		ft_initialization_commande(t_cmd *commande);
 void 		ft_init_fd1(void);
 
 #endif
-

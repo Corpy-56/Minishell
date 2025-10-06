@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/05 16:58:08 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/06 11:46:43 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ typedef struct s_redir
 	char			*target;
 	struct s_redir	*next;
 }					t_redir;
-
 
 typedef struct s_cmd
 {
@@ -36,6 +35,7 @@ typedef struct s_cmd
 
 typedef struct s_env
 {
+	// bool			exported;
 	char			*str;
 	int				i;
 	char			*name;

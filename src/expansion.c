@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 18:16:15 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/05 17:37:59 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/06 14:41:03 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ size_t	expand_var2(t_shell *stru, char *args, size_t i, char **str)
 {
 	size_t	start;
 	size_t	len_str;
-	char 	*name;
+	char	*name;
 	char	*value;
 	char	*dup;
-	
+
 	start = i;
 	len_str = ft_strlen(args);
 	while (i < len_str && (ft_isalnum(args[i]) || args[i] == '_'))

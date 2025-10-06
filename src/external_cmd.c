@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/05 16:30:56 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/06 18:32:47 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,47 +72,59 @@ char	*find_in_path(char *name, t_shell *stru)
 	return (NULL);
 }
 
-
-
-void	exec_external(t_cmd *cmd, t_shell *stru, char **env)
+void	exec_external(t_cmd *cmd, t_shell *stru)
 {
 	struct stat	info;
+	char		**envp;
+	int			error;
+	bool		found_chosen_path;
 
 	auto char *path_val, *chosen_path, **argv = cmd->args;
 	if (argv == NULL || argv[0] == NULL)
 		return ;
-	if (stat(argv[0], &info) == 0)
-	{
-		if (S_ISDIR(info.st_mode))
-			err_msg_dir(argv, stru);
-		return ;
-	}
 	if (ft_strchr(argv[0], '/'))
 	{
 		if (stat(argv[0], &info) != 0)
 			return (err_msg_file_or_dir(argv, stru));
-		else
-		{
-			signal(SIGINT, SIG_DFL);
-			signal(SIGQUIT, SIG_DFL);
-			execve(argv[0], argv, env);
-		}
-	}
-	path_val = get_env_value(stru->environ, "PATH");
-	if (path_val == NULL)
-		return (err_msg_file_or_dir(argv, stru));
-	chosen_path = find_in_path(argv[0], stru);
-	if (chosen_path)
-	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
-		execve(chosen_path, argv, env);
+		else if (S_ISDIR(info.st_mode))
+			return (err_msg_dir(argv, stru));
+		chosen_path = argv[0];
+		found_chosen_path = false;
 	}
 	else
-		err_msg_cmd(argv, stru);
+	{
+		path_val = get_env_value(stru->environ, "PATH");
+		if (path_val == NULL || path_val[0] == '\0')
+			return (err_msg_file_or_dir(argv, stru));
+		chosen_path = find_in_path(argv[0], stru);
+		if (!chosen_path)
+			return (err_msg_cmd(argv, stru));
+		else
+			found_chosen_path = true;
+	}
+	envp = env_list_to_envp(stru->environ);
+	if (!envp)
+	{
+		ft_putstr_fd("No envp\n", 2);
+		exit (1);
+	}
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	if (execve(chosen_path, argv, envp) == -1)
+	{
+		error = errno;
+		free_doublechar(envp);
+		if (found_chosen_path)
+			free(chosen_path);
+		if (error == ENOENT)
+			_exit(127);
+		if (error == EACCES || error == EISDIR || error == ENOEXEC)
+			_exit(126);
+	}
+	exit(stru->last_status);
 }
 
-void	run_external(t_cmd *cmd, t_shell *stru, char **env, int fd)
+void	run_external(t_cmd *cmd, t_shell *stru, int fd)
 {
 	int		pid;
 	int		status;
@@ -130,7 +142,7 @@ void	run_external(t_cmd *cmd, t_shell *stru, char **env, int fd)
 			dup2(fd, STDIN_FILENO);
 			close(fd);
 		}
-		exec_external(cmd, stru, env);
+		exec_external(cmd, stru);
 		exit(stru->last_status);
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/05 17:00:11 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/06 15:39:17 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,12 @@ int main(int argc, char **argv, char **env)
 	if (stru == NULL)
 		return (0);
 	stru->environ = ft_duplicate_env(env, stru);
+	update_shlvl(stru->environ, stru);
 	// ft_init_fd1();
 	while (!stru->should_exit)
 	{
 		ft_signal();
-		rl = readline("Minishell > ");
+		rl = readline("\033[32mMinishell : \033[0m");
 		if (!rl)
 		{
 			write(1, "exit\n", 5);
@@ -86,7 +87,7 @@ int main(int argc, char **argv, char **env)
 				clean_cmd(stru);
 				continue ;
 			}
-			exec_cmd_line(stru, env);
+			exec_cmd_line(stru);
 			if (stru->should_exit)
 			{
 				clean_cmd(stru);
