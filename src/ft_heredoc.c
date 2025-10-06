@@ -6,13 +6,13 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/03 17:35:47 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/06 18:26:50 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_heredoc(t_cmd *commande, int pidfd, int i)
+int	ft_heredoc(t_cmd *commande, int pidfd, int i)
 {
 	char	*line;
 
@@ -23,7 +23,7 @@ void	ft_heredoc(t_cmd *commande, int pidfd, int i)
 		write(1, "> ", 2);
 		line = get_next_line(0);
 		if (line == NULL)
-			break ;
+			return (-1);
 		if (ft_strncmp(line, commande->heredoc[i],
 				ft_strlen(commande->heredoc[i])) == 0)
 		{
@@ -37,6 +37,7 @@ void	ft_heredoc(t_cmd *commande, int pidfd, int i)
 		}
 		write(pidfd, line, ft_strlen(line));
 	}
+	return (0);
 }
 
 void	signal_handler(int signum, siginfo_t *info, void *context)
@@ -54,14 +55,20 @@ void	ft_child_heredoc(t_cmd *commande)
 	struct sigaction	signale;
 	int					pidfd;
 	int i;
+	int j;
 
+	j = 0;
 	i = 0;
 	pidfd = -1;
 	signale.sa_sigaction = signal_handler;
 	sigemptyset(&signale.sa_mask);
 	signale.sa_flags = SA_SIGINFO;
 	sigaction(SIGINT, &signale, NULL);
-	ft_heredoc(commande, pidfd, i);
+	j = ft_heredoc(commande, pidfd, i);
+	if (j == -1)
+		printf("\nwarning: here-document delimited by end-of-file (wanted `%s')\n", commande->heredoc[i]);
+	if (isatty(pidfd) == 1)
+		close (pidfd);
 	exit (0);
 }
 

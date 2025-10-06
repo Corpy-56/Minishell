@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/03 17:39:33 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/06 18:28:54 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,23 +44,130 @@ t_cmd	**collect_maillons(t_cmd *head, int n)
 	return (cmds);
 }
 
-//int	ft_test_heredoc_pipes(int i, int n, t_cmd *head, t_shell *sh)
-//{
-//	int fd;
+t_cmd	**ft_test_heredoc_pipes(int i, int n, t_cmd **cmds, t_shell *sh)
+{
+	int fd;
 
-//	fd = 0;
+	fd = 0;
+	while (i < n)
+	{
+		if (cmds[i]->heredoc != NULL)
+		{
+			cmds[i]->here = ft_setup_heredoc(cmds[i]);
+			if (cmds[i]->here == -1)
+				return (cmds);
+			cmds[i]->here = ft_expand_heredoc(cmds[i]->here, sh);
+		}
+		i++;
+	}
+	return (cmds);
+}
+
+void	ft_first_ft_redirections2(t_cmd *head)
+{
+	if (head->fd_out_put1 != -2)
+	{
+		dup2(head->fd_out_put1, STDOUT_FILENO);
+		close(head->fd_out_put1);
+	}
+	if (head->fd_out_put2 != -2)
+	{
+		dup2(head->fd_out_put2, STDOUT_FILENO);
+		close(head->fd_out_put2);
+	}
+	if (head->fd_int_put != -2)
+	{
+		dup2(head->fd_int_put, STDIN_FILENO);
+		close(head->fd_int_put);
+	}
+}
+
+//void	run_pipes(t_cmd *head, t_shell *sh, char **env)
+//{
+//	int		fd[2];
+//	pid_t	*pids;
+//	pid_t	pid;
+//	int		i;
+//	int		n;
+//	int		prev_read;
+//	int		status;
+//	int		last_pid;
+//	t_cmd	**cmds;
+//	int fd_test;
+	
+//	//auto int fd_stdin = dup(0), fd_stdout;
+//	//fd_stdout = dup(1);
+//	fd_test = 0;
+//	n = count_maillons(head);
+//	prev_read = -1;
+//	cmds = collect_maillons(head, n);
+//	pids = malloc(sizeof(pid_t) * n);
+//	if (!cmds || !pids)
+//		return ;
+//	i = 0;
+//	cmds = ft_test_heredoc_pipes(i, n, cmds, sh);
 //	while (i < n)
 //	{
-//		if (head->heredoc[i] != NULL)
+//		if (i < (n - 1))
 //		{
-//			fd = ft_setup_heredoc(head);
-//			if (fd == -1)
-//				return (fd);
-//			fd = ft_expand_heredoc(fd, sh);
+//			if (pipe(fd) == -1)
+//				exit(1);
 //		}
+//		pid = fork();
+//		if (pid == 0)
+//		{
+//			if (i < (n - 1))
+//			{
+//				if (dup2(fd[1], STDOUT_FILENO) == -1)
+//					exit(1);
+//				close(fd[0]);
+//				close(fd[1]);
+//			}
+//			cmds[i]->here = ft_first_ft_redirections(cmds[i], fd_test, sh);
+//			if (cmds[i]->here != -2)
+//			{
+//				if (dup2(cmds[i]->here, STDIN_FILENO) == -1)
+//					exit(1);
+//				close(cmds[i]->here);
+//			}
+//			else if (prev_read != -1)
+//			{
+//				if (dup2(prev_read, STDIN_FILENO) == -1)
+//					exit(1);
+//				close(prev_read);
+//			}
+//			if (is_builtin(cmds[i]))
+//				exit(ft_test_bultins(cmds[i], sh));
+//			else
+//			{
+//				exec_external(cmds[i], sh, env);
+//				//ft_close_fd(head, fd_stdin, fd_stdout, cmds[i]->here);
+//				exit(127);
+//			}
+//		}
+//		pids[i] = pid;
+//		if (prev_read != -1)
+//			close(prev_read);
+//		if (i < (n - 1))
+//		{
+//			close(fd[1]);
+//			prev_read = fd[0];
+//		}
+//		else
+//			prev_read = -1;
+//		status = 0;
+//		last_pid = 0;
+//		waitpid(pids[i], &status, 0);
+//		if (i == (n - 1))
+//			last_pid = extract_exit_status(last_pid);
 //		i++;
 //	}
+//	if (prev_read != -1)
+//		close(prev_read);
+//	sh->last_status = last_pid;
 //}
+
+
 
 void	run_pipes(t_cmd *head, t_shell *sh, char **env)
 {
@@ -85,7 +192,7 @@ void	run_pipes(t_cmd *head, t_shell *sh, char **env)
 	if (!cmds || !pids)
 		return ;
 	i = 0;
-	//ft_test_heredoc_pipes(i, n, head, sh);
+	cmds = ft_test_heredoc_pipes(i, n, cmds, sh);
 	while (i < n)
 	{
 		if (i < (n - 1))
@@ -96,8 +203,13 @@ void	run_pipes(t_cmd *head, t_shell *sh, char **env)
 		pid = fork();
 		if (pid == 0)
 		{
-			
-			if (prev_read != -1)
+			if (cmds[i]->here != -2)
+			{
+				if (dup2(cmds[i]->here, STDIN_FILENO) == -1)
+					exit(1);
+				close(cmds[i]->here);
+			}
+			else if (prev_read != -1)
 			{
 				if (dup2(prev_read, STDIN_FILENO) == -1)
 					exit(1);
@@ -105,22 +217,26 @@ void	run_pipes(t_cmd *head, t_shell *sh, char **env)
 			}
 			if (i < (n - 1))
 			{
+				//if (cmds[i]->here != -2)
+				//{
+				//	dup2(fd[1], STDOUT_FILENO);
+				//	exit(1);
+				//}
 				if (dup2(fd[1], STDOUT_FILENO) == -1)
 					exit(1);
 				close(fd[0]);
 				close(fd[1]);
 			}
-			//je peux mettre les heredocs + redirections
-			fd_test = ft_first_ft_redirections(cmds[i], fd_test, sh);
+			cmds[i]->here = ft_first_ft_redirections(cmds[i], fd_test, sh);
 			if (is_builtin(cmds[i]))
 				exit(ft_test_bultins(cmds[i], sh));
 			else
 			{
 				exec_external(cmds[i], sh, env);
-			//	ft_close_fd(head, fd_stdin, fd_stdout, fd_test);
+			//	ft_close_fd(head, fd_stdin, fd_stdout, cmds[i]->here);
 				exit(127);
 			}
-			//ft_close_fd(head, fd_stdin, fd_stdout, fd_test);
+			//ft_close_fd(head, fd_stdin, fd_stdout, cmds[i]->here);
 		}
 		pids[i] = pid;
 		if (prev_read != -1)

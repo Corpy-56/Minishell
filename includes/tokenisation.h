@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/03 14:50:15 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/06 15:39:54 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_cmd
 	char			**heredoc;
 	t_redir			*redirs;
 	int				is_builtin;
+	int				here;
 	struct s_cmd	*next;
 }					t_cmd;
 
