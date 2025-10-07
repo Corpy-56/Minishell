@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 14:50:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/06 17:23:26 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/07 12:19:35 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,12 @@ void	free_env(t_env **env)
 		next = current->next;
 		free(current->name);
 		free(current->value);
-		if (current->path)
-			free_doublechar(current->path);
+		free_doublechar(current->path);
 		free(current->str);
 		free(current);
 		current = next;
 	}
-	if (env)
-		*env = NULL;
+	*env = NULL;
 }
 
 void	free_tokens(t_tokens *token)

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/06 15:25:24 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/07 17:23:46 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,42 @@ t_cmd	**collect_maillons(t_cmd *head, int n)
 	return (cmds);
 }
 
-// void	run_pipes(t_cmd *head, t_shell *sh, char **env)
+t_cmd	**ft_test_heredoc_pipes(int i, int n, t_cmd **cmds, t_shell *sh)
+{
+	while (i < n)
+	{
+		if (cmds[i]->heredoc != NULL)
+		{
+			cmds[i]->here = ft_setup_heredoc(cmds[i]);
+			if (cmds[i]->here == -1)
+				return (cmds);
+			cmds[i]->here = ft_expand_heredoc(cmds[i]->here, sh);
+		}
+		i++;
+	}
+	return (cmds);
+}
+
+void	ft_first_ft_redirections2(t_cmd *head)
+{
+	if (head->fd_out_put1 != -2)
+	{
+		dup2(head->fd_out_put1, STDOUT_FILENO);
+		close(head->fd_out_put1);
+	}
+	if (head->fd_out_put2 != -2)
+	{
+		dup2(head->fd_out_put2, STDOUT_FILENO);
+		close(head->fd_out_put2);
+	}
+	if (head->fd_int_put != -2)
+	{
+		dup2(head->fd_int_put, STDIN_FILENO);
+		close(head->fd_int_put);
+	}
+}
+
+// void	run_pipes(t_cmd *head, t_shell *sh)
 // {
 // 	int		fd[2];
 // 	pid_t	*pids;
@@ -60,11 +95,13 @@ t_cmd	**collect_maillons(t_cmd *head, int n)
 // 	n = count_maillons(head);
 // 	prev_read = -1;
 // 	cmds = collect_maillons(head, n);
-// 	if (!cmds)
-// 		return ;
 // 	pids = malloc(sizeof(pid_t) * n);
-// 	if (!pids)
-// 		return (free(cmds));
+// 	if (!pids || !cmds)
+// 	{
+// 		free(pids);
+// 		free(cmds);
+// 		return ;
+// 	}
 // 	i = 0;
 // 	while (i < n)
 // 	{
@@ -95,6 +132,13 @@ t_cmd	**collect_maillons(t_cmd *head, int n)
 // 		}
 // 		if (pid == 0)
 // 		{
+// 			if (cmds[i]->here != -2)
+// 			{
+// 				if (dup2(cmds[i]->here, STDIN_FILENO) == -1)
+// 					exit(1);
+// 				if (i == 0 || cmds[i]->fd_int_put != -2)
+// 					close(cmds[i]->here);
+// 			}
 // 			if (prev_read != -1)
 // 			{
 // 				if (dup2(prev_read, STDIN_FILENO) == -1)
@@ -108,6 +152,7 @@ t_cmd	**collect_maillons(t_cmd *head, int n)
 // 				close(fd[0]);
 // 				close(fd[1]);
 // 			}
+// 			cmds[i]->here = ft_first_ft_redirections(cmds[i], cmds[i]->here, sh);
 // 			if (is_builtin(cmds[i]))
 // 			{
 // 				builtins = ft_exec_builtins(cmds[i], sh, false);
@@ -116,7 +161,7 @@ t_cmd	**collect_maillons(t_cmd *head, int n)
 // 			}
 // 			else
 // 			{
-// 				exec_external(cmds[i], sh, env);
+// 				exec_external(cmds[i], sh);
 // 				clean_children(sh);
 // 				exit(127);
 // 			}
@@ -148,103 +193,114 @@ t_cmd	**collect_maillons(t_cmd *head, int n)
 void	run_pipes(t_cmd *head, t_shell *sh)
 {
 	int		fd[2];
-	pid_t	*pids;
-	pid_t	pid;
 	int		i;
 	int		n;
 	int		prev_read;
 	int		status;
-	int		last_pid;
+	int		last_status;
 	int		builtins;
-	t_cmd	**cmds;
+	t_cmd	*current;
+	// t_cmd	*hd;
+	pid_t	wait_child;
+	pid_t	pid;
+	pid_t	last_pid;
 
-	n = count_maillons(head);
+	n = 0;
 	prev_read = -1;
-	cmds = collect_maillons(head, n);
-	if (!cmds)
-		return ;
-	pids = malloc(sizeof(pid_t) * n);
-	if (!pids)
-		return (free(cmds));
+	last_pid = -1;
+	current = head;
 	i = 0;
-	while (i < n)
+	current = *ft_test_heredoc_pipes(i, n, &current, sh);
+	while (current)
 	{
-		if (i < (n - 1))
+		if (current->next && pipe(fd) == -1)
 		{
-			if (pipe(fd) == -1)
-			{
-				if (prev_read != -1)
-					close (prev_read);
-				free(pids);
-				free(cmds);
-				exit(1);
-			}
+			if (prev_read != -1)
+				close (prev_read);
+			_exit(1);
 		}
 		pid = fork();
 		if (pid == -1)
 		{
-			if (i < n - 1)
+			if (current->next)
 			{
 				close(fd[0]);
 				close(fd[1]);
 			}
 			if (prev_read != -1)
 				close(prev_read);
-			free(pids);
-			free(cmds);
-			exit (1);
+			_exit (1);
 		}
 		if (pid == 0)
 		{
+			if (current->here != -2)
+			{
+				if (dup2(current->here, STDIN_FILENO) == -1)
+					exit(1);
+				if (current->fd_int_put != -2)
+					close(current->here);
+			}
 			if (prev_read != -1)
 			{
 				if (dup2(prev_read, STDIN_FILENO) == -1)
-					exit(1);
+					_exit(1);
 				close(prev_read);
 			}
-			if (i < (n - 1))
+			if (current->next)
 			{
 				if (dup2(fd[1], STDOUT_FILENO) == -1)
-					exit(1);
+					_exit(1);
 				close(fd[0]);
 				close(fd[1]);
 			}
-			if (is_builtin(cmds[i]))
+			current->here = ft_first_ft_redirections(current, current->here, sh);
+			if (is_builtin(current))
 			{
-				builtins = ft_exec_builtins(cmds[i], sh, false);
+				builtins = ft_exec_builtins(current, sh, false);
 				clean_children(sh);
-				exit(builtins);
+				_exit(builtins);
 			}
 			else
 			{
-				exec_external(cmds[i], sh);
+				exec_external(current, sh);
 				clean_children(sh);
-				exit(127);
+				_exit(127);
 			}
 		}
-		pids[i] = pid;
+		n++;
 		if (prev_read != -1)
 			close(prev_read);
-		if (i < (n - 1))
+		if (current->next)
 		{
 			close(fd[1]);
 			prev_read = fd[0];
 		}
 		else
 			prev_read = -1;
-		status = 0;
-		last_pid = 0;
-		waitpid(pids[i], &status, 0);
-		if (i == (n - 1))
-			last_pid = extract_exit_status(status);
-		i++;
+		last_pid = pid;
+		current = current->next;
 	}
 	if (prev_read != -1)
 		close(prev_read);
-	sh->last_status = last_pid;
-	free(pids);
-	free(cmds);
+	i = 0;
+	status = 0;
+	last_status = 0;
+	while (i < n)
+	{
+		wait_child = wait(&status);
+		if (wait_child == -1)
+		{
+			if (errno == EINTR)
+				continue ;
+			break ;
+		}
+		if (wait_child == last_pid)
+			last_status = extract_exit_status(status);
+		i++;
+	}
+	sh->last_status = last_status;
 }
+
 
 static void	reconstruct_path_dirs(t_shell *stru)
 {
@@ -262,7 +318,7 @@ static void	reconstruct_path_dirs(t_shell *stru)
 	}
 }
 
-// void	exec_cmd_line(t_shell *stru, char **env)
+// void	exec_cmd_line(t_shell *stru)
 // {
 // 	t_cmd	*head;
 
@@ -279,14 +335,14 @@ static void	reconstruct_path_dirs(t_shell *stru)
 // 		if (is_builtin(head))
 // 			(void)ft_exec_builtins(head, stru, true);
 // 		else
-// 			run_external(head, stru, env, fd);
+// 			run_external(head, stru, fd);
 // 		ft_close_fd(head, fd_stdin, fd_stdout, fd);
 // 		if (stru->should_exit)
 // 			return ;
 // 	}
 // 	if (n >= 2)
 // 	{
-// 		run_pipes(head, stru, env);
+// 		run_pipes(head, stru);
 // 		ft_close_fd(head, fd_stdin, fd_stdout, fd);
 // 	}
 // 	return ;
@@ -295,6 +351,7 @@ static void	reconstruct_path_dirs(t_shell *stru)
 void	exec_cmd_line(t_shell *stru)
 {
 	t_cmd	*head;
+	int		builtins;
 
 	auto int n, fd_stdin = dup(0), fd_stdout, fd = 0;
 	fd_stdout = dup(1);
@@ -307,12 +364,18 @@ void	exec_cmd_line(t_shell *stru)
 	{
 		fd = ft_first_ft_redirections(head, fd, stru);
 		if (is_builtin(head))
-			(void)ft_exec_builtins(head, stru, true);
+		{
+			builtins = ft_exec_builtins(head, stru, true);
+			if (stru->should_exit)
+			{
+				stru->last_status = builtins;
+				return ;
+			}
+
+		}
 		else
 			run_external(head, stru, fd);
 		ft_close_fd(head, fd_stdin, fd_stdout, fd);
-		if (stru->should_exit)
-			return ;
 	}
 	if (n >= 2)
 	{

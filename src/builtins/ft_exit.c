@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:01:37 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/05 16:32:01 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/07 18:19:20 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,12 @@ int	str_to_long(const char *str, long *out)
 	return (0);
 }
 
+void	print_exit(bool cmd_seule)
+{
+	if (cmd_seule && isatty(STDIN_FILENO))
+		printf("exit\n");
+}
+
 int	ft_exit(t_shell *stru, char **args, bool cmd_seule)
 {
 	long	out;
@@ -67,22 +73,16 @@ int	ft_exit(t_shell *stru, char **args, bool cmd_seule)
 	out = 0;
 	if (!args[1])
 	{
+		print_exit(cmd_seule);
 		if (cmd_seule)
-		{
-			if (isatty(STDIN_FILENO))
-				printf("exit\n");
 			stru->should_exit = 1;
-			return (0);
-		}
+		return (stru->last_status);
 	}
 	if (str_to_long(args[1], &out))
 	{
+		print_exit(cmd_seule);
 		if (cmd_seule)
-		{
-			if (isatty(STDIN_FILENO))
-				printf("exit\n");
 			err_msg_num(args, stru);
-		}
 		return (2);
 	}
 	if (args[2])
@@ -95,11 +95,9 @@ int	ft_exit(t_shell *stru, char **args, bool cmd_seule)
 	stru->last_status = out % 256;
 	if (stru->last_status < 0)
 		stru->last_status += 256;
+	print_exit(cmd_seule);
 	if (cmd_seule)
-	{
-		if (isatty(STDIN_FILENO))
-			printf("exit\n");
 		stru->should_exit = 1;
-	}	
 	return (stru->last_status);
 }
+

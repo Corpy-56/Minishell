@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/06 18:32:47 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/07 17:02:00 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,12 +116,14 @@ void	exec_external(t_cmd *cmd, t_shell *stru)
 		free_doublechar(envp);
 		if (found_chosen_path)
 			free(chosen_path);
+		clean_children(stru);
 		if (error == ENOENT)
 			_exit(127);
-		if (error == EACCES || error == EISDIR || error == ENOEXEC)
+		else if (error == EACCES || error == EISDIR || error == ENOEXEC)
+			_exit(126);
+		else
 			_exit(126);
 	}
-	exit(stru->last_status);
 }
 
 void	run_external(t_cmd *cmd, t_shell *stru, int fd)
@@ -143,7 +145,9 @@ void	run_external(t_cmd *cmd, t_shell *stru, int fd)
 			close(fd);
 		}
 		exec_external(cmd, stru);
-		exit(stru->last_status);
+		status = stru->last_status;
+		clean_children(stru);
+		_exit(status);
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/06 11:46:43 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/07 14:56:57 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_cmd
 	char			**heredoc;
 	t_redir			*redirs;
 	int				is_builtin;
+	int				here;
 	struct s_cmd	*next;
 }					t_cmd;
 

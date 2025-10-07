@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:52:31 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/06 12:19:11 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/07 11:11:53 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,11 @@ static void	update_env2(t_env *node, char *name, t_shell *stru)
 	if (!name || ft_strcmp(name, "") == 0)
 		return ;
 	if (node->path)
+	{
 		free_doublechar(node->path);
-	if (node->value)
+		node->path = NULL;
+	}
+	if (node->value && node->value[0] != '\0')
 		node->path = ft_split(node->value, ':');
 	else
 		node->path = NULL;
@@ -54,8 +57,11 @@ static void	update_env2(t_env *node, char *name, t_shell *stru)
 	{
 		stru->path_node = node;
 		if (stru->path_dirs)
+		{
 			free_doublechar(stru->path_dirs);
-		if (node->value)
+			stru->path_dirs = NULL;
+		}
+		if (node->value && node->value[0] != '\0')
 			stru->path_dirs = ft_split(node->value, ':');
 		else
 			stru->path_dirs = NULL;

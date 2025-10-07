@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/06 15:39:17 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/07 15:38:39 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,64 +40,62 @@ int	ft_exec_builtins(t_cmd *commande, t_shell *stru, bool cmd_seule)
 int main(int argc, char **argv, char **env)
 {
 	char	*rl;
-	t_shell	*stru;
+	t_shell	stru;
 	int		syntax;
 	int		status;
 
 	(void)argc;
 	(void)argv;
-	stru = ft_calloc(1, sizeof(t_shell));
-	if (stru == NULL)
-		return (0);
-	stru->environ = ft_duplicate_env(env, stru);
-	update_shlvl(stru->environ, stru);
+	ft_bzero(&stru, sizeof(stru));
+	stru.environ = ft_duplicate_env(env, &stru);
+	update_shlvl(stru.environ, &stru);
 	// ft_init_fd1();
-	while (!stru->should_exit)
+	while (!stru.should_exit)
 	{
 		ft_signal();
 		rl = readline("\033[32mMinishell : \033[0m");
 		if (!rl)
 		{
 			write(1, "exit\n", 5);
-			stru->should_exit = 1;
+			clean_all(&stru);
+			stru.should_exit = 1;
 			break ;
 		}
 		if (*rl)
 			add_history(rl);
-		stru->tokens = ft_tokenisation(rl, stru->tokens);
+		stru.tokens = ft_tokenisation(rl, stru.tokens);
 		free(rl);
-		if (!stru->tokens)
+		if (!stru.tokens)
 			continue ;
-		main_expand(stru);
-		split_all_tokens(&stru->tokens, stru);
-		unquote_tokens(stru->tokens);
-		if (stru->tokens != NULL)
+		main_expand(&stru);
+		split_all_tokens(&stru.tokens, &stru);
+		unquote_tokens(stru.tokens);
+		if (stru.tokens != NULL)
 		{
-			syntax = ft_valid_syntax(stru->tokens);
+			syntax = ft_valid_syntax(stru.tokens);
 			if (syntax != 0)
 			{
-				stru->last_status = 2;
-				clean_cmd(stru);
+				stru.last_status = 2;
+				clean_cmd(&stru);
 				continue ;
 			}
-			stru->commande = ft_type_token(stru->commande, stru->tokens, stru);
-			stru->commande = suppr_empty_cmd(stru->commande);
-			if (stru->commande == NULL)
+			stru.commande = ft_type_token(stru.commande, stru.tokens, &stru);
+			stru.commande = suppr_empty_cmd(stru.commande);
+			if (stru.commande == NULL)
 			{
-				clean_cmd(stru);
+				clean_cmd(&stru);
 				continue ;
 			}
-			exec_cmd_line(stru);
-			if (stru->should_exit)
+			exec_cmd_line(&stru);
+			if (stru.should_exit)
 			{
-				clean_cmd(stru);
+				clean_cmd(&stru);
 				break ;
 			}
 		}
-		clean_cmd(stru);
+		clean_cmd(&stru);
 	}
-	status = stru->last_status;
-	clean_all(stru);
-	free(stru);
+	status = stru.last_status;
+	clean_all(&stru);
 	exit (status);
 }

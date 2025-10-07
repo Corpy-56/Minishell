@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_heredoc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/05 16:20:42 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/06 18:26:50 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_heredoc(t_cmd *commande, int pidfd, int i)
+int	ft_heredoc(t_cmd *commande, int pidfd, int i)
 {
 	char	*line;
 
@@ -23,7 +23,7 @@ void	ft_heredoc(t_cmd *commande, int pidfd, int i)
 		write(1, "> ", 2);
 		line = get_next_line(0);
 		if (line == NULL)
-			break ;
+			return (-1);
 		if (ft_strncmp(line, commande->heredoc[i],
 				ft_strlen(commande->heredoc[i])) == 0)
 		{
@@ -37,6 +37,7 @@ void	ft_heredoc(t_cmd *commande, int pidfd, int i)
 		}
 		write(pidfd, line, ft_strlen(line));
 	}
+	return (0);
 }
 
 void	signal_handler(int signum, siginfo_t *info, void *context)
@@ -45,6 +46,7 @@ void	signal_handler(int signum, siginfo_t *info, void *context)
 	(void)info;
 	(void)context;
 	write(1, "\n", 1);
+//	close(0);// comme ca je peux free tout avant de tout reafficher 
 	exit(130);
 }
 
@@ -52,15 +54,26 @@ void	ft_child_heredoc(t_cmd *commande)
 {
 	struct sigaction	signale;
 	int					pidfd;
+	t_cmd				*temp;
 	int i;
+	int j;
 
+	j = 0;
 	i = 0;
 	pidfd = -1;
+	temp = commande;
+	while(temp->heredoc[i] != NULL)
+		i++;
+	i--;
 	signale.sa_sigaction = signal_handler;
 	sigemptyset(&signale.sa_mask);
 	signale.sa_flags = SA_SIGINFO;
 	sigaction(SIGINT, &signale, NULL);
-	ft_heredoc(commande, pidfd, i);
+	j = ft_heredoc(commande, pidfd, 0);
+	if (j == -1)
+		printf("\nwarning: here-document delimited by end-of-file (wanted `%s')\n", temp->heredoc[i]);
+	if (isatty(pidfd) == 1)
+		close (pidfd);
 	exit (0);
 }
 

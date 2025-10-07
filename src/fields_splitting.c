@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 14:20:54 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/06 12:08:24 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/07 18:00:52 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,8 @@ size_t	count_fields(const char *str, const char *ifs)
 	return (n_fields);
 }
 
-char	**split_by_ifs(const char *str, const char *ifs)
+char	**split_by_ifs2(const char *str, const char *ifs, char **fields)
 {
-	size_t	i;
-	size_t	j;
-	size_t	n_fields;
-	size_t	start;
-	char	**fields;
-
-	i = 0;
-	j = 0;
-	fields = NULL;
 	if (str == NULL)
 	{
 		fields = ft_calloc(1, sizeof(char *));
@@ -65,6 +56,36 @@ char	**split_by_ifs(const char *str, const char *ifs)
 			return (NULL);
 		return (fields);
 	}
+	return (fields);
+}
+
+
+char	**split_by_ifs(const char *str, const char *ifs)
+{
+	size_t	i;
+	size_t	j;
+	size_t	n_fields;
+	size_t	start;
+	char	**fields;
+
+	i = 0;
+	j = 0;
+	fields = NULL;
+	// if (str == NULL)
+	// {
+	// 	fields = ft_calloc(1, sizeof(char *));
+	// 	return (fields);
+	// }
+	// if (!ifs || !*ifs)
+	// 	ifs = " \t\n";
+	// else if (!ifs[0])
+	// {
+	// 	fields = ft_calloc(1, sizeof(char *));
+	// 	if (fields == NULL)
+	// 		return (NULL);
+	// 	return (fields);
+	// }
+	split_by_ifs2(str, ifs, fields);
 	n_fields = count_fields(str, ifs);
 	fields = ft_calloc(n_fields + 1, sizeof(char *));
 	if (!fields)

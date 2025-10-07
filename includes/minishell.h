@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/06 15:31:11 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/07 17:24:22 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void		exec_cmd_line(t_shell *stru);
 /* ********* ft_heredocs ********* */
 int			ft_setup_heredoc(t_cmd *commande);
 void		ft_child_heredoc(t_cmd *commande);
-void		ft_heredoc(t_cmd *commande, int pidfd, int i);
+int			ft_heredoc(t_cmd *commande, int pidfd, int i);
 void		signal_handler(int signum, siginfo_t *info, void *context);
 
 /* ********* ft_signals ********* */

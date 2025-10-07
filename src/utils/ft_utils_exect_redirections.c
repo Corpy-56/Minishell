@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils_exect_redirections.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/02 17:26:45 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/06 18:34:14 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,19 +88,19 @@ int	ft_expand_heredoc(int fd, t_shell *stru)
 
 int	ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru)
 {
-	if (head->heredoc != NULL)
+	if (head->heredoc != NULL && (fd == -2 || fd == 0))
 	{
 		fd = ft_setup_heredoc(head);
 		if (fd == -1)
 			return (fd);
 		fd = ft_expand_heredoc(fd, stru);
 	}
-	if (head->fd_out_put1 != -2)
+	if (head->fd_out_put1 != -2 && head->here == -2)
 	{
 		dup2(head->fd_out_put1, STDOUT_FILENO);
 		close(head->fd_out_put1);
 	}
-	if (head->fd_out_put2 != -2)
+	if (head->fd_out_put2 != -2 && head->here == -2)
 	{
 		dup2(head->fd_out_put2, STDOUT_FILENO);
 		close(head->fd_out_put2);
@@ -115,7 +115,7 @@ int	ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru)
 
 void	ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd)
 {
-	if (head->heredoc != NULL)
+	if (head->heredoc != NULL && isatty(fd) == 1)
 		close(fd);
 	if (head->fd_out_put1 != -2 || head->fd_out_put2 != -2)
 	{
