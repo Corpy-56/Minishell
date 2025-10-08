@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/07 14:56:57 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/08 18:09:28 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ typedef struct s_cmd
 
 typedef struct s_env
 {
-	// bool			exported;
 	char			*str;
 	int				i;
 	char			*name;
@@ -65,6 +64,21 @@ typedef struct s_fd
 }					t_fd;
 
 extern t_fd *fd;
+
+typedef struct s_split
+{
+	const char		*ifs;
+	const char		*str;
+	char			**fields;
+	char			*new_field;
+	size_t			i;
+	size_t			j;
+	size_t			n_fields;
+	size_t			start;
+	t_tokens		*prev;
+	t_tokens		*current;
+	t_tokens		*last;
+}					t_split;
 
 typedef struct s_shell
 {

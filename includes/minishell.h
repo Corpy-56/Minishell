@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/07 17:24:22 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/08 18:08:54 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ void		ft_exit_d(void);
 
 /* ********* fields_splitting ********* */
 size_t		count_fields(const char *str, const char *ifs);
-char		**split_by_ifs(const char *str, const char *ifs);
 void		split_all_tokens(t_tokens **head, t_shell *stru);
 
 /* ********* main ********* */
@@ -116,7 +115,6 @@ char		*get_env_value(t_env *env, char *name);
 int			is_assignment_word(const char *str);
 bool		is_ifs(char c, const char *ifs);
 int			extract_exit_status(int status);
-char		**split_by_ifs(const char *str, const char *ifs);
 
 /* ********* utils_token ********* */
 int			ft_quote(char *rl);
@@ -153,6 +151,9 @@ void		ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd);
 /* ********* utils tests ********* */
 t_cmd		*ft_test_no_errors(t_cmd *commande);
 
+/* ********* utils fields split ********* */
+char		**split_by_ifs(const char *str, const char *ifs);
+
 /* ********* free ********* */
 void		free_tokens(t_tokens *token);
 void		free_env(t_env **env);
@@ -179,5 +180,9 @@ void		err_msg_ambiguous(char *args);
 /* ********* init ********* */
 void		ft_initialization_commande(t_cmd *commande);
 void 		ft_init_fd1(void);
+void		init_split(t_split *split, t_tokens **head, t_shell *stru);
+void		init_split_ifs(t_split *split, const char *str, const char *ifs);
+
+
 
 #endif

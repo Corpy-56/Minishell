@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/07 15:38:39 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/08 11:39:03 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int main(int argc, char **argv, char **env)
 	t_shell	stru;
 	int		syntax;
 	int		status;
+	// t_split	*split = NULL;
 
 	(void)argc;
 	(void)argv;
