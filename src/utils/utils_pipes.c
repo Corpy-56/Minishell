@@ -1,27 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_utils_tests.c                                   :+:      :+:    :+:   */
+/*   utils_pipes.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:56:23 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/01 16:22:43 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/09 14:21:07 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_cmd	*ft_test_no_errors(t_cmd *commande)
+void	ignore_sigpipe_once(void)
 {
-	t_cmd	*a;
+	struct sigaction	sa;
 
-	a = commande;
-	while (a)
-	{
-		if (a->fd_int_put == -1 || a->fd_out_put1 == -1 || a->fd_out_put2 == -1)
-			return (NULL);
-		a = a->next;
-	}
-	return (commande);
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sa.sa_handler = SIG_IGN;
+	sigaction(SIGPIPE, &sa, NULL);
 }
+
+void	bad_fork(t_pipes *pipes)
+{
+	if (pipes->current->next)
+	{
+		close(pipes->fd[0]);
+		close(pipes->fd[1]);
+	}
+	if (pipes->prev_read != -1)
+		close(pipes->prev_read);
+	_exit (1);
+}
+

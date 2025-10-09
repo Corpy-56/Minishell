@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 16:37:09 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/08 18:18:10 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/09 15:10:14 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,26 @@ void	init_split_ifs(t_split *split, const char *str, const char *ifs)
 	split->ifs = ifs;
 	if (!split->ifs || !*split->ifs)
 		split->ifs = " \t\n";
+}
+
+void	init_pipes(t_pipes *pipes, t_cmd *head)
+{
+	pipes->i = 0;
+	pipes->n = 0;
+	pipes->prev_read = -1;
+	pipes->last_status = 0;
+	pipes->builtins = 0;
+	pipes->status = 0;
+	pipes->current = head;
+	pipes->wait_child = 0;
+	pipes->pid = 0;
+	pipes->last_pid = -1;
+}
+
+void	init_copy(t_copy *copy, t_env *var, char *new_value)
+{
+	copy->new_val = NULL;
+	copy->new_str = NULL;
+	copy->name_len = ft_strlen(var->name);
+	copy->val_len = ft_strlen(new_value);
 }

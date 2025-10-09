@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/08 11:39:03 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/09 16:23:59 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,21 @@ int	ft_exec_builtins(t_cmd *commande, t_shell *stru, bool cmd_seule)
 	return (status);
 }
 
+void	ft_tty(t_shell *stru)
+{
+	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
+	{
+		clean_all(stru);
+		exit (1);
+	}
+}
+
 int main(int argc, char **argv, char **env)
 {
 	char	*rl;
 	t_shell	stru;
 	int		syntax;
 	int		status;
-	// t_split	*split = NULL;
 
 	(void)argc;
 	(void)argv;
@@ -51,6 +59,7 @@ int main(int argc, char **argv, char **env)
 	stru.environ = ft_duplicate_env(env, &stru);
 	update_shlvl(stru.environ, &stru);
 	// ft_init_fd1();
+	// ft_tty(&stru);
 	while (!stru.should_exit)
 	{
 		ft_signal();

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 14:20:54 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/08 18:23:30 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/09 16:13:05 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,35 +85,31 @@ int	while_fields(t_split *split)
 	return (0);
 }
 
-static void	ft_is_op(t_split *split)
+static void	split_all_tokens2(t_split *split)
 {
-	while (split->current)
-	{
-		if (is_operator(split->current->str))
-		{
-			split->prev = split->current;
-			split->current = split->current->next;
-			continue ;
-		}
-	}
+	free(split->current->str);
+	split->current->str = split->new_field;
+	split->last = split->current;
+	split->i = 1;
+	if (while_fields(split) < 0)
+		return ;
+	free_doublechar(split->fields);
+	split->prev = split->last;
 }
-
-
 
 void	split_all_tokens(t_tokens **head, t_shell *stru)
 {
 	t_split	split;
 
 	init_split(&split, head, stru);
-	ft_is_op(&split);
 	while (split.current)
 	{
-		// if (is_operator(split.current->str))
-		// {
-		// 	split.prev = split.current;
-		// 	split.current = split.current->next;
-		// 	continue ;
-		// }
+		if (is_operator(split.current->str))
+		{
+			split.prev = split.current;
+			split.current = split.current->next;
+			continue ;
+		}
 		split.fields = split_by_ifs(split.current->str, split.ifs);
 		if (!split.fields)
 			return ;
@@ -125,14 +121,7 @@ void	split_all_tokens(t_tokens **head, t_shell *stru)
 		split.new_field = ft_strdup(split.fields[0]);
 		if (!split.new_field)
 			return (free_doublechar(split.fields));
-		free(split.current->str);
-		split.current->str = split.new_field;
-		split.last = split.current;
-		split.i = 1;
-		if (while_fields(&split) < 0)
-			return ;
-		free_doublechar(split.fields);
-		split.prev = split.last;
+		split_all_tokens2(&split);
 		split.current = split.last->next;
 	}
 }

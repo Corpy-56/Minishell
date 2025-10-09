@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/08 18:08:54 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/09 16:53:43 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,10 @@ void		exec_external(t_cmd *cmd, t_shell *stru);
 void		run_external(t_cmd *cmd, t_shell *stru, int fd);
 
 /* ********* exec ********* */
-// void		exec_cmd_line(t_shell *stru, char **env);
+int			count_maillons(t_cmd *cmd);
 void		exec_cmd_line(t_shell *stru);
+t_cmd		*ft_test_heredoc_pipes(t_cmd *cmds, t_shell *sh);
+void		ft_first_ft_redirections2(t_cmd *head);
 
 /* ********* ft_heredocs ********* */
 int			ft_setup_heredoc(t_cmd *commande);
@@ -90,6 +92,9 @@ void		ft_exit_d(void);
 /* ********* fields_splitting ********* */
 size_t		count_fields(const char *str, const char *ifs);
 void		split_all_tokens(t_tokens **head, t_shell *stru);
+
+/* ********* pipes ********* */
+void		run_pipes(t_cmd *head, t_shell *sh);
 
 /* ********* main ********* */
 int			main(int argc, char **argv, char **env);
@@ -107,8 +112,7 @@ int			append_str(char **result, const char *str);
 int			check_valid_var(char *str);
 t_env		*find_var(t_env *env, char *name);
 void		parse_args(char *args, char **name, char **value);
-void		update_value(t_env *var, char *new_value);
-void		update_str(t_env *var);
+int			update_value(t_env *var, char *new_value);
 
 /* ********* utils_expan ********* */
 char		*get_env_value(t_env *env, char *name);
@@ -148,8 +152,9 @@ int			ft_expand_heredoc(int fd, t_shell *stru);
 int			ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru);
 void		ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd);
 
-/* ********* utils tests ********* */
-t_cmd		*ft_test_no_errors(t_cmd *commande);
+/* ********* utils pipes ********* */
+void		ignore_sigpipe_once(void);
+void		bad_fork(t_pipes *pipes);
 
 /* ********* utils fields split ********* */
 char		**split_by_ifs(const char *str, const char *ifs);
@@ -182,7 +187,9 @@ void		ft_initialization_commande(t_cmd *commande);
 void 		ft_init_fd1(void);
 void		init_split(t_split *split, t_tokens **head, t_shell *stru);
 void		init_split_ifs(t_split *split, const char *str, const char *ifs);
-
-
+void		init_pipes(t_pipes *pipes, t_cmd *head);
+void		init_copy(t_copy *copy, t_env *var, char *new_value);
+void		init_tab(t_tab *tab, t_env *env);
+void		init_exec(t_exec *exec, t_shell *stru);
 
 #endif

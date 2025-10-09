@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/07 17:02:00 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/09 14:03:54 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ char	*find_in_path(char *name, t_shell *stru)
 			i++;
 			continue ;
 		}
-		// printf("%s\n", chosen_path);
 		return (chosen_path);
 	}
 	return (NULL);

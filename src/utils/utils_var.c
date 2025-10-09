@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 12:32:05 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/29 11:46:53 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/09 16:04:38 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,39 +71,37 @@ t_env	*find_var(t_env *env, char *name)
 	return (NULL);
 }
 
-void	update_value(t_env *var, char *new_value)
+void	no_new_value(t_copy *copy, t_env *var)
 {
-	char	*tmp_str;
-
-	free(var->value);
-	if (new_value)
-		var->value = ft_strdup(new_value);
-	else
-		var->value = NULL;
-	free(var->str);
-	if (var->value)
-	{
-		tmp_str = ft_strjoin(var->name, "=");
-		var->str = ft_strjoin(tmp_str, new_value);
-		free(tmp_str);
-	}
-	else
-		var->str = ft_strdup(var->name);
-}
-
-void	update_str(t_env *var)
-{
-	char	*tmp;
-
-	if (!var)
+	copy->new_str = ft_strdup(var->name);
+	if (!copy->new_str)
 		return ;
-	if (var->str)
-		free(var->str);
-	if (var->value)
+}
+
+int	update_value(t_env *var, char *new_value)
+{
+	t_copy	copy;
+
+	init_copy(&copy, var, new_value);
+	if (new_value)
 	{
-		tmp = ft_strjoin(var->name, "=");
-		var->str = ft_strjoin(tmp, ft_strdup(var->value));
+		copy.new_val = ft_strdup(new_value);
+		if (!copy.new_val)
+			return (-1);
+		copy.new_str = malloc((copy.name_len + 1) + (copy.val_len + 1));
+		if (!copy.new_str)
+			return (free(copy.new_val), -1);
+		ft_memcpy(copy.new_str, var->name, copy.name_len);
+		copy.new_str[copy.name_len] = '=';
+		ft_memcpy((copy.new_str + copy.name_len + 1), new_value, copy.val_len);
+		copy.new_str[copy.name_len + 1 + copy.val_len] = '\0';
 	}
 	else
-		var->str = ft_strdup(var->name);
+		no_new_value(&copy, var);
+	free(var->value);
+	free(var->str);
+	var->value = copy.new_val;
+	var->str = copy.new_str;
+	return (0);
 }
+

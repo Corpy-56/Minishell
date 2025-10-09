@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:52:31 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/07 12:13:56 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/09 16:25:49 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,30 +115,24 @@ char	*catch_line(char *name, char *value)
 
 char	**env_list_to_envp(t_env *env)
 {
-	char	**envp;
-	char	*line;
-	int		n_nodes;
-	size_t	i;
-	t_env	*node;
+	t_tab	tab;
 
-	i = 0;
-	node = env;
-	n_nodes = count_nodes(env);
-	envp = ft_calloc(n_nodes + 1, sizeof(char *));
-	if (!envp)
+	init_tab(&tab, env);
+	tab.envp = ft_calloc(tab.n_nodes + 1, sizeof(char *));
+	if (!tab.envp)
 		return (NULL);
-	while (node)
+	while (tab.node)
 	{
-		line = catch_line(node->name, node->value);
-		if (!line)
+		tab.line = catch_line(tab.node->name, tab.node->value);
+		if (!tab.line)
 		{
-			free_doublechar(envp);
+			free_doublechar(tab.envp);
 			return (NULL);
 		}
-		envp[i] = line;
-		i++;
-		node = node->next;
+		tab.envp[tab.i] = tab.line;
+		tab.i++;
+		tab.node = tab.node->next;
 	}
-	envp[i] = NULL;
-	return (envp);
+	tab.envp[tab.i] = NULL;
+	return (tab.envp);
 }

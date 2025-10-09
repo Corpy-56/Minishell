@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/08 18:09:28 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/09 16:47:17 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,16 +80,69 @@ typedef struct s_split
 	t_tokens		*last;
 }					t_split;
 
+typedef struct s_pipes
+{
+	int				fd[2];
+	int				i;
+	int				n;
+	int				prev_read;
+	int				status;
+	int				last_status;
+	int				builtins;
+	t_cmd			*current;
+	pid_t			wait_child;
+	pid_t			pid;
+	pid_t			last_pid;
+}					t_pipes;
+
+typedef struct s_path
+{
+	char			**rep;
+	char			*base;
+	char			*chosen_path;
+	char			*tmp;
+	struct stat		info;
+	int				i;
+}					t_path;
+
+typedef struct s_copy
+{
+	char			*new_val;
+	char			*new_str;
+	size_t			name_len;
+	size_t			val_len;
+}					t_copy;
+
+typedef struct s_tab
+{
+	char			**envp;
+	char			*line;
+	int				n_nodes;
+	size_t			i;
+	t_env			*node;
+}					t_tab;
+
+typedef struct s_exec
+{
+	t_cmd	*head;
+	int		builtins;
+	int		n;
+	int		fd_stdin;
+	int		fd_stdout;
+	int		fd;
+}					t_exec;
+
+
 typedef struct s_shell
 {
-	t_cmd		*commande;
-	t_tokens	*tokens;
-	t_env		*environ;
-	t_env		*local;
-	t_env		*path_node;
-	char		**path_dirs;
-	int			last_status;
-	int			should_exit;
-}				t_shell;
+	t_cmd			*commande;
+	t_tokens		*tokens;
+	t_env			*environ;
+	t_env			*local;
+	t_env			*path_node;
+	char			**path_dirs;
+	int				last_status;
+	int				should_exit;
+}					t_shell;
 
 #endif

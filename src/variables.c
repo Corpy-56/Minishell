@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:09:43 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/06 11:32:24 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/09 16:01:49 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,10 @@ t_env	*create_local_var(char *args, t_env *local, t_shell *stru)
 	}
 	var = find_var(local, name);
 	if (var)
-		update_value(var, ft_strdup(value));
+	{
+		if (update_value(var, value) == -1)
+			ft_putstr_fd("Error value\n", 2);
+	}
 	else
 		local = add_to_local(local, name, value);
 	free(name);

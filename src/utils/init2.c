@@ -1,37 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*   init2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/14 19:34:55 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/09 13:47:32 by skuor            ###   ########.fr       */
+/*   Created: 2025/10/09 16:16:20 by skuor             #+#    #+#             */
+/*   Updated: 2025/10/09 16:51:41 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_echo(char **args)
+void	init_tab(t_tab *tab, t_env *env)
 {
-	int	i;
-	int	no_newline;
+	tab->envp = NULL;
+	tab->line = NULL;
+	tab->n_nodes = count_nodes(env);
+	tab->i = 0;
+	tab->node = env;
+}
 
-	i = 1;
-	no_newline = 0;
-	if (args[1] && ft_strncmp(args[1], "-n", 3) == 0)
-	{
-		no_newline = 1;
-		i = 2;
-	}
-	while (args[i])
-	{
-		ft_printf("%s", args[i]);
-		if (args[i + 1])
-			ft_printf(" ");
-		i++;
-	}
-	if (!no_newline)
-		ft_printf("\n");
-	return (0);
+void	init_exec(t_exec *exec, t_shell *stru)
+{
+	exec->head = stru->commande;
+	exec->builtins = 0;
+	exec->n = count_maillons(exec->head);
+	exec->fd_stdin = dup(0);
+	exec->fd_stdout = dup(1);
+	exec->fd = 0;
 }
