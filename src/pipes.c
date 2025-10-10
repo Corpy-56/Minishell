@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 11:25:27 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/09 16:44:54 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/10 17:15:40 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,12 @@ void	child_exec(t_pipes *pipes, t_shell *stru)
 	cmd = pipes->current;
 	child_setup(pipes);
 	cmd->here = ft_first_ft_redirections(cmd, cmd->here, stru);
+	if (cmd->here == -1)
+	{
+		ignore_sigpipe_once();
+		clean_children(stru);
+		_exit(1);
+	}
 	if (is_builtin(cmd))
 	{
 		ignore_sigpipe_once();
@@ -110,11 +116,13 @@ void	run_pipes(t_cmd *head, t_shell *sh)
 		{
 			if (pipes.prev_read != -1)
 				close (pipes.prev_read);
-			_exit(1);
+			sh->last_status = 1;
+			// clean_children(sh);
+			break ;
 		}
 		pipes.pid = fork();
-		if (pipes.pid == -1)
-			bad_fork(&pipes);
+		// if (pipes.pid == -1)
+		bad_fork(&pipes, sh);
 		if (pipes.pid == 0)
 			child_exec(&pipes, sh);
 		parent_after_fork(&pipes);

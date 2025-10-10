@@ -6,11 +6,21 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/09 16:23:59 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/10 18:40:25 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_shell	*static_struct(t_shell *stru)
+{
+	static t_shell	*tmp = NULL;
+
+	if (stru)
+		tmp = stru;
+	return (tmp);
+}
+
 
 int	ft_exec_builtins(t_cmd *commande, t_shell *stru, bool cmd_seule)
 {
@@ -59,11 +69,11 @@ int main(int argc, char **argv, char **env)
 	stru.environ = ft_duplicate_env(env, &stru);
 	update_shlvl(stru.environ, &stru);
 	// ft_init_fd1();
-	// ft_tty(&stru);
+	ft_tty(&stru);
 	while (!stru.should_exit)
 	{
 		ft_signal();
-		rl = readline("\033[32mMinishell : \033[0m");
+		rl = readline("\033[32mMinishell : \033[0m"); 
 		if (!rl)
 		{
 			write(1, "exit\n", 5);
@@ -73,7 +83,7 @@ int main(int argc, char **argv, char **env)
 		}
 		if (*rl)
 			add_history(rl);
-		stru.tokens = ft_tokenisation(rl, stru.tokens);
+		stru.tokens = ft_tokenisation(rl, stru.tokens, &stru);
 		free(rl);
 		if (!stru.tokens)
 			continue ;

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 12:32:05 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/09 16:04:38 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/10 11:32:16 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,3 +105,29 @@ int	update_value(t_env *var, char *new_value)
 	return (0);
 }
 
+// char	*update_value(t_env *var, char *new_value)
+// {
+// 	t_copy	copy;
+
+// 	init_copy(&copy, var, new_value);
+// 	if (new_value)
+// 	{
+// 		copy.new_val = ft_strdup(new_value);
+// 		if (!copy.new_val)
+// 			return (NULL);
+// 		copy.new_str = malloc((copy.name_len + 1) + (copy.val_len + 1));
+// 		if (!copy.new_str)
+// 			return (free(copy.new_val), NULL);
+// 		ft_memcpy(copy.new_str, var->name, copy.name_len);
+// 		copy.new_str[copy.name_len] = '=';
+// 		ft_memcpy((copy.new_str + copy.name_len + 1), new_value, copy.val_len);
+// 		copy.new_str[copy.name_len + 1 + copy.val_len] = '\0';
+// 	}
+// 	else
+// 		no_new_value(&copy, var);
+// 	free(var->value);
+// 	free(var->str);
+// 	var->value = copy.new_val;
+// 	var->str = copy.new_str;
+// 	return (var->str);
+// }

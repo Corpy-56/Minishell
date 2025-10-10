@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/09 10:59:30 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/10 17:57:13 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru)
 {
 	if (head->heredoc != NULL && (fd == -2 || fd == 0))
 	{
-		fd = ft_setup_heredoc(head);
+		fd = ft_setup_heredoc(head, stru);
 		if (fd == -1)
 			return (fd);
 		fd = ft_expand_heredoc(fd, stru);

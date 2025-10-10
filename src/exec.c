@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/09 16:53:34 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/10 17:57:02 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_cmd	*ft_test_heredoc_pipes(t_cmd *cmds, t_shell *sh)
 	{
 		if (p_actuel->heredoc != NULL)
 		{
-			p_actuel->here = ft_setup_heredoc(p_actuel);
+			p_actuel->here = ft_setup_heredoc(p_actuel, sh);
 			if (p_actuel->here == -1)
 				return (cmds);
 			p_actuel->here = ft_expand_heredoc(p_actuel->here, sh);
@@ -115,6 +115,16 @@ static void	reconstruct_path_dirs(t_shell *stru)
 // 		ft_close_fd(head, fd_stdin, fd_stdout, fd);
 // 	}
 // 	return ;
+// }
+
+// static void	exec_builtins(t_exec *exec, t_shell *stru)
+// {
+// 	exec->builtins = ft_exec_builtins(exec->head, stru, true);
+// 	if (stru->should_exit)
+// 	{
+// 		stru->last_status = exec->builtins;
+// 		return ;
+// 	}
 // }
 
 void	exec_cmd_line(t_shell *stru)

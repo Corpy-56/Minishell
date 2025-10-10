@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 14:32:46 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/05 10:55:54 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/10 18:04:33 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	clean_all(t_shell *stru)
 		free_env(&stru->local);
 		stru->local = NULL;
 	}
+	clean_gnl();
 	clear_history();
 }
 
@@ -80,5 +81,17 @@ void	clean_children(t_shell *stru)
 		stru->path_dirs = NULL;
 	}
 	stru->path_node = NULL;
+	clean_env(stru);
+}
+
+void	clean_gnl(void)
+{
+	(void)get_next_line(-1);
+}
+
+void	clean_heredoc(t_shell *stru)
+{
+	clean_gnl();
+	clean_cmd(stru);
 	clean_env(stru);
 }

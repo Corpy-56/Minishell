@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/09 16:47:17 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/10 12:10:13 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,14 +124,21 @@ typedef struct s_tab
 
 typedef struct s_exec
 {
-	t_cmd	*head;
-	int		builtins;
-	int		n;
-	int		fd_stdin;
-	int		fd_stdout;
-	int		fd;
+	t_cmd			*head;
+	int				builtins;
+	int				n;
+	int				fd_stdin;
+	int				fd_stdout;
+	int				fd;
 }					t_exec;
 
+typedef struct s_cd
+{
+	char			*home;
+	char			*pwd;
+	char			*oldpwd;
+	char			*newpwd;
+}					t_cd;
 
 typedef struct s_shell
 {

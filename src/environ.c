@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:52:31 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/09 16:25:49 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/10 11:50:57 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,9 @@ t_env	*ft_duplicate_env(char **env, t_shell *stru)
 
 void	update_shlvl(t_env *env, t_shell *stru)
 {
-	char	*old;
-	char	*new;
-	int		shlvl;
+	const char	*old;
+	char		*new;
+	int			shlvl;
 
 	old = get_env_value(env, "SHLVL");
 	if (old == NULL)

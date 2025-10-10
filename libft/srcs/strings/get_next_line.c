@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 17:15:46 by skuor             #+#    #+#             */
-/*   Updated: 2025/02/12 15:01:49 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/10 17:08:13 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*ft_read(int fd, char *res)
 	{
 		nbytes = read(fd, buf, BUFFER_SIZE);
 		buf[nbytes] = 0;
-		res = ft_strjoin(res, buf);
+		res = ft_strjoin_free(res, buf);
 	}
 	free(buf);
 	if (*res)
@@ -66,48 +66,62 @@ char	*ft_line(char *res)
 
 char	*ft_next(char *res)
 {
-	char	*str;
-	int		i;
-	int		j;
+	int	i;
+	int	j;
 
 	i = 0;
+	j = 0;
 	while (res[i] && res[i] != '\n')
 		i++;
-	if (res[i] == '\n')
+	if (res[i])
 		i++;
-	str = ft_calloc(sizeof(char), (ft_strlen(res) - i + 1));
-	if (!str)
-		return (NULL);
-	j = 0;
 	while (res[i])
 	{
-		str[j] = res[i];
+		res[j] = res[i];
 		i++;
 		j++;
 	}
-	free(res);
-	return (str);
+	res[j] = 0;
+	return (res);
+}
+
+static void	free_gnl(char *tmp[1025])
+{
+	int	i;
+
+	i = 0;
+	while (i < 1025)
+	{
+		free(tmp[i]);
+		tmp[i] = NULL;
+		i++;
+	}
 }
 
 char	*get_next_line(int fd)
 {
 	char			*str;
-	static char		*temp[1025];
+	static char		*tmp[1025];
 
+	if (fd == -1)
+	{
+		free_gnl(tmp);
+		return (NULL);
+	}
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 	{
-		free(temp[fd]);
-		temp[fd] = NULL;
+		free(tmp[fd]);
+		tmp[fd] = NULL;
 		return (NULL);
 	}
-	temp[fd] = ft_read(fd, temp[fd]);
-	if (!temp[fd])
+	tmp[fd] = ft_read(fd, tmp[fd]);
+	if (!tmp[fd])
 	{
-		free(temp[fd]);
-		temp[fd] = NULL;
+		free(tmp[fd]);
+		tmp[fd] = NULL;
 		return (NULL);
 	}
-	str = ft_line(temp[fd]);
-	temp[fd] = ft_next(temp[fd]);
+	str = ft_line(tmp[fd]);
+	tmp[fd] = ft_next(tmp[fd]);
 	return (str);
 }

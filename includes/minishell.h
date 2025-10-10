@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/09 16:53:43 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/10 18:13:38 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <signal.h>
 # include <sys/wait.h>
 # include <errno.h>
+# include <termios.h>
 
 /* ******************************** BUILTINS ******************************** */
 
@@ -41,7 +42,7 @@ int			ft_unset(t_shell *stru, char **args);
 /* ******************************** SOURCES ******************************** */
 
 /* ********* tokenisation ********* */
-t_tokens	*ft_tokenisation(char *rl, t_tokens *token);
+t_tokens	*ft_tokenisation(char *rl, t_tokens *token, t_shell *stru);
 
 /* ********* environ ********* */
 t_env		*ft_duplicate_env(char **env, t_shell *stru);
@@ -79,8 +80,10 @@ t_cmd		*ft_test_heredoc_pipes(t_cmd *cmds, t_shell *sh);
 void		ft_first_ft_redirections2(t_cmd *head);
 
 /* ********* ft_heredocs ********* */
-int			ft_setup_heredoc(t_cmd *commande);
-void		ft_child_heredoc(t_cmd *commande);
+int			ft_setup_heredoc(t_cmd *commande, t_shell *stru);
+void		ft_child_heredoc(t_cmd *commande, t_shell *stru);
+// int			ft_setup_heredoc(t_cmd *commande);
+// void		ft_child_heredoc(t_cmd *commande);
 int			ft_heredoc(t_cmd *commande, int pidfd, int i);
 void		signal_handler(int signum, siginfo_t *info, void *context);
 
@@ -113,6 +116,8 @@ int			check_valid_var(char *str);
 t_env		*find_var(t_env *env, char *name);
 void		parse_args(char *args, char **name, char **value);
 int			update_value(t_env *var, char *new_value);
+// void		update_value(t_env *var, char *new_value);
+
 
 /* ********* utils_expan ********* */
 char		*get_env_value(t_env *env, char *name);
@@ -154,7 +159,7 @@ void		ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd);
 
 /* ********* utils pipes ********* */
 void		ignore_sigpipe_once(void);
-void		bad_fork(t_pipes *pipes);
+void		bad_fork(t_pipes *pipes, t_shell *sh);
 
 /* ********* utils fields split ********* */
 char		**split_by_ifs(const char *str, const char *ifs);
@@ -170,6 +175,9 @@ void		free_fields(char **fields, size_t i);
 void		clean_cmd(t_shell *stru);
 void		clean_all(t_shell *stru);
 void		clean_children(t_shell *stru);
+void		clean_gnl(void);
+void		clean_heredoc(t_shell *stru);
+
 
 /* ********* error msg ********* */
 void		err_msg_cmd(char **argv, t_shell *stru);
@@ -191,5 +199,7 @@ void		init_pipes(t_pipes *pipes, t_cmd *head);
 void		init_copy(t_copy *copy, t_env *var, char *new_value);
 void		init_tab(t_tab *tab, t_env *env);
 void		init_exec(t_exec *exec, t_shell *stru);
+void		init_cd(t_cd *cd, t_shell *stru);
+
 
 #endif
