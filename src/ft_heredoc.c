@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/10 18:45:38 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/11 11:36:32 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,105 @@
 static struct termios orig_termios;
 struct termios saved_term;
 
+// int	ft_heredoc(t_cmd *commande, int pidfd, int i)
+// {
+// 	char	*line;
+// 	char	*temp;
+// 	int		k;
+
+// 	k = 0;
+// 	temp = NULL;
+// 	line = NULL;
+// 	while (1)
+// 	{
+// 		if (pidfd == -1)
+// 			pidfd = open(".files", O_CREAT | O_RDWR | O_TRUNC, 0600);
+// 		if (k == 0)
+// 			write(1, "> ", 2);
+// 		line = get_next_line(0);
+// 		if (line == NULL)
+// 		{
+// 			if (k == 0)
+// 				return (-1);
+// 			continue ;
+// 			//if (temp && *temp)
+// 			//{
+// 			//	write(pidfd, temp, ft_strlen(temp));
+// 			//	write(pidfd, "\n", 1);
+// 			//	free(temp);
+// 			//}
+// 			//printf("A\n");
+// 			//else
+// 			//{
+// 			//	write(2, "warning: here-document delimited by end-of-file (wanted `", 57);
+// 			//	write(2, commande->heredoc[i], ft_strlen(commande->heredoc[i]));
+// 			//	write(2, "`)\n", 3);
+// 			//}
+// 			//return (-1);
+// 		}
+// 		if ((line[ft_strlen(line) - 1] != '\n' && ft_strlen(line) > 0))
+// 		{
+// 			k = 1;
+// 			//char *li;
+			
+// 			//li = ft_strjoin(temp, line);
+// 			//free(temp);
+// 			//temp = li;
+// 			//free(line);
+// 			//printf("%s", temp);
+// 			continue ;
+// 		}
+// 		else
+// 		{
+// 		//	if (temp != NULL)
+// 		//	{
+// 		//		line = ft_strjoin(temp, line);
+// 		//		free(temp);
+// 		//	}
+// 			//if (temp)
+// 			//{
+// 			//	char *joined = ft_strjoin(temp, line);
+// 			//	free(temp);
+// 			//	free(line);
+// 			//	line = joined;
+// 			//	temp = NULL;
+// 			//}
+// 			k = 0;
+// 		}
+// 		if (line[ft_strlen(line) - 1] == '\n')
+// 		{
+// 			if ((ft_strncmp(line, commande->heredoc[i],
+// 					ft_strlen(commande->heredoc[i])) == 0) && (line[ft_strlen(commande->heredoc[i])] == '\0'
+// 					|| line[ft_strlen(commande->heredoc[i])] == '\n'))
+// 			{
+// 				close(pidfd);
+// 				pidfd = -1;
+// 				if (commande->heredoc[++i] == NULL)
+// 				{
+// 					if (line != NULL)
+// 						(free(line), line = NULL);
+// 					break ;
+// 				}
+// 			}
+// 			write(pidfd, line, ft_strlen(line));
+// 			free(line);
+// 			line = NULL;
+// 		}
+// 	}
+// 	if (line)
+// 		free(line);
+// 	return (0);
+// }
+
 int	ft_heredoc(t_cmd *commande, int pidfd, int i)
 {
 	char	*line;
 	char	*temp;
+	char	*join;
 	int		k;
 
 	k = 0;
+	join = NULL;
 	temp = NULL;
 	line = NULL;
 	while (1)
@@ -33,75 +125,46 @@ int	ft_heredoc(t_cmd *commande, int pidfd, int i)
 		line = get_next_line(0);
 		if (line == NULL)
 		{
+			printf("-%s-\n", temp);
 			if (k == 0)
 				return (-1);
 			continue ;
-			//if (temp && *temp)
-			//{
-			//	write(pidfd, temp, ft_strlen(temp));
-			//	write(pidfd, "\n", 1);
-			//	free(temp);
-			//}
-			//printf("A\n");
-			//else
-			//{
-			//	write(2, "warning: here-document delimited by end-of-file (wanted `", 57);
-			//	write(2, commande->heredoc[i], ft_strlen(commande->heredoc[i]));
-			//	write(2, "`)\n", 3);
-			//}
-			//return (-1);
 		}
 		if ((line[ft_strlen(line) - 1] != '\n' && ft_strlen(line) > 0))
 		{
 			k = 1;
-			//char *li;
-			
-			//li = ft_strjoin(temp, line);
-			//free(temp);
-			//temp = li;
-			//free(line);
-			//printf("%s", temp);
+			join = ft_strjoin(temp, line);
+			temp = join;
+			free(join);
+			printf("-%s-\n", temp);
 			continue ;
 		}
 		else
+			k = 0;
+		if (line[ft_strlen(line) - 1] == '\n')
 		{
 		//	if (temp != NULL)
 		//	{
-		//		line = ft_strjoin(temp, line);
-		//		free(temp);
+	//			join = ft_strjoin(temp, line);
+		//		line = join;
+		//		free(join);
 		//	}
-			//if (temp)
-			//{
-			//	char *joined = ft_strjoin(temp, line);
-			//	free(temp);
-			//	free(line);
-			//	line = joined;
-			//	temp = NULL;
-			//}
-			k = 0;
-		}
-		if (line[ft_strlen(line) - 1] == '\n')
-		{
 			if ((ft_strncmp(line, commande->heredoc[i],
 					ft_strlen(commande->heredoc[i])) == 0) && (line[ft_strlen(commande->heredoc[i])] == '\0'
 					|| line[ft_strlen(commande->heredoc[i])] == '\n'))
 			{
 				close(pidfd);
 				pidfd = -1;
+				free(line);
 				if (commande->heredoc[++i] == NULL)
-				{
-					if (line != NULL)
-						(free(line), line = NULL);
 					break ;
-				}
+				continue ;
 			}
 			write(pidfd, line, ft_strlen(line));
+		//	free(temp);
 			free(line);
-			line = NULL;
 		}
 	}
-	if (line)
-		free(line);
 	return (0);
 }
 
@@ -139,7 +202,7 @@ void	ft_child_heredoc(t_cmd *commande, t_shell *stru)
 	t_cmd				*temp;
 	int					i;
 	int					j;
-
+	
 	j = 0;
 	i = 0;
 	pidfd = -1;

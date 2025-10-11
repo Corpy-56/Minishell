@@ -6,11 +6,12 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/10 17:57:13 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/11 12:08:56 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 
 char	*ft_end_expand(size_t start, char *str, char *line, size_t i)
 {
@@ -29,33 +30,53 @@ char	*ft_end_expand(size_t start, char *str, char *line, size_t i)
 	return (str);
 }
 
-char	*ft_expand_heredoc2(char *line, t_shell *stru)
+char *ft_free_str(char *str)
 {
-	auto char *str;
-	auto size_t i = 0, start = 0, len_str = ft_strlen(line), j;
+	free(str);
+	return (NULL);
+}
+
+//static int	expand_exit_status(t_shell *stru, char **str)
+//{
+//	char	*status_str;
+
+//	status_str = ft_itoa(stru->last_status);
+//	append_str(str, status_str);
+//	free(status_str);
+//	return (2);
+//}
+
+char	*ft_expand_heredoc2(char *l, t_shell *sh, size_t i, size_t start)
+{
+	char *str;
+	size_t	j;
+	size_t	len_str;
+
+	len_str = ft_strlen(l);
 	str = ft_calloc(1, 1);
 	if (!str)
 		return (NULL);
 	while (i < len_str)
 	{
-		if (line[i] == '$')
+		if (l[i] == '$')
 		{
 			j = start;
 			while (j < i)
 			{
-				if (append_char(&str, line[j++]) < 0)
-				{
-					free(str);
-					return (NULL);
-				}
+				if (append_char(&str, l[j++]) < 0)
+					return (ft_free_str(str));
 			}
-			i = expand_var2(stru, line, i + 1, &str);
+			//if (i + 1 < len_str && l[i + 1] == '?')
+			//	i += expand_exit_status(sh, &str);
+			//else
+			//	i = expand_var2(sh, l, i + 1, &str);
+			i = expand_var2(sh, l, i + 1, &str);
 			start = i;
 		}
 		else
 			i++;
 	}
-	return (ft_end_expand(start, str, line, i));
+	return (ft_end_expand(start, str, l, i));
 }
 
 int	ft_expand_heredoc(int fd, t_shell *stru)
@@ -76,7 +97,7 @@ int	ft_expand_heredoc(int fd, t_shell *stru)
 			unlink(".files_expand");
 			return (new_fd);
 		}
-		temp = ft_expand_heredoc2(line, stru);
+		temp = ft_expand_heredoc2(line, stru, 0, 0);
 		write(new_fd, temp, ft_strlen(line));
 		if (ft_strcmp(temp, line) != 0)
 			write(new_fd, "\n", 1);
@@ -95,7 +116,7 @@ int	ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru)
 			return (fd);
 		fd = ft_expand_heredoc(fd, stru);
 	}
-	if (head->fd_out_put1 != -2 && head->here == -2)
+	if (head->fd_out_put1 != -2 && head->here == -2 )
 	{
 		dup2(head->fd_out_put1, STDOUT_FILENO);
 		close(head->fd_out_put1);
@@ -116,7 +137,10 @@ int	ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru)
 void	ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd)
 {
 	if (head->heredoc != NULL && isatty(fd) == 1)
+	{
+		//dup2(fd_stdin, 0);
 		close(fd);
+	}
 	if (head->fd_out_put1 != -2 || head->fd_out_put2 != -2)
 	{
 		dup2(fd_stdout, 1);

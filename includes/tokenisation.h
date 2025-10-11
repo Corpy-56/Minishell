@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/10 12:10:13 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/11 11:43:26 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ typedef struct s_exec
 	int				fd_stdin;
 	int				fd_stdout;
 	int				fd;
+	int				status;
 }					t_exec;
 
 typedef struct s_cd

@@ -6,11 +6,14 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/10 11:51:40 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/11 11:53:05 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static struct termios orig_termios1;
+struct termios saved_term1;
 
 char	*find_in_path(char *name, t_shell *stru)
 {
@@ -125,23 +128,54 @@ void	exec_external(t_cmd *cmd, t_shell *stru)
 	}
 }
 
-void	run_external(t_cmd *cmd, t_shell *stru, int fd)
+void disable_echoctl1(void)
+{
+    struct termios term;
+
+    if (tcgetattr(STDIN_FILENO, &term) == -1)
+        return;
+    orig_termios1 = term;
+    term.c_lflag &= ~(ECHOCTL);
+    tcsetattr(STDIN_FILENO, TCSANOW, &term);
+}
+
+void save_termios1(void)
+{
+    tcgetattr(STDIN_FILENO, &saved_term1);
+}
+void restore_termios1(void)
+{
+    tcsetattr(STDIN_FILENO, TCSANOW, &saved_term1);
+}
+
+int	run_external(t_cmd *cmd, t_shell *stru, int f)
 {
 	int		pid;
 	int		status;
 
+	(void)f;
+	if (cmd->args[0] == NULL)
+		return (0);
+	signal(SIGINT, SIG_IGN);// il est ultra important 
+	//signal(SIGQUIT, SIG_IGN);
+	save_termios1();
 	pid = fork();
 	if (pid < 0)
 	{
 		stru->last_status = 1;
-		return ;
+		return (0);
 	}
 	if (pid == 0)
 	{
+		disable_echoctl1();
+		signal(SIGQUIT, SIG_IGN);
+	//	f = ft_first_ft_redirections(cmd, f, stru);
+	//	if (f == -1)
+	//			exit(0) ;
 		if (cmd->heredoc != NULL)
 		{
-			dup2(fd, STDIN_FILENO);
-			close(fd);
+			dup2(f, STDIN_FILENO);
+			close(f);
 		}
 		exec_external(cmd, stru);
 		status = stru->last_status;
@@ -150,8 +184,43 @@ void	run_external(t_cmd *cmd, t_shell *stru, int fd)
 	}
 	else
 	{
+		//restore_termios1();
+		//signal(SIGQUIT, SIG_IGN);
 		status = 0;
 		waitpid(pid, &status, 0);
+		restore_termios1();
 		stru->last_status = extract_exit_status(status);
 	}
+	return (0);
 }
+
+// void	run_external(t_cmd *cmd, t_shell *stru, int fd)
+// {
+// 	int		pid;
+// 	int		status;
+
+// 	pid = fork();
+// 	if (pid < 0)
+// 	{
+// 		stru->last_status = 1;
+// 		return ;
+// 	}
+// 	if (pid == 0)
+// 	{
+// 		if (cmd->heredoc != NULL)
+// 		{
+// 			dup2(fd, STDIN_FILENO);
+// 			close(fd);
+// 		}
+// 		exec_external(cmd, stru);
+// 		status = stru->last_status;
+// 		clean_children(stru);
+// 		_exit(status);
+// 	}
+// 	else
+// 	{
+// 		status = 0;
+// 		waitpid(pid, &status, 0);
+// 		stru->last_status = extract_exit_status(status);
+// 	}
+// }
