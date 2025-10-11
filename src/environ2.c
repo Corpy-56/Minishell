@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:52:31 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/10 11:32:51 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/11 15:47:26 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,15 +68,15 @@ static void	update_env2(t_env *node, char *name, t_shell *stru)
 	}
 }
 
-static void	update_env3(t_env *head, t_env *new_node, char *name, t_shell *stru)
+static void	update_env3(t_env **head, t_env *new_node, char *name, t_shell *stru)
 {
 	t_env	*last;
 
-	if (!head)
-		head = new_node;
+	if (!*head)
+		*head = new_node;
 	else
 	{
-		last = head;
+		last = *head;
 		while (last->next)
 			last = last->next;
 		last->next = new_node;
@@ -93,6 +93,35 @@ static void	update_env3(t_env *head, t_env *new_node, char *name, t_shell *stru)
 	}
 }
 
+char	*join_three_char(char *a, char *b, char *c)
+{
+	char 	*ab;
+	char 	*abc;
+
+	ab = ft_strjoin(a, b);
+	if (ab)
+		abc = ft_strjoin(ab, c);
+	else
+		abc = NULL;
+	free(ab);
+	return (abc);
+}
+
+int	rebuild_str(t_env *node)
+{
+	char	*str;
+
+	if (node->value)
+		str = join_three_char(node->name, "=", node->value);
+	else
+		str = join_three_char(node->name, "", "");
+	if (!str)
+		return (-1);
+	free(node->str);
+	node->str = str;
+	return (0);
+}
+
 int	update_env(t_env *head, char *name, char *value, t_shell *stru)
 {
 	char	*line;
@@ -104,8 +133,9 @@ int	update_env(t_env *head, char *name, char *value, t_shell *stru)
 	node = find_var(head, name);
 	if (node)
 	{
-		// update_value(node, value);
 		if (update_value(node, value) == -1)
+			return (-1);
+		if (rebuild_str(node) == -1)
 			return (-1);
 		if (name && ft_strcmp(name, "PATH") == 0)
 			update_env2(node, name, stru);
@@ -118,6 +148,6 @@ int	update_env(t_env *head, char *name, char *value, t_shell *stru)
 	free(line);
 	if (!new_node)
 		return (-1);
-	update_env3(head, new_node, name, stru);
+	update_env3(&head, new_node, name, stru);
 	return (0);
 }

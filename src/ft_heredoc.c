@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/11 11:36:32 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/11 15:55:40 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,6 +195,36 @@ void disable_echoctl(void)
     tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
+// void	ft_child_heredoc(t_cmd *commande, t_shell *stru)
+// {
+// 	struct sigaction	signale;
+// 	int					pidfd;
+// 	t_cmd				*temp;
+// 	int					i;
+// 	int					j;
+	
+// 	j = 0;
+// 	i = 0;
+// 	pidfd = -1;
+// 	temp = commande;
+// 	while (temp->heredoc[i] != NULL)
+// 		i++;
+// 	i--;
+// 	disable_echoctl();
+// 	signal(SIGQUIT, SIG_IGN);
+// 	signale.sa_sigaction = signal_handler;
+// 	sigemptyset(&signale.sa_mask);
+// 	signale.sa_flags = SA_SIGINFO;
+// 	sigaction(SIGINT, &signale, NULL);
+// 	j = ft_heredoc(commande, pidfd, 0);
+// 	if (j == -1)
+// 		printf("\nwarning: here-document delimited by end-of-file (wanted `%s')\n", temp->heredoc[i]);
+// 	clean_heredoc(stru);
+// 	if (isatty(pidfd) == 1)
+// 		close (pidfd);
+// 	exit (0);
+// }
+
 void	ft_child_heredoc(t_cmd *commande, t_shell *stru)
 {
 	struct sigaction	signale;
@@ -214,7 +244,7 @@ void	ft_child_heredoc(t_cmd *commande, t_shell *stru)
 	signal(SIGQUIT, SIG_IGN);
 	signale.sa_sigaction = signal_handler;
 	sigemptyset(&signale.sa_mask);
-	signale.sa_flags = SA_SIGINFO;
+	signale.sa_flags = 0;
 	sigaction(SIGINT, &signale, NULL);
 	j = ft_heredoc(commande, pidfd, 0);
 	if (j == -1)
@@ -235,7 +265,26 @@ void restore_termios(void)
     tcsetattr(STDIN_FILENO, TCSANOW, &saved_term);
 }
 
-int	parent_heredoc(pid_t pid, struct sigaction old_s, int fd)
+// int	parent_heredoc(pid_t pid, struct sigaction old_s, int fd)
+// {
+// 	int					exit_code;
+// 	int					status;
+
+// 	waitpid(pid, &status, 0);
+// 	restore_termios();
+// 	sigaction(SIGINT, &old_s, NULL);
+// 	exit_code = WEXITSTATUS(status);
+// 	if (exit_code == 130)
+// 		return (-1);
+// 	else
+// 	{
+// 		fd = open(".files", O_RDONLY);
+// 		unlink(".files");
+// 	}
+// 	return (fd);
+// }
+
+int	parent_heredoc(pid_t pid, struct sigaction old_s, int fd, t_shell *sh)
 {
 	int					exit_code;
 	int					status;
@@ -243,18 +292,54 @@ int	parent_heredoc(pid_t pid, struct sigaction old_s, int fd)
 	waitpid(pid, &status, 0);
 	restore_termios();
 	sigaction(SIGINT, &old_s, NULL);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+	{
+		clean_heredoc(sh);
+		return (-1);
+	}
 	exit_code = WEXITSTATUS(status);
 	if (exit_code == 130)
+	{
+		clean_heredoc(sh);
 		return (-1);
-	fd = open(".files", O_RDONLY);
-	unlink(".files");
+	}
+	else
+	{
+		fd = open(".files", O_RDONLY);
+		unlink(".files");
+	}
 	return (fd);
 }
+
+// int	ft_setup_heredoc(t_cmd *commande, t_shell *stru)
+// {
+// 	pid_t				pid;
+// 	int					fd;
+// 	struct sigaction	new_signale;
+// 	struct sigaction	old_signale;
+
+// 	sigemptyset(&new_signale.sa_mask);
+// 	new_signale.sa_handler = SIG_IGN;
+// 	new_signale.sa_flags = 0;
+// 	sigaction(SIGINT, &new_signale, &old_signale);
+// 	save_termios();
+// 	pid = fork();
+// 	if (pid == -1)
+// 		return (-1);
+// 	if (pid == 0)
+// 		ft_child_heredoc(commande, stru);
+// 	else if (pid > 0)
+// 	{
+// 		fd = parent_heredoc(pid, old_signale, 0);
+// 		return (fd);
+// 	}
+// 	return (0);
+// }
 
 int	ft_setup_heredoc(t_cmd *commande, t_shell *stru)
 {
 	pid_t				pid;
-	int					fd;
+	int					fd = 0;
 	struct sigaction	new_signale;
 	struct sigaction	old_signale;
 
@@ -270,10 +355,11 @@ int	ft_setup_heredoc(t_cmd *commande, t_shell *stru)
 		ft_child_heredoc(commande, stru);
 	else if (pid > 0)
 	{
-		fd = parent_heredoc(pid, old_signale, 0);
-		return (fd);
+		fd = parent_heredoc(pid, old_signale, 0, stru);
+		if (fd == -1)
+			stru->last_status = 130;
 	}
-	return (0);
+	return (fd);
 }
 
 //int	ft_heredoc(t_cmd *commande, int pidfd, int i)

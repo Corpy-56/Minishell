@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/11 11:53:41 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/11 15:59:10 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,42 +81,6 @@ static void	reconstruct_path_dirs(t_shell *stru)
 	}
 }
 
-// void	exec_cmd_line(t_shell *stru)
-// {
-// 	t_cmd	*head;
-// 	int		builtins;
-
-// 	auto int n, fd_stdin = dup(0), fd_stdout, fd = 0;
-// 	fd_stdout = dup(1);
-// 	reconstruct_path_dirs(stru);
-// 	head = stru->commande;
-// 	n = count_maillons(head);
-// 	if (n == 0)
-// 		return ;
-// 	if (n == 1)
-// 	{
-// 		fd = ft_first_ft_redirections(head, fd, stru);
-// 		if (is_builtin(head))
-// 		{
-// 			builtins = ft_exec_builtins(head, stru, true);
-// 			if (stru->should_exit)
-// 			{
-// 				stru->last_status = builtins;
-// 				return ;
-// 			}
-// 		}
-// 		else
-// 			run_external(head, stru, fd);
-// 		ft_close_fd(head, fd_stdin, fd_stdout, fd);
-// 	}
-// 	if (n >= 2)
-// 	{
-// 		run_pipes(head, stru);
-// 		ft_close_fd(head, fd_stdin, fd_stdout, fd);
-// 	}
-// 	return ;
-// }
-
 // static void	exec_builtins(t_exec *exec, t_shell *stru)
 // {
 // 	exec->builtins = ft_exec_builtins(exec->head, stru, true);
@@ -125,38 +89,6 @@ static void	reconstruct_path_dirs(t_shell *stru)
 // 		stru->last_status = exec->builtins;
 // 		return ;
 // 	}
-// }
-
-// void	exec_cmd_line(t_shell *stru)
-// {
-// 	t_exec	exec;
-
-// 	reconstruct_path_dirs(stru);
-// 	init_exec(&exec, stru);
-// 	if (exec.n == 0)
-// 		return ;
-// 	if (exec.n == 1)
-// 	{
-// 		exec.fd = ft_first_ft_redirections(exec.head, exec.fd, stru);
-// 		if (is_builtin(exec.head))
-// 		{
-// 			exec.builtins = ft_exec_builtins(exec.head, stru, true);
-// 			if (stru->should_exit)
-// 			{
-// 				stru->last_status = exec.builtins;
-// 				return ;
-// 			}
-// 		}
-// 		else
-// 			run_external(exec.head, stru, exec.fd);
-// 		ft_close_fd(exec.head, exec.fd_stdin, exec.fd_stdout, exec.fd);
-// 	}
-// 	if (exec.n >= 2)
-// 	{
-// 		run_pipes(exec.head, stru);
-// 		ft_close_fd(exec.head, exec.fd_stdin, exec.fd_stdout, exec.fd);
-// 	}
-// 	return ;
 // }
 
 void	exec_cmd_line(t_shell *stru)
@@ -170,6 +102,8 @@ void	exec_cmd_line(t_shell *stru)
 	if (exec.n == 1)
 	{
 		exec.fd = ft_first_ft_redirections(exec.head, exec.fd, stru);
+		if (exec.fd == -1)
+			return ;
 		if (is_builtin(exec.head))
 		{
 			exec.builtins = ft_exec_builtins(exec.head, stru, true);
@@ -189,7 +123,6 @@ void	exec_cmd_line(t_shell *stru)
 					write(1, "^C\n", 4);
 			}
 			ft_signal();
-			stru->last_status = extract_exit_status(exec.status);
 		}
 		ft_close_fd(exec.head, exec.fd_stdin, exec.fd_stdout, exec.fd);
 	}
