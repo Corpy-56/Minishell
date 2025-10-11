@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 16:59:00 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/11 12:13:40 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/11 17:11:39 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,18 @@ t_tokens	*ft_creat_token(char *rl, int i)
 		token->str = NULL;
 	token->dollars = 0;
 	return (token);
+}
+
+t_cmd	*ft_test_no_errors(t_cmd *commande)
+{
+	t_cmd	*a;
+
+	a = commande;
+	while (a)
+	{
+		if (a->fd_int_put == -1 || a->fd_out_put1 == -1 || a->fd_out_put2 == -1)
+			return (NULL);
+		a = a->next;
+	}
+	return (commande);
 }

@@ -6,11 +6,12 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/11 13:01:46 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/11 18:01:37 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 
 void	signal_handler1(int signum)
 {

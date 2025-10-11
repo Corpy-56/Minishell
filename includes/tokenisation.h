@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/11 11:43:26 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/11 17:26:38 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,10 @@ typedef struct s_shell
 	char			**path_dirs;
 	int				last_status;
 	int				should_exit;
+
+	int				hd_fd_ecr;
+	int				hd_fd_lect;
+	char			*hd_path;
 }					t_shell;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:07:35 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/11 12:21:43 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/11 18:46:41 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,35 +97,6 @@ int	ft_one_token(char *rl, int i, t_tokens *token)
 	}
 	return (i);
 }
-
-// int	ft_one_token(char *rl, int i, t_tokens *token)
-// {
-// 	while (rl[i])
-// 	{
-// 		if (rl[i] == '\'' || rl[i] == '\"')
-// 			i = ft_one_token2(rl, i, token);
-// 		else if (rl[i] == '<' || rl[i] == '>')
-// 		{
-// 			if (token->str == NULL)
-// 			{
-// 				while ((rl[i] == '<' || rl[i] == '>') && rl[i])
-// 				{
-// 					token->str = ft_strjoin_char(token->str, rl[i]);
-// 					i++;
-// 				}
-// 			}
-// 			return (i - 1);
-// 		}
-// 		else if (rl[i] != 9 && rl[i] != 32 && rl[i])
-// 			token->str = ft_one_token_extra(rl, i, token);
-// 		// else if ((rl[i] != '<' || rl[i] != '>') && token->str == NULL)
-// 		// 	token->str = ft_strjoin_char(token->str, rl[i]);
-// 		else if (rl[i] == 9 || rl[i] == 32 || rl[i] == '\0')
-// 			return (i);
-// 		i++;
-// 	}
-// 	return (i);
-// }
 
 
 void	ft_ignore_signal(void)

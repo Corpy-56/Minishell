@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/11 12:21:08 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/11 17:11:59 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,8 @@ int			ft_exec_builtins(t_cmd *commande, t_shell *stru, bool cmd_seule);
 /* ********* utils_cmd ********* */
 t_cmd		*suppr_empty_cmd(t_cmd *head);
 t_tokens	*ft_creat_token(char *rl, int i);
+t_cmd		*ft_test_no_errors(t_cmd *commande);
+
 
 /* ********* utils exect redirections ********* */
 char		*ft_end_expand(size_t start, char *str, char *line, size_t i);
@@ -184,7 +186,6 @@ void		clean_all(t_shell *stru);
 void		clean_children(t_shell *stru);
 void		clean_gnl(void);
 void		clean_heredoc(t_shell *stru);
-
 
 /* ********* error msg ********* */
 void		err_msg_cmd(char **argv, t_shell *stru);
