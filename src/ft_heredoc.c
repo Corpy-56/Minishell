@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/11 15:55:40 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/11 16:25:02 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,30 +125,36 @@ int	ft_heredoc(t_cmd *commande, int pidfd, int i)
 		line = get_next_line(0);
 		if (line == NULL)
 		{
-			printf("-%s-\n", temp);
 			if (k == 0)
 				return (-1);
 			continue ;
 		}
-		if ((line[ft_strlen(line) - 1] != '\n' && ft_strlen(line) > 0))
+		if (line != NULL && (line[ft_strlen(line) - 1] != '\n' && ft_strlen(line) > 0))
 		{
 			k = 1;
-			join = ft_strjoin(temp, line);
-			temp = join;
-			free(join);
-			printf("-%s-\n", temp);
+			if (temp == NULL)
+				temp = ft_strdup(line);
+			else
+			{
+				join = ft_strjoin(temp, line);
+				temp = ft_strdup(join);
+				free(join);
+			}
 			continue ;
 		}
 		else
 			k = 0;
 		if (line[ft_strlen(line) - 1] == '\n')
 		{
-		//	if (temp != NULL)
-		//	{
-	//			join = ft_strjoin(temp, line);
-		//		line = join;
-		//		free(join);
-		//	}
+			if (temp != NULL)
+			{
+				join = ft_strjoin(temp, line);
+				free(temp);
+				free(line);
+				line = NULL;
+				line = ft_strdup(join);
+				free(join);
+			}
 			if ((ft_strncmp(line, commande->heredoc[i],
 					ft_strlen(commande->heredoc[i])) == 0) && (line[ft_strlen(commande->heredoc[i])] == '\0'
 					|| line[ft_strlen(commande->heredoc[i])] == '\n'))
@@ -161,9 +167,10 @@ int	ft_heredoc(t_cmd *commande, int pidfd, int i)
 				continue ;
 			}
 			write(pidfd, line, ft_strlen(line));
-		//	free(temp);
-			free(line);
+			//free(line);
 		}
+		if (line != NULL)
+			free(line);
 	}
 	return (0);
 }
@@ -292,11 +299,11 @@ int	parent_heredoc(pid_t pid, struct sigaction old_s, int fd, t_shell *sh)
 	waitpid(pid, &status, 0);
 	restore_termios();
 	sigaction(SIGINT, &old_s, NULL);
-	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-	{
-		clean_heredoc(sh);
-		return (-1);
-	}
+	// if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+	// {
+	// 	clean_heredoc(sh);
+	// 	return (-1);
+	// }
 	exit_code = WEXITSTATUS(status);
 	if (exit_code == 130)
 	{

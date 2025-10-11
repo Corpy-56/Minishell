@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 16:37:09 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/09 15:10:14 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/11 16:39:49 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	ft_initialization_commande(t_cmd *commande)
 	commande->args = NULL;
 	commande->cmd = NULL;
 	commande->heredoc = NULL;
+	commande->here = -2;
 	commande->fd_int_put = -2;
 	commande->next = NULL;
 	commande->fd_out_put1 = -2;

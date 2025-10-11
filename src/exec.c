@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/11 15:59:10 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/11 16:43:41 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,8 @@ void	exec_cmd_line(t_shell *stru)
 				return ;
 			}
 		}
+		else if(exec.head->args == NULL)
+			exec.fd = ft_first_ft_redirections(exec.head, exec.fd, stru);
 		else
 		{
 			exec.status = run_external(exec.head, stru, exec.fd);

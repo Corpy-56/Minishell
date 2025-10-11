@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/11 11:53:05 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/11 16:46:03 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void	exec_external(t_cmd *cmd, t_shell *stru)
 		return ;
 	if (ft_strchr(argv[0], '/'))
 	{
-		if (stat(argv[0], &info) != 0)
+		if (stat(argv[0], &info) != 0 && cmd->fd_out_put1 == -2 && cmd->fd_out_put2 == -2)
 			return (err_msg_file_or_dir(argv, stru));
 		else if (S_ISDIR(info.st_mode))
 			return (err_msg_dir(argv, stru));
@@ -96,7 +96,7 @@ void	exec_external(t_cmd *cmd, t_shell *stru)
 	else
 	{
 		path_val = get_env_value(stru->environ, "PATH");
-		if (path_val == NULL || path_val[0] == '\0')
+		if ((path_val == NULL || path_val[0] == '\0') && cmd->fd_out_put1 == -2 && cmd->fd_out_put2 == -2)
 			return (err_msg_file_or_dir(argv, stru));
 		chosen_path = find_in_path(argv[0], stru);
 		if (!chosen_path)
@@ -111,7 +111,7 @@ void	exec_external(t_cmd *cmd, t_shell *stru)
 		exit (1);
 	}
 	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	signal(SIGQUIT, SIG_IGN);
 	if (execve(chosen_path, argv, envp) == -1)
 	{
 		error = errno;
@@ -189,7 +189,8 @@ int	run_external(t_cmd *cmd, t_shell *stru, int f)
 		status = 0;
 		waitpid(pid, &status, 0);
 		restore_termios1();
-		stru->last_status = extract_exit_status(status);
+		// stru->last_status = extract_exit_status(status);
+		return (status);
 	}
 	return (0);
 }

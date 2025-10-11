@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 17:02:46 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/13 17:53:06 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/11 16:32:46 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 bool	is_builtin(t_cmd *commande)
 {
-	if (commande->args[0] == NULL)
+	if (commande->args == NULL || commande->args[0] == NULL)
 		return (false);
 	if (ft_strncmp(commande->args[0], "pwd", 4) == 0)
 		return (true);
