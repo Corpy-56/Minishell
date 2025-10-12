@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 16:16:20 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/11 11:43:38 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/12 16:32:29 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,20 @@ void	init_cd(t_cd *cd, t_shell *stru)
 	cd->oldpwd = NULL;
 	cd->newpwd = NULL;
 	cd->pwd = NULL;
+}
+
+void	init_ext(t_ext *ext, t_cmd *cmd)
+{
+	ext->argv = cmd->args;
+	ext->envp = NULL;
+	ext->chosen_path = NULL;
+}
+
+void	init_expand(t_expand *exp, t_tokens *tk, size_t i)
+{
+	exp->str = tk->str;
+	exp->len_str = ft_strlen(exp->str);
+	exp->out = ft_calloc(1, 1);
+	exp->start = i;
+	exp->j = 0;
 }

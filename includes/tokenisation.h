@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/11 17:26:38 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/12 16:28:40 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,16 +95,6 @@ typedef struct s_pipes
 	pid_t			last_pid;
 }					t_pipes;
 
-typedef struct s_path
-{
-	char			**rep;
-	char			*base;
-	char			*chosen_path;
-	char			*tmp;
-	struct stat		info;
-	int				i;
-}					t_path;
-
 typedef struct s_copy
 {
 	char			*new_val;
@@ -141,6 +131,24 @@ typedef struct s_cd
 	char			*newpwd;
 }					t_cd;
 
+typedef struct s_ext
+{
+	char			**envp;
+	char			**argv;
+	int				error;
+	char			*path_val;
+	char			*chosen_path;
+}					t_ext;
+
+typedef struct s_expand
+{
+	char			*str;
+	char			*out;
+	size_t			len_str;
+	size_t			start;
+	size_t			j;
+}					t_expand;
+
 typedef struct s_shell
 {
 	t_cmd			*commande;
@@ -156,5 +164,7 @@ typedef struct s_shell
 	int				hd_fd_lect;
 	char			*hd_path;
 }					t_shell;
+
+
 
 #endif

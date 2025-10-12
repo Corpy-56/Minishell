@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/11 17:11:59 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/12 16:32:36 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,6 +208,10 @@ void		init_copy(t_copy *copy, t_env *var, char *new_value);
 void		init_tab(t_tab *tab, t_env *env);
 void		init_exec(t_exec *exec, t_shell *stru);
 void		init_cd(t_cd *cd, t_shell *stru);
+void		init_ext(t_ext *ext, t_cmd *cmd);
+void		init_expand(t_expand *exp, t_tokens *tk, size_t i);
+
+
 
 void		save_termios1(void);
 

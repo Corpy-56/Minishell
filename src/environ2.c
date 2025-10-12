@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:52:31 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/11 15:47:26 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/12 17:03:21 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,9 +133,7 @@ int	update_env(t_env *head, char *name, char *value, t_shell *stru)
 	node = find_var(head, name);
 	if (node)
 	{
-		if (update_value(node, value) == -1)
-			return (-1);
-		if (rebuild_str(node) == -1)
+		if (update_value(node, value) == -1 || rebuild_str(node) == -1)
 			return (-1);
 		if (name && ft_strcmp(name, "PATH") == 0)
 			update_env2(node, name, stru);

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:01:37 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/07 18:19:20 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/12 14:58:08 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,30 @@ void	print_exit(bool cmd_seule)
 		printf("exit\n");
 }
 
+static void	exit_fin(t_shell *stru, bool cmd_seule)
+{
+	print_exit(cmd_seule);
+	if (cmd_seule)
+		stru->should_exit = 1;
+}
+
+static int	exit_badnum(t_shell *stru, char **args, bool cmd_seule)
+{
+	print_exit(cmd_seule);
+	if (cmd_seule)
+		err_msg_num(args, stru);
+	return (2);
+}
+
+static int	exit_too_many(t_shell *stru, bool cmd_seule)
+{
+	print_exit(cmd_seule);
+	ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+	if (cmd_seule)
+		stru->last_status = 1;
+	return (1);
+}
+
 int	ft_exit(t_shell *stru, char **args, bool cmd_seule)
 {
 	long	out;
@@ -79,25 +103,12 @@ int	ft_exit(t_shell *stru, char **args, bool cmd_seule)
 		return (stru->last_status);
 	}
 	if (str_to_long(args[1], &out))
-	{
-		print_exit(cmd_seule);
-		if (cmd_seule)
-			err_msg_num(args, stru);
-		return (2);
-	}
+		return (exit_badnum(stru, args, cmd_seule));
 	if (args[2])
-	{
-		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
-		if (cmd_seule)
-			stru->last_status = 1;
-		return (1);
-	}
+		return (exit_too_many(stru, cmd_seule));
 	stru->last_status = out % 256;
 	if (stru->last_status < 0)
 		stru->last_status += 256;
-	print_exit(cmd_seule);
-	if (cmd_seule)
-		stru->should_exit = 1;
+	exit_fin(stru, cmd_seule);
 	return (stru->last_status);
 }
-

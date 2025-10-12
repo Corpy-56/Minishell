@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 15:23:24 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/11 12:20:18 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/12 17:09:43 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,25 +53,50 @@ int	count_nodes(t_env *list)
 // 	return (0);
 // }
 
+// int	ft_quote(char *rl, int i)
+// {
+// 	int	quote1;
+
+// 	quote1 = 0;
+// 	while (rl[i])
+// 	{
+// 		if (quote1 == 0 && rl[i] == '\'')
+// 		{
+// 			i++;
+// 			while (rl[i] != '\'' && rl[i])
+// 				i++;
+// 			if (rl[i] == '\0')
+// 				quote1++;
+// 		}
+// 		else if (quote1 == 0 && rl[i] == '\"')
+// 		{
+// 			i++;
+// 			while (rl[i] != '\"' && rl[i])
+// 				i++;
+// 			if (rl[i] == '\0')
+// 				quote1++;
+// 		}
+// 		i++;
+// 	}
+// 	if (quote1 != 0)
+// 		return (ft_error(1, "Problem with quote\n", NULL));
+// 	return (0);
+// }
+
 int	ft_quote(char *rl, int i)
 {
-	int	quote1;
+	int		quote1;
+	char	q;
 
 	quote1 = 0;
+	q = 0;
 	while (rl[i])
 	{
-		if (quote1 == 0 && rl[i] == '\'')
+		if (quote1 == 0 && (rl[i] == '\'' || rl[i] == '\"'))
 		{
+			q = rl[i];
 			i++;
-			while (rl[i] != '\'' && rl[i])
-				i++;
-			if (rl[i] == '\0')
-				quote1++;
-		}
-		else if (quote1 == 0 && rl[i] == '\"')
-		{
-			i++;
-			while (rl[i] != '\"' && rl[i])
+			while (rl[i] != '\'' && rl[i] != q)
 				i++;
 			if (rl[i] == '\0')
 				quote1++;
