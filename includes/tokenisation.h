@@ -6,12 +6,14 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/12 16:28:40 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/13 16:45:16 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOKENISATION_H
 # define TOKENISATION_H
+
+# include <signal.h>
 
 typedef struct s_redir
 {
@@ -129,6 +131,7 @@ typedef struct s_cd
 	char			*pwd;
 	char			*oldpwd;
 	char			*newpwd;
+	char			*old;
 }					t_cd;
 
 typedef struct s_ext
@@ -159,10 +162,7 @@ typedef struct s_shell
 	char			**path_dirs;
 	int				last_status;
 	int				should_exit;
-
-	int				hd_fd_ecr;
-	int				hd_fd_lect;
-	char			*hd_path;
+	int				hdc_interrupted;
 }					t_shell;
 
 

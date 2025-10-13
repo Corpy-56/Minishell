@@ -6,11 +6,38 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 11:25:27 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/10 17:15:40 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/13 18:01:18 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// static void	child_setup(t_pipes *pipes)
+// {
+// 	t_cmd	*cmd;
+
+// 	cmd = pipes->current;
+// 	if (cmd->here != -2)
+// 	{
+// 		if (dup2(cmd->here, STDIN_FILENO) == -1)
+// 			_exit(1);
+// 		if (cmd->fd_int_put != -2)
+// 			close(cmd->here);
+// 	}
+// 	if (pipes->prev_read != -1)
+// 	{
+// 		if (dup2(pipes->prev_read, STDIN_FILENO) == -1)
+// 			_exit(1);
+// 		close(pipes->prev_read);
+// 	}
+// 	if (cmd->next)
+// 	{
+// 		if (dup2(pipes->fd[1], STDOUT_FILENO) == -1)
+// 			_exit(1);
+// 		close(pipes->fd[0]);
+// 		close(pipes->fd[1]);
+// 	}
+// }
 
 static void	child_setup(t_pipes *pipes)
 {
@@ -20,7 +47,7 @@ static void	child_setup(t_pipes *pipes)
 	if (cmd->here != -2)
 	{
 		if (dup2(cmd->here, STDIN_FILENO) == -1)
-			exit(1);
+			_exit(1);
 		if (cmd->fd_int_put != -2)
 			close(cmd->here);
 	}
@@ -34,8 +61,11 @@ static void	child_setup(t_pipes *pipes)
 	{
 		if (dup2(pipes->fd[1], STDOUT_FILENO) == -1)
 			_exit(1);
-		close(pipes->fd[0]);
-		close(pipes->fd[1]);
+		if (pipes->fd[0] != -1)
+			close(pipes->fd[0]);
+		if (pipes->fd[1] != -1)
+			close(pipes->fd[1]);
+
 	}
 }
 
@@ -52,6 +82,7 @@ void	child_exec(t_pipes *pipes, t_shell *stru)
 		clean_children(stru);
 		_exit(1);
 	}
+	apply_cmd_redirs_in_child(cmd);
 	if (is_builtin(cmd))
 	{
 		ignore_sigpipe_once();

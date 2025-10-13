@@ -6,11 +6,12 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/11 18:49:39 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/13 15:54:48 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 
 t_shell	*static_struct(t_shell *stru)
 {
@@ -69,18 +70,20 @@ int main(int argc, char **argv, char **env)
 	stru.environ = ft_duplicate_env(env, &stru);
 	update_shlvl(stru.environ, &stru);
 	save_termios1();
+	// init_shell(&stru);
 	// ft_init_fd1();
 	ft_tty(&stru);
+	set_shell(&stru);
 	while (!stru.should_exit)
 	{
 		ft_signal();
-		rl = readline("\033[32mMinishell : \033[0m"); 
+		rl = readline("\033[32mMinishell : \033[0m");
 		if (!rl)
 		{
+			status = stru.last_status;
 			write(1, "exit\n", 5);
 			clean_all(&stru);
-			stru.should_exit = 1;
-			break ;
+			exit(status);
 		}
 		if (*rl)
 			add_history(rl);

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:07:35 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/11 18:46:41 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/13 13:47:31 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,9 +137,12 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token, int i)
 	k = 0;
 	a_debut = NULL;
 	fin = NULL;
+	if (!rl || rl[0] == '\0')
+		return (NULL);
 	i = white_space(rl, i);
-	if (i <= 0)
-		k = ft_quote(rl, i);
+	if (i < 0)
+		return (NULL);
+	k = ft_quote(rl, i);
 	if (k == -1)
 		return (NULL);
 	while (i != -1 && rl[i])

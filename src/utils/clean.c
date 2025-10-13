@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 14:32:46 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/11 18:49:23 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/13 14:57:02 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,5 +93,5 @@ void	clean_heredoc(t_shell *stru)
 {
 	clean_cmd(stru);
 	clean_env(stru);
-		// clean_gnl();
+		clean_gnl();
 }

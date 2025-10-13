@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 14:47:22 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/10 11:52:14 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/13 10:33:46 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,22 +55,6 @@ int	is_assignment_word(const char *str)
 	return (1);
 }
 
-// void	command_expand(t_cmd *cmd, t_shell *stru)
-// {
-// 	char	*expanded;
-// 	int		i;
-
-// 	i = 0;
-// 	while (cmd->args[i])
-// 	{
-// 		expanded = expand_var(cmd->args[i], stru);
-// 		if (expanded != cmd->args[i])
-// 			free(cmd->args[i]);
-// 		cmd->args[i] = expanded;
-// 		i++;
-// 	}
-// }
-
 int	extract_exit_status(int status)
 {
 	if (WIFEXITED(status))
@@ -94,4 +78,11 @@ bool	is_ifs(char c, const char *ifs)
 		i++;
 	}
 	return (false);
+}
+
+size_t	i_equal_start(char **str, size_t *start)
+{
+	if (append_char(str, '$') < 0)
+		return (*start);
+	return (*start);
 }

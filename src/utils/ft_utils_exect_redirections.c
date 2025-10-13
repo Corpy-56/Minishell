@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/11 16:40:50 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/13 18:05:35 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,32 +107,94 @@ int	ft_expand_heredoc(int fd, t_shell *stru)
 	return (-1);
 }
 
+// int	ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru)
+// {
+// 	if (head->heredoc != NULL && (fd == -2 || fd == 0))
+// 	{
+// 		fd = ft_setup_heredoc(head, stru);
+// 		if (fd == -1)
+// 			return (fd);
+// 		fd = ft_expand_heredoc(fd, stru);
+// 	}
+// 	if (head->fd_out_put1 != -2 && head->here == -2 )
+// 	{
+// 		dup2(head->fd_out_put1, STDOUT_FILENO);
+// 		close(head->fd_out_put1);
+// 	}
+// 	if (head->fd_out_put2 != -2 && head->here == -2)
+// 	{
+// 		dup2(head->fd_out_put2, STDOUT_FILENO);
+// 		close(head->fd_out_put2);
+// 	}
+// 	if (head->fd_int_put != -2)
+// 	{
+// 		dup2(head->fd_int_put, STDIN_FILENO);
+// 		close(head->fd_int_put);
+// 	}
+// 	return (fd);
+// }
+
 int	ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru)
 {
 	if (head->heredoc != NULL && (fd == -2 || fd == 0))
 	{
 		fd = ft_setup_heredoc(head, stru);
 		if (fd == -1)
-			return (fd);
+			return (-1);
 		fd = ft_expand_heredoc(fd, stru);
+		if (fd == -1)
+			return (-1);
 	}
 	if (head->fd_out_put1 != -2 && head->here == -2 )
 	{
 		dup2(head->fd_out_put1, STDOUT_FILENO);
 		close(head->fd_out_put1);
+		head->fd_out_put1 = -2;
 	}
 	if (head->fd_out_put2 != -2 && head->here == -2)
 	{
 		dup2(head->fd_out_put2, STDOUT_FILENO);
 		close(head->fd_out_put2);
+		head->fd_out_put2 = -2;
 	}
 	if (head->fd_int_put != -2)
 	{
 		dup2(head->fd_int_put, STDIN_FILENO);
 		close(head->fd_int_put);
+		head->fd_int_put = -2;
 	}
 	return (fd);
 }
+// void ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int hd_fd)
+// {
+//     (void)head;
+
+//     // Heredoc: toujours fermer dans le parent s'il existe
+//     if (hd_fd >= 0)
+//         close(hd_fd);
+
+//     // Restaurer puis fermer les sauvegardes SI elles sont valides
+//     if (fd_stdout >= 0) { dup2(fd_stdout, STDOUT_FILENO); close(fd_stdout); }
+//     if (fd_stdin  >= 0) { dup2(fd_stdin,  STDIN_FILENO); close(fd_stdin);  }
+// }
+
+// void	ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd)
+// {
+// 	(void)head;
+
+// 	if (fd >= 0)
+// 		close(fd);
+// 	if (fd_stdout >= 0)
+// 	{
+// 		dup2(fd_stdout, 1);
+// 		close(fd_stdout);
+// 	}
+// 	if (fd_stdin >= 0)
+// 	{
+// 		dup2(fd_stdin, 0);
+// 		close(fd_stdin);
+// 	}
+// }
 
 void	ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd)
 {
@@ -150,5 +212,33 @@ void	ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd)
 	{
 		dup2(fd_stdin, 0);
 		close(fd_stdin);
+	}
+}
+
+void apply_cmd_redirs_in_child(t_cmd *cmd)
+{
+	if (cmd->here)
+	{
+		dup2(cmd->here, 0);
+		close(cmd->here);
+		cmd->here = -1;
+	}
+	if (cmd->fd_int_put >= 0)
+	{
+		dup2(cmd->fd_int_put, 0);
+		close(cmd->fd_int_put);
+		cmd->fd_int_put = -1;
+	}
+	if (cmd->fd_out_put1 >= 0)
+	{
+		dup2(cmd->fd_out_put1, 1);
+		close(cmd->fd_out_put1);
+		cmd->fd_out_put1 = -1;
+	}
+	if (cmd->fd_out_put2 >= 0)
+	{
+		dup2(cmd->fd_out_put2, 1);
+		close(cmd->fd_out_put2);
+		cmd->fd_out_put2 = -1;
 	}
 }

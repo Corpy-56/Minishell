@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/12 16:32:36 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/13 17:56:56 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,8 @@ void		signal_handler(int signum, siginfo_t *info, void *context);
 /* ********* ft_signals ********* */
 void		ft_signal(void);
 void		signal_handler1(int signum);
-void		ft_exit_d(void);
+void		set_shell(t_shell *shell);
+
 
 /* ********* fields_splitting ********* */
 size_t		count_fields(const char *str, const char *ifs);
@@ -129,6 +130,8 @@ char		*get_env_value(t_env *env, char *name);
 int			is_assignment_word(const char *str);
 bool		is_ifs(char c, const char *ifs);
 int			extract_exit_status(int status);
+size_t		i_equal_start(char **str, size_t *start);
+
 
 /* ********* utils_token ********* */
 int			ft_quote(char *rl, int i);
@@ -165,6 +168,8 @@ char		*ft_expand_heredoc2(char *l, t_shell *sh, size_t i, size_t start);
 int			ft_expand_heredoc(int fd, t_shell *stru);
 int			ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru);
 void		ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd);
+void 		apply_cmd_redirs_in_child(t_cmd *cmd);
+
 
 /* ********* utils pipes ********* */
 void		ignore_sigpipe_once(void);
@@ -200,7 +205,7 @@ void		err_msg_ambiguous(char *args);
 
 /* ********* init ********* */
 void		ft_initialization_commande(t_cmd *commande);
-void 		ft_init_fd1(void);
+void		ft_init_fd1(void);
 void		init_split(t_split *split, t_tokens **head, t_shell *stru);
 void		init_split_ifs(t_split *split, const char *str, const char *ifs);
 void		init_pipes(t_pipes *pipes, t_cmd *head);
@@ -210,6 +215,8 @@ void		init_exec(t_exec *exec, t_shell *stru);
 void		init_cd(t_cd *cd, t_shell *stru);
 void		init_ext(t_ext *ext, t_cmd *cmd);
 void		init_expand(t_expand *exp, t_tokens *tk, size_t i);
+void		init_shell(t_shell *stru);
+
 
 
 

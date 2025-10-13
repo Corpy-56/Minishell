@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:52:31 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/12 17:03:21 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/13 10:30:07 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,26 +68,26 @@ static void	update_env2(t_env *node, char *name, t_shell *stru)
 	}
 }
 
-static void	update_env3(t_env **head, t_env *new_node, char *name, t_shell *stru)
+static void	update_env3(t_env **head, t_env *new, char *name, t_shell *stru)
 {
 	t_env	*last;
 
 	if (!*head)
-		*head = new_node;
+		*head = new;
 	else
 	{
 		last = *head;
 		while (last->next)
 			last = last->next;
-		last->next = new_node;
+		last->next = new;
 	}
 	if (ft_strcmp(name, "PATH") == 0 && stru != NULL)
 	{
-		stru->path_node = new_node;
+		stru->path_node = new;
 		if (stru->path_dirs)
 			free_doublechar(stru->path_dirs);
-		if (new_node->value)
-			stru->path_dirs = ft_split(new_node->value, ':');
+		if (new->value)
+			stru->path_dirs = ft_split(new->value, ':');
 		else
 			stru->path_dirs = NULL;
 	}
@@ -95,8 +95,8 @@ static void	update_env3(t_env **head, t_env *new_node, char *name, t_shell *stru
 
 char	*join_three_char(char *a, char *b, char *c)
 {
-	char 	*ab;
-	char 	*abc;
+	char	*ab;
+	char	*abc;
 
 	ab = ft_strjoin(a, b);
 	if (ab)

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/12 15:03:10 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/13 12:28:07 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ struct termios saved_term1;
 static bool	is_exec_file(const char *chosen_path)
 {
 	struct stat	info;
-	
+
 	if (!chosen_path)
 		return (false);
 	if (stat(chosen_path, &info) != 0)
@@ -38,7 +38,7 @@ static char	*join_cmd(char *rep, char *name)
 
 	if (rep && *rep)
 		base = rep;
-	else 
+	else
 		base = ".";
 	tmp = ft_strjoin(base, "/");
 	if (!tmp)
@@ -71,12 +71,12 @@ char	*find_in_path(char *name, t_shell *stru)
 	return (NULL);
 }
 
-static char *exec_external2(char **argv, t_cmd *cmd, t_shell *stru)
+static char	*exec_external2(char **argv, t_cmd *cmd, t_shell *stru)
 {
 	struct stat	info;
 	char		*path_val;
 	char		*chosen_path;
-	
+
 	if (argv == NULL || argv[0] == NULL)
 		return (NULL);
 	if (ft_strchr(argv[0], '/'))
@@ -101,14 +101,14 @@ static char *exec_external2(char **argv, t_cmd *cmd, t_shell *stru)
 
 static void	handle_exec_error(t_ext *ext, t_shell *stru, int error)
 {
-		free_doublechar(ext->envp);
-		if (ext->chosen_path != ext->argv[0])
-			free(ext->chosen_path);
-		clean_children(stru);
-		if (error == ENOENT)
-			_exit(127);
-		else
-			_exit(126);
+	free_doublechar(ext->envp);
+	if (ext->chosen_path != ext->argv[0])
+		free(ext->chosen_path);
+	clean_children(stru);
+	if (error == ENOENT)
+		_exit(127);
+	else
+		_exit(126);
 }
 
 void	exec_external(t_cmd *cmd, t_shell *stru)
@@ -187,34 +187,34 @@ void	exec_external(t_cmd *cmd, t_shell *stru)
 // 	}
 // }
 
-void disable_echoctl1(void)
+void	disable_echoctl1(void)
 {
-    struct termios term;
+	struct termios	term;
 
-    if (tcgetattr(STDIN_FILENO, &term) == -1)
-        return;
-    orig_termios1 = term;
-    term.c_lflag &= ~(ECHOCTL);
-    tcsetattr(STDIN_FILENO, TCSANOW, &term);
+	if (tcgetattr(STDIN_FILENO, &term) == -1)
+		return ;
+	orig_termios1 = term;
+	term.c_lflag &= ~(ECHOCTL);
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
-void save_termios1(void)
+void	save_termios1(void)
 {
-    tcgetattr(STDIN_FILENO, &saved_term1);
+	tcgetattr(STDIN_FILENO, &saved_term1);
 }
-void restore_termios1(void)
+void	restore_termios1(void)
 {
-    tcsetattr(STDIN_FILENO, TCSANOW, &saved_term1);
+	tcsetattr(STDIN_FILENO, TCSANOW, &saved_term1);
 }
 
 static int	collect_status(pid_t pid, t_shell *stru)
 {
 	int	status;
-	(void)stru;
 
+	(void)stru;
 	status = 0;
 	waitpid(pid, &status, 0);
-	restore_termios1();
+	// restore_termios1();
 	// stru->last_status = extract_exit_status(status);
 	return (status);
 }
@@ -222,7 +222,6 @@ static int	collect_status(pid_t pid, t_shell *stru)
 static void	run_child(t_cmd *cmd, t_shell *stru, int f)
 {
 	(void)f;	
-	
 	disable_echoctl1();
 	signal(SIGQUIT, SIG_IGN);
 //	f = ft_first_ft_redirections(cmd, f, stru);
@@ -249,7 +248,7 @@ int	run_external(t_cmd *cmd, t_shell *stru, int f)
 	if (cmd->args[0] == NULL)
 		return (0);
 	signal(SIGINT, SIG_IGN);// il est ultra important 
-	//signal(SIGQUIT, SIG_IGN);
+	// signal(SIGQUIT, SIG_IGN);
 	save_termios1();
 	pid = fork();
 	if (pid < 0)
@@ -257,6 +256,8 @@ int	run_external(t_cmd *cmd, t_shell *stru, int f)
 	if (pid == 0)
 		run_child(cmd, stru, f);
 	status = collect_status(pid, stru);
+	restore_termios1();
+	ft_signal();
 	return (status);
 }
 

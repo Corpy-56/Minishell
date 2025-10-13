@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 16:16:20 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/12 16:32:29 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/13 16:46:25 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	init_cd(t_cd *cd, t_shell *stru)
 	cd->oldpwd = NULL;
 	cd->newpwd = NULL;
 	cd->pwd = NULL;
+	cd->old = NULL;
 }
 
 void	init_ext(t_ext *ext, t_cmd *cmd)
