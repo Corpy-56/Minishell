@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 16:16:20 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/13 16:46:25 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/14 14:42:41 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ void	init_exec(t_exec *exec, t_shell *stru)
 	exec->builtins = 0;
 	exec->status = 0;
 	exec->n = count_maillons(exec->head);
-	exec->fd_stdin = dup(0);
-	exec->fd_stdout = dup(1);
+	exec->fd_stdin = -1;
+	exec->fd_stdout = -1;
 	exec->fd = 0;
 }
 

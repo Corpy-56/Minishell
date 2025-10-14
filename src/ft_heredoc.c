@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/13 16:01:03 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/14 16:35:44 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,11 @@ int	ft_heredoc(t_cmd *commande, int pidfd, int i)
 	while (1)
 	{
 		if (pidfd == -1)
+		{
 			pidfd = open(".files", O_CREAT | O_RDWR | O_TRUNC, 0600);
+			if (pidfd == -1)
+				return (-1);
+		}
 		if (k == 0)
 			write(1, "> ", 2);
 		line = get_next_line(0);
@@ -128,6 +132,11 @@ int	ft_heredoc(t_cmd *commande, int pidfd, int i)
 		{
 			if (k == 0)
 			{
+				if (pidfd == -1)
+				{
+					close(pidfd);
+					pidfd = -1;
+				}
 				get_next_line(-1);
 				return (-1);
 			}
@@ -165,8 +174,13 @@ int	ft_heredoc(t_cmd *commande, int pidfd, int i)
 					ft_strlen(commande->heredoc[i])) == 0) && (line[ft_strlen(commande->heredoc[i])] == '\0'
 					|| line[ft_strlen(commande->heredoc[i])] == '\n'))
 			{
-				close(pidfd);
-				pidfd = -1;
+				// close(pidfd);
+				// pidfd = -1;
+				if (pidfd == -1)
+				{
+					close(pidfd);
+					pidfd = -1;
+				}
 				free(line);
 				get_next_line(-1);
 				if (commande->heredoc[++i] == NULL)
@@ -175,9 +189,16 @@ int	ft_heredoc(t_cmd *commande, int pidfd, int i)
 			}
 			write(pidfd, line, ft_strlen(line));
 			//free(line);
+
 		}
 		if (line != NULL)
 			free(line);
+
+	}
+	if (pidfd == -1)
+	{
+		close(pidfd);
+		pidfd = -1;
 	}
 	return (0);
 }
@@ -194,7 +215,7 @@ void	signal_handler(int signum, siginfo_t *info, void *context)
 		unlink(".files");
 	write(1, "^C", 2);
 	write(1, "\n", 1);
-//	close(0);// comme ca je peux free tout avant de tout reafficher 
+	close(0);// comme ca je peux free tout avant de tout reafficher 
 	exit(130);
 }
 
@@ -237,7 +258,7 @@ void	ft_child_heredoc(t_cmd *commande, t_shell *stru)
 	clean_heredoc(stru);
 	if (isatty(pidfd) == 1)
 		close (pidfd);
-	exit (0);
+	_exit (0);
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/13 18:05:35 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/14 14:49:53 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,34 @@ char	*ft_expand_heredoc2(char *l, t_shell *sh, size_t i, size_t start)
 	return (ft_end_expand(start, str, l, i));
 }
 
+// int	ft_expand_heredoc(int fd, t_shell *stru)
+// {
+// 	char	*line;
+// 	int		new_fd;
+// 	char	*temp;
+
+// 	new_fd = open(".files_expand", O_CREAT | O_RDWR | O_TRUNC, 0600);
+// 	while (1)
+// 	{
+// 		line = get_next_line(fd);
+// 		if (line == NULL)
+// 		{
+// 			close(fd);
+// 			close(new_fd);
+// 			new_fd = open(".files_expand", O_CREAT | O_RDWR, 0600);
+// 			unlink(".files_expand");
+// 			return (new_fd);
+// 		}
+// 		temp = ft_expand_heredoc2(line, stru, 0, 0);
+// 		write(new_fd, temp, ft_strlen(line));
+// 		if (ft_strcmp(temp, line) != 0)
+// 			write(new_fd, "\n", 1);
+// 		free(temp);
+// 		free(line);
+// 	}
+// 	return (-1);
+// }
+
 int	ft_expand_heredoc(int fd, t_shell *stru)
 {
 	char	*line;
@@ -104,6 +132,7 @@ int	ft_expand_heredoc(int fd, t_shell *stru)
 		free(temp);
 		free(line);
 	}
+	(close(new_fd), unlink(".files_expand"));
 	return (-1);
 }
 
@@ -140,12 +169,12 @@ int	ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru)
 	{
 		fd = ft_setup_heredoc(head, stru);
 		if (fd == -1)
-			return (-1);
+			return (fd);
 		fd = ft_expand_heredoc(fd, stru);
 		if (fd == -1)
 			return (-1);
 	}
-	if (head->fd_out_put1 != -2 && head->here == -2 )
+	if (head->fd_out_put1 != -2 && head->here == -2)
 	{
 		dup2(head->fd_out_put1, STDOUT_FILENO);
 		close(head->fd_out_put1);
@@ -165,18 +194,6 @@ int	ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru)
 	}
 	return (fd);
 }
-// void ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int hd_fd)
-// {
-//     (void)head;
-
-//     // Heredoc: toujours fermer dans le parent s'il existe
-//     if (hd_fd >= 0)
-//         close(hd_fd);
-
-//     // Restaurer puis fermer les sauvegardes SI elles sont valides
-//     if (fd_stdout >= 0) { dup2(fd_stdout, STDOUT_FILENO); close(fd_stdout); }
-//     if (fd_stdin  >= 0) { dup2(fd_stdin,  STDIN_FILENO); close(fd_stdin);  }
-// }
 
 // void	ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd)
 // {
@@ -217,7 +234,7 @@ void	ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd)
 
 void apply_cmd_redirs_in_child(t_cmd *cmd)
 {
-	if (cmd->here)
+	if (cmd->here >= 0)
 	{
 		dup2(cmd->here, 0);
 		close(cmd->here);
@@ -227,18 +244,18 @@ void apply_cmd_redirs_in_child(t_cmd *cmd)
 	{
 		dup2(cmd->fd_int_put, 0);
 		close(cmd->fd_int_put);
-		cmd->fd_int_put = -1;
+		cmd->fd_int_put = -2;
 	}
 	if (cmd->fd_out_put1 >= 0)
 	{
 		dup2(cmd->fd_out_put1, 1);
 		close(cmd->fd_out_put1);
-		cmd->fd_out_put1 = -1;
+		cmd->fd_out_put1 = -2;
 	}
 	if (cmd->fd_out_put2 >= 0)
 	{
-		dup2(cmd->fd_out_put2, 1);
+		dup2(cmd->fd_out_put2, 2);
 		close(cmd->fd_out_put2);
-		cmd->fd_out_put2 = -1;
+		cmd->fd_out_put2 = -2;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 15:44:14 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/14 14:05:46 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/14 17:13:18 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,5 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char	**ft_array_dup(char **array);
 char	*get_next_line(int fd);
 char	*ft_strjoin_free(char const *s1, char const *s2);
-
 
 #endif

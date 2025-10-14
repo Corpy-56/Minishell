@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 21:35:08 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/13 16:48:34 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/14 17:15:00 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,31 +34,10 @@ static void	chdir_home(t_cd *cd, char **args)
 		}
 		chdir(cd->home);
 	}
-
 }
-
-// if (ft_strcmp(args[1], "-") == 0)
-// 	{
-// 		char *old = get_env_value(stru->environ, "OLDPWD");
-// 		if (!old)
-// 		{
-// 			ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
-// 			return ;
-// 		}
-// 		if (chdir(old) != 0)
-// 		{
-// 			err_msg_cd(old);
-// 			return ;
-// 		}
-// 		/* comme bash: afficher le nouveau chemin */
-// 		char *np = getcwd(NULL, 0);
-// 		if (np) { ft_putendl_fd(np, 1); free(np); }
-// 		return ;
-// 	}
 
 static void	chdir_args(t_cd *cd, char **args, t_shell *stru)
 {
-
 	if (args[1] && ft_strncmp(args[1], "~", 3) == 0)
 		chdir(cd->home);
 	else if (args[1] && ft_strncmp(args[1], "-", 3) == 0)

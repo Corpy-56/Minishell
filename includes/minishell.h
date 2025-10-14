@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/13 17:56:56 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/14 18:47:00 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@
 # include <sys/wait.h>
 # include <errno.h>
 # include <termios.h>
+
+
+
 
 /* ******************************** BUILTINS ******************************** */
 
@@ -107,6 +110,8 @@ void		run_pipes(t_cmd *head, t_shell *sh);
 
 /* ********* main ********* */
 int			main(int argc, char **argv, char **env);
+t_shell		*static_struct(t_shell *stru);
+
 
 /* ******************************** UTILS ********************************** */
 
@@ -216,6 +221,7 @@ void		init_cd(t_cd *cd, t_shell *stru);
 void		init_ext(t_ext *ext, t_cmd *cmd);
 void		init_expand(t_expand *exp, t_tokens *tk, size_t i);
 void		init_shell(t_shell *stru);
+void		init_export(t_export *exp, t_env **env, t_env **local);
 
 
 

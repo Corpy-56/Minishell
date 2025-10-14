@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/13 17:57:13 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/14 18:45:32 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ static void	run_one_cmd(t_exec *exec, t_shell *stru)
 	int	builtins;
 
 	builtins = 0;
+	static_struct(stru);
 	exec->fd = ft_first_ft_redirections(exec->head, exec->fd, stru);
 	if (exec->fd == -1)
 		return ;
@@ -131,7 +132,6 @@ static void	run_one_cmd(t_exec *exec, t_shell *stru)
 	{
 		stru->last_status = 0;
 		end_of_line_restore(&exec->fd_stdin, &exec->fd_stdout);
-
 		return ;
 	}
 	exec->status = run_external(exec->head, stru, exec->fd);
@@ -139,28 +139,23 @@ static void	run_one_cmd(t_exec *exec, t_shell *stru)
 	end_of_line_restore(&exec->fd_stdin, &exec->fd_stdout);
 }
 
-
-
 void	exec_cmd_line(t_shell *stru)
 {
 	t_exec	exec;
 
 	reconstruct_path_dirs(stru);
 	init_exec(&exec, stru);
+	exec.fd_stdin = dup(STDIN_FILENO);
+	exec.fd_stdout = dup(STDOUT_FILENO);
 	if (exec.n == 0)
 	{
 		end_of_line_restore(&exec.fd_stdin, &exec.fd_stdout);
-		// ft_close_fd(exec.head, exec.fd_stdin, exec.fd_stdout, exec.fd);		
 		return ;
 	}
 	if (exec.n == 1)
-	{
 		run_one_cmd(&exec, stru);
-		// ft_close_fd(exec.head, exec.fd_stdin, exec.fd_stdout, exec.fd);
-	}
 	else
 		run_pipes(exec.head, stru);
-	// ft_close_fd(exec.head, exec.fd_stdin, exec.fd_stdout, exec.fd);
 	end_of_line_restore(&exec.fd_stdin, &exec.fd_stdout);
 
 }

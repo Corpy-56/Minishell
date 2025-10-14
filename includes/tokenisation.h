@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/13 16:45:16 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/14 18:21:13 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ typedef struct s_fd
 	int				fd_int_put;
 }					t_fd;
 
-extern t_fd *fd;
 
 typedef struct s_split
 {
@@ -152,6 +151,18 @@ typedef struct s_expand
 	size_t			j;
 }					t_expand;
 
+typedef struct s_export
+{
+	int				i;
+	char			*name;
+	char			*value;
+	t_env			*var;
+	char			*val_final;
+	t_env			**env;
+	t_env			**local;
+}					t_export;
+
+
 typedef struct s_shell
 {
 	t_cmd			*commande;
@@ -159,6 +170,7 @@ typedef struct s_shell
 	t_env			*environ;
 	t_env			*local;
 	t_env			*path_node;
+	t_exec			*exec;
 	char			**path_dirs;
 	int				last_status;
 	int				should_exit;
