@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils_exect_redirections.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 18:45:11 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 20:08:56 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	apply_cmd_redirs_in_child(t_cmd *cmd, t_shell *shell)
 	{
 		dup2(shell->dup_0, 0);
 		close_fds(&cmd->fd_int_put);
-		close_fds(&shell->dup_0);
+		close(shell->dup_0);
 		shell->dup_0 = -1;
 		cmd->fd_int_put = -1;
 	}
@@ -107,16 +107,14 @@ void	apply_cmd_redirs_in_child(t_cmd *cmd, t_shell *shell)
 	{
 		dup2(shell->dup_1, 1);
 		close_fds(&cmd->fd_out_put1);
-		close_fds(&shell->dup_1);
+		close(shell->dup_1);
 		shell->dup_1 = -1;
-		//close_fds(shell->dup_0);
 		cmd->fd_out_put1 = -1;
 	}
 	if (cmd->fd_out_put2 >= 0)
 	{
 		dup2(shell->dup_1, 1);
 		close_fds(&cmd->fd_out_put2);
-	//	close_fds(shell->dup_1);
 		shell->dup_1 = -1;
 		cmd->fd_out_put2 = -1;
 	}

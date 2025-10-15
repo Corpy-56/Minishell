@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 19:00:55 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 19:24:05 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void		ft_first_ft_redirections2(t_cmd *head);
 
 /* ********* ft_heredocs ********* */
 int			ft_setup_heredoc(t_cmd *commande, t_shell *stru);
-void		ft_child_heredoc(t_cmd *commande, t_shell *stru, int j, int pidfd);
+void		ft_child_heredoc(t_cmd *commande, t_shell *stru, int j);
 int			ft_heredoc(t_cmd *commande, int pidfd, int i, char *line);
 void		signal_handler(int signum, siginfo_t *info, void *context);
 

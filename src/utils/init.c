@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 16:37:09 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 16:15:36 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/15 19:47:53 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,26 +22,9 @@ void	ft_initialization_commande(t_cmd *commande)
 	commande->next = NULL;
 	commande->fd_out_put1 = -2;
 	commande->fd_out_put2 = -2;
-	//commande->fd_dup_0 = dup(STDIN_FILENO);
-	//if (commande->fd_dup_0 == -1)
-	//{
-	//	printf("A");
-	//	commande->fd_dup_0 = 0;
-	//}
 	commande->next = NULL;
 	return ;
 }
-
-// void 	ft_init_fd1(void)
-// {
-// 	fd = ft_calloc(1, sizeof(t_fd));
-// 	fd->fd_in = dup(0);
-// 	fd->fd_out = dup (1);
-// 	fd->fd = 5;
-// 	fd->fd_out_put1 = -2;
-// 	fd->fd_out_put2 = -2;
-// 	fd->fd_int_put = -2;
-// }
 
 void	init_split(t_split *split, t_tokens **head, t_shell *stru)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 18:33:35 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 19:58:08 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,19 +75,19 @@ static void	run_one_cmd(t_exec *exec, t_shell *stru)
 		apply_cmd_redirs_in_child(exec->head, stru);
 		builtins = ft_exec_builtins(exec->head, stru, true);
 		stru->last_status = builtins;
-		// end_of_line_restore(&exec->fd_stdin, &exec->fd_stdout);
+		end_of_line_restore(&exec->fd_stdin, &exec->fd_stdout);
 		return ;
 	}
 	if (exec->head->args == NULL)
 	{
 		stru->last_status = 0;
-		// end_of_line_restore(&exec->fd_stdin, &exec->fd_stdout);
+		end_of_line_restore(&exec->fd_stdin, &exec->fd_stdout);
 		return ;
 	}
 	exec->status = run_external(exec->head, stru, exec->fd);
 	status_signals(stru, exec->status);
-	// apply_cmd_redirs_in_child(exec->head, stru);
-	// end_of_line_restore(&exec->fd_stdin, &exec->fd_stdout);
+	apply_cmd_redirs_in_child(exec->head, stru);
+	end_of_line_restore(&exec->fd_stdin, &exec->fd_stdout);
 }
 
 void	exec_cmd_line(t_shell *stru)

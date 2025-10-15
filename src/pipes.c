@@ -3,41 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 11:25:27 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 18:51:12 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 19:50:44 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// static void	child_setup(t_pipes *pipes)
-// {
-// 	t_cmd	*cmd;
-
-// 	cmd = pipes->current;
-// 	if (cmd->here != -2)
-// 	{
-// 		if (dup2(cmd->here, STDIN_FILENO) == -1)
-// 			_exit(1);
-// 		if (cmd->fd_int_put != -2)
-// 			close(cmd->here);
-// 	}
-// 	if (pipes->prev_read != -1)
-// 	{
-// 		if (dup2(pipes->prev_read, STDIN_FILENO) == -1)
-// 			_exit(1);
-// 		close(pipes->prev_read);
-// 	}
-// 	if (cmd->next)
-// 	{
-// 		if (dup2(pipes->fd[1], STDOUT_FILENO) == -1)
-// 			_exit(1);
-// 		close(pipes->fd[0]);
-// 		close(pipes->fd[1]);
-// 	}
-// }
 
 static void	child_setup(t_pipes *pipes)
 {

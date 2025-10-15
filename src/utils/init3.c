@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:50:15 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 16:52:50 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 19:29:14 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	init_shell(t_shell *stru, char **env)
 	stru->environ = ft_duplicate_env(env, stru);
 	stru->tokens = NULL;
 	stru->commande = NULL;
+	stru->fd = -2;
 	update_shlvl(stru->environ, stru);
 	save_termios1();
 	ft_tty(stru);
