@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/15 19:06:09 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 19:47:41 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ void	signal_handler(int signum, siginfo_t *info, void *context)
 	(void)signum;
 	(void)info;
 	(void)context;
-	//j = access(".files", F_OK);
-	//if (j == 0)
-	//	unlink(".files");
+	// j = access(".files", F_OK);
+	// if (j == 0)
+	// 	unlink(".files");
 	shell = static_struct(shell);
 	clean_heredoc(shell);
 	close_fds(0);

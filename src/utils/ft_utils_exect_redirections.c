@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 18:45:11 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 19:43:46 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ int	ft_expand_heredoc(int fd, t_shell *stru, int new_fd)
 			write(new_fd, "\n", 1);
 		free(temp);
 		free(line);
+		(close_fds(&new_fd), unlink(".files_expand"));
+
 	}
 	(close_fds(&new_fd), unlink(".files_expand"));
 	return (-1);
