@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/15 14:10:42 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 17:42:05 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,69 +21,138 @@ void	ft_tty(t_shell *stru)
 	}
 }
 
-int main(int argc, char **argv, char **env)
+void	exit_with_status(t_shell *stru)
+{
+	int	status;
+
+	status = stru->last_status;
+	write(1, "exit\n", 5);
+	clean_all(stru);
+	exit (status);
+}
+
+int	read_and_tokenise(t_shell *stru)
 {
 	char	*rl;
+
+	ft_signal();
+	rl = readline(MINISHELL);
+	if (!rl)
+		exit_with_status(stru);
+	if (*rl)
+		add_history(rl);
+	stru->tokens = ft_tokenisation(rl, stru->tokens, 0);
+	free(rl);
+	if (!stru->tokens)
+		return (0);
+	main_expand(stru);
+	split_all_tokens(&stru->tokens, stru);
+	unquote_tokens(stru->tokens);
+	return (1);
+}
+
+int	parse_cmds(t_shell *stru)
+{
+	int	syntax;
+
+	syntax = ft_valid_syntax(stru->tokens);
+	if (syntax != 0)
+	{
+		stru->last_status = 2;
+		return (0);
+	}
+	stru->commande = ft_type_token(stru->commande, stru->tokens, stru);
+	stru->commande = suppr_empty_cmd(stru->commande);
+	return (stru->commande != NULL);
+}
+
+int	main(int argc, char **argv, char **env)
+{
 	t_shell	stru;
-	int		syntax;
 	int		status;
 
-	(void)argc; 
+	(void)argc;
 	(void)argv;
 	ft_bzero(&stru, sizeof(stru));
 	init_shell(&stru, env);
-	// stru.environ = ft_duplicate_env(env, &stru);
-	update_shlvl(stru.environ, &stru);
-	save_termios1();
-	// init_shell(&stru);
-	ft_tty(&stru);
-	set_shell(&stru);
 	while (!stru.should_exit)
 	{
-		ft_signal();
-		rl = readline("\033[32mMinishell : \033[0m");
-		if (!rl)
+		if (!read_and_tokenise(&stru))
 		{
-			status = stru.last_status;
-			write(1, "exit\n", 5);
-			clean_all(&stru);
-			exit(status);
-		}
-		if (*rl)
-			add_history(rl);
-		stru.tokens = ft_tokenisation(rl, stru.tokens, 0);
-		free(rl);
-		if (!stru.tokens)
+			clean_cmd(&stru);
 			continue ;
-		main_expand(&stru);
-		split_all_tokens(&stru.tokens, &stru);
-		unquote_tokens(stru.tokens);
-		if (stru.tokens != NULL)
-		{
-			syntax = ft_valid_syntax(stru.tokens);
-			if (syntax != 0)
-			{
-				stru.last_status = 2;
-				clean_cmd(&stru);
-				continue ;
-			}
-			stru.commande = ft_type_token(stru.commande, stru.tokens, &stru);
-			stru.commande = suppr_empty_cmd(stru.commande);
-			if (stru.commande == NULL)
-			{
-				clean_cmd(&stru);
-				continue ;
-			}
-			exec_cmd_line(&stru);
-			if (stru.should_exit)
-			{
-				clean_cmd(&stru);
-				break ;
-			}
 		}
+		if (!parse_cmds(&stru))
+		{
+			clean_cmd(&stru);
+			continue ;
+		}
+		exec_cmd_line(&stru);
 		clean_cmd(&stru);
 	}
 	status = stru.last_status;
 	clean_all(&stru);
 	exit (status);
 }
+
+// int main(int argc, char **argv, char **env)
+// {
+// 	char	*rl;
+// 	t_shell	stru;
+// 	int		syntax;
+// 	int		status;
+
+// 	(void)argc;
+// 	(void)argv;
+// 	ft_bzero(&stru, sizeof(stru));
+// 	init_shell(&stru, env);
+// 	// save_termios1();
+// 	while (!stru.should_exit)
+// 	{
+// 		ft_signal();
+// 		rl = readline(MINISHELL);
+// 		if (!rl)
+// 		{
+// 			status = stru.last_status;
+// 			write(1, "exit\n", 5);
+// 			clean_all(&stru);
+// 			exit(status);
+// 		}
+// 		if (*rl)
+// 			add_history(rl);
+// 		stru.tokens = ft_tokenisation(rl, stru.tokens, 0);
+// 		free(rl);
+// 		if (!stru.tokens)
+// 			continue ;
+// 		main_expand(&stru);
+// 		split_all_tokens(&stru.tokens, &stru);
+// 		unquote_tokens(stru.tokens);
+// 		if (stru.tokens != NULL)
+// 		{
+// 			syntax = ft_valid_syntax(stru.tokens);
+// 			if (syntax != 0)
+// 			{
+// 				stru.last_status = 2;
+// 				clean_cmd(&stru);
+// 				continue ;
+// 			}
+// 			stru.commande = ft_type_token(stru.commande, stru.tokens, &stru);
+// 			stru.commande = suppr_empty_cmd(stru.commande);
+// 			if (stru.commande == NULL)
+// 			{
+// 				clean_cmd(&stru);
+// 				continue ;
+// 			}
+// 			exec_cmd_line(&stru);
+// 			if (stru.should_exit)
+// 			{
+// 				clean_cmd(&stru);
+// 				break ;
+// 			}
+// 		}
+// 		clean_cmd(&stru);
+// 	}
+// 	status = stru.last_status;
+// 	clean_all(&stru);
+// 	exit (status);
+// }

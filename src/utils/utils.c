@@ -6,18 +6,27 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:21:04 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/24 10:46:22 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 17:27:07 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// int	ft_error(int i, char *str, char *str2)
+// {
+// 	(void)i;
+// 	if (str2 != NULL)
+// 		write(2, str2, (ft_strlen(str)));
+// 	write(2, str, (ft_strlen(str)));
+// 	return (-1);
+// }
+
 int	ft_error(int i, char *str, char *str2)
 {
-	(void)i;
-	if (str2 != NULL)
-		write(2, str2, (ft_strlen(str)));
-	write(2, str, (ft_strlen(str)));
+	if (str)
+		write (i, str, ft_strlen(str));
+	if (str2)
+		write (i, str2, ft_strlen(str2));
 	return (-1);
 }
 

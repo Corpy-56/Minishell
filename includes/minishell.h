@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 14:19:39 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 17:00:11 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # include <sys/wait.h>
 # include <errno.h>
 # include <termios.h>
+
+# define MINISHELL "\001\033[1;32m\002Minishell : \001\033[0m\002"
 
 /* ******************************** BUILTINS ******************************** */
 
@@ -118,6 +120,7 @@ void		run_pipes(t_cmd *head, t_shell *sh);
 
 /* ********* main ********* */
 int			main(int argc, char **argv, char **env);
+void		ft_tty(t_shell *stru);
 
 /* ******************************** UTILS ********************************** */
 

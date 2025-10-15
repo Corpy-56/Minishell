@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 11:25:27 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 13:52:58 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 17:39:59 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,6 @@ void	run_pipes(t_cmd *head, t_shell *sh)
 			if (pipes.prev_read != -1)
 				close (pipes.prev_read);
 			sh->last_status = 1;
-			// clean_children(sh);
 			break ;
 		}
 		pipes.pid = fork();
