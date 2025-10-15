@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 14:32:46 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/13 14:57:02 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 13:59:21 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,4 @@ void	clean_children(t_shell *stru)
 void	clean_gnl(void)
 {
 	(void)get_next_line(-1);
-}
-
-void	clean_heredoc(t_shell *stru)
-{
-	clean_cmd(stru);
-	clean_env(stru);
-		clean_gnl();
 }

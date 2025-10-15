@@ -6,36 +6,11 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/15 11:42:08 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 14:10:42 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	ft_exec_builtins(t_cmd *commande, t_shell *stru, bool cmd_seule)
-{
-	int	status;
-
-	status = 0;
-	if (ft_strncmp(commande->cmd, "pwd", 4) == 0)
-		status = ft_pwd(commande->args, stru);
-	else if (ft_strncmp(commande->cmd, "cd", 3) == 0)
-		status = ft_cd(commande->args, stru);
-	else if (ft_strncmp(commande->cmd, "echo", 5) == 0)
-		status = ft_echo(commande->args);
-	else if (ft_strncmp(commande->cmd, "env", 4) == 0)
-		status = ft_env(stru->environ);
-	else if (ft_strncmp(commande->cmd, "exit", 5) == 0)
-		status = ft_exit(stru, commande->args, cmd_seule);
-	else if (ft_strncmp(commande->cmd, "unset", 5) == 0)
-		status = ft_unset(stru, commande->args);
-	else if (ft_strncmp(commande->cmd, "export", 5) == 0)
-		status = ft_export(commande->args, &stru->environ, &stru->local, stru);
-	else
-		return (1);
-	stru->last_status = status;
-	return (status);
-}
 
 void	ft_tty(t_shell *stru)
 {
@@ -53,14 +28,14 @@ int main(int argc, char **argv, char **env)
 	int		syntax;
 	int		status;
 
-	(void)argc;
+	(void)argc; 
 	(void)argv;
 	ft_bzero(&stru, sizeof(stru));
-	stru.environ = ft_duplicate_env(env, &stru);
+	init_shell(&stru, env);
+	// stru.environ = ft_duplicate_env(env, &stru);
 	update_shlvl(stru.environ, &stru);
 	save_termios1();
 	// init_shell(&stru);
-	// ft_init_fd1();
 	ft_tty(&stru);
 	set_shell(&stru);
 	while (!stru.should_exit)

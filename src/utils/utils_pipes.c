@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:56:23 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/10 16:36:05 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 12:26:05 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,3 +38,40 @@ void	bad_fork(t_pipes *pipes, t_shell *sh)
 	}
 }
 
+char	*join_three_char(char *a, char *b, char *c)
+{
+	char	*ab;
+	char	*abc;
+
+	ab = ft_strjoin(a, b);
+	if (ab)
+		abc = ft_strjoin(ab, c);
+	else
+		abc = NULL;
+	free(ab);
+	return (abc);
+}
+
+t_shell	*static_struct(t_shell *stru)
+{
+	static t_shell	*tmp = NULL;
+
+	if (stru)
+		tmp = stru;
+	return (tmp);
+}
+
+bool	is_exec_file(const char *chosen_path)
+{
+	struct stat	info;
+
+	if (!chosen_path)
+		return (false);
+	if (stat(chosen_path, &info) != 0)
+		return (false);
+	if (S_ISDIR(info.st_mode))
+		return (false);
+	if (access(chosen_path, X_OK) != 0)
+		return (false);
+	return (true);
+}

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 18:16:15 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/14 18:43:09 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 13:51:59 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ void	main_expand(t_shell *stru)
 			expanded = expand_var(token, stru, 0);
 			if (expanded)
 				(free(token->str), token->str = expanded);
-
 			token = token->next;
 		}
 	}

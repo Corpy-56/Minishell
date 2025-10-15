@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 14:32:46 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/14 17:29:20 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/15 14:21:46 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,29 @@ int	ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru)
 	if (head->heredoc != NULL && (fd == -2 || fd == 0))
 	{
 		fd = ft_setup_heredoc(head, stru);
+		if (fd == -1)
+			return (fd);
 		fd = ft_expand_heredoc(fd, stru, 0);
 		if (fd == -1)
 			return (-1);
 	}
 	if (head->fd_out_put1 != -2 && head->here == -2)
-		head = ft_dup_out(head);
+	{
+		dup2(head->fd_out_put1, STDOUT_FILENO);
+		close(head->fd_out_put1);
+		// head->fd_out_put1 = -2;
+	}
 	if (head->fd_out_put2 != -2 && head->here == -2)
 	{
 		dup2(head->fd_out_put2, STDOUT_FILENO);
 		close(head->fd_out_put2);
-		head->fd_out_put2 = -2;
+		// head->fd_out_put2 = -2;
 	}
 	if (head->fd_int_put != -2)
 	{
 		dup2(head->fd_int_put, STDIN_FILENO);
 		close(head->fd_int_put);
-		head->fd_int_put = -2;
+		// head->fd_int_put = -2;
 	}
 	return (fd);
 }

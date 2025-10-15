@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:42:37 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/14 16:10:25 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 14:00:09 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ static int	error_chevrons(t_tokens *p_actuel)
 	}
 	return (0);
 }
-
 
 int	ft_valid_syntax(t_tokens *token)
 {

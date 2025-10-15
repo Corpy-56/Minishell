@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 11:25:27 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/14 18:42:24 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 13:52:58 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ static void	child_setup(t_pipes *pipes)
 			close(pipes->fd[0]);
 		if (pipes->fd[1] != -1)
 			close(pipes->fd[1]);
-
 	}
 }
 
@@ -129,6 +128,8 @@ void	wait_children(t_pipes *pipes)
 		}
 		if (pipes->wait_child == pipes->last_pid)
 			pipes->last_status = extract_exit_status(pipes->status);
+		if (WIFSIGNALED(pipes->status) && WTERMSIG(pipes->status) == SIGINT)
+			printf("\n");
 		pipes->i++;
 	}
 }

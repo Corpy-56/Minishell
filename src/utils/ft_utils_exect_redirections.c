@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 11:25:57 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 14:21:38 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,6 @@ char	*ft_end_expand(size_t start, char *str, char *line, size_t i)
 	return (str);
 }
 
-char *ft_free_str(char *str)
-{
-	free(str);
-	return (NULL);
-}
-
 //static int	expand_exit_status(t_shell *stru, char **str)
 //{
 //	char	*status_str;
@@ -48,7 +42,7 @@ char *ft_free_str(char *str)
 
 char	*ft_expand_heredoc2(char *l, t_shell *sh, size_t i, size_t start)
 {
-	char *str;
+	char	*str;
 	size_t	j;
 	size_t	len_str;
 
@@ -66,10 +60,6 @@ char	*ft_expand_heredoc2(char *l, t_shell *sh, size_t i, size_t start)
 				if (append_char(&str, l[j++]) < 0)
 					return (ft_free_str(str));
 			}
-			//if (i + 1 < len_str && l[i + 1] == '?')
-			//	i += expand_exit_status(sh, &str);
-			//else
-			//	i = expand_var2(sh, l, i + 1, &str);
 			i = expand_var2(sh, l, i + 1, &str);
 			start = i;
 		}
@@ -79,38 +69,9 @@ char	*ft_expand_heredoc2(char *l, t_shell *sh, size_t i, size_t start)
 	return (ft_end_expand(start, str, l, i));
 }
 
-// int	ft_expand_heredoc(int fd, t_shell *stru)
-// {
-// 	char	*line;
-// 	int		new_fd;
-// 	char	*temp;
-
-// 	new_fd = open(".files_expand", O_CREAT | O_RDWR | O_TRUNC, 0600);
-// 	while (1)
-// 	{
-// 		line = get_next_line(fd);
-// 		if (line == NULL)
-// 		{
-// 			close(fd);
-// 			close(new_fd);
-// 			new_fd = open(".files_expand", O_CREAT | O_RDWR, 0600);
-// 			unlink(".files_expand");
-// 			return (new_fd);
-// 		}
-// 		temp = ft_expand_heredoc2(line, stru, 0, 0);
-// 		write(new_fd, temp, ft_strlen(line));
-// 		if (ft_strcmp(temp, line) != 0)
-// 			write(new_fd, "\n", 1);
-// 		free(temp);
-// 		free(line);
-// 	}
-// 	return (-1);
-// }
-
-int	ft_expand_heredoc(int fd, t_shell *stru)
+int	ft_expand_heredoc(int fd, t_shell *stru, int new_fd)
 {
 	char	*line;
-	int		new_fd;
 	char	*temp;
 
 	new_fd = open(".files_expand", O_CREAT | O_RDWR | O_TRUNC, 0600);
@@ -163,37 +124,37 @@ int	ft_expand_heredoc(int fd, t_shell *stru)
 // 	return (fd);
 // }
 
-int	ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru)
-{
-	if (head->heredoc != NULL && (fd == -2 || fd == 0))
-	{
-		fd = ft_setup_heredoc(head, stru);
-		if (fd == -1)
-			return (fd);
-		fd = ft_expand_heredoc(fd, stru);
-		if (fd == -1)
-			return (-1);
-	}
-	if (head->fd_out_put1 != -2 && head->here == -2)
-	{
-		dup2(head->fd_out_put1, STDOUT_FILENO);
-		close(head->fd_out_put1);
-		// head->fd_out_put1 = -2;
-	}
-	if (head->fd_out_put2 != -2 && head->here == -2)
-	{
-		dup2(head->fd_out_put2, STDOUT_FILENO);
-		close(head->fd_out_put2);
-		// head->fd_out_put2 = -2;
-	}
-	if (head->fd_int_put != -2)
-	{
-		dup2(head->fd_int_put, STDIN_FILENO);
-		close(head->fd_int_put);
-		// head->fd_int_put = -2;
-	}
-	return (fd);
-}
+// int	ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru)
+// {
+// 	if (head->heredoc != NULL && (fd == -2 || fd == 0))
+// 	{
+// 		fd = ft_setup_heredoc(head, stru);
+// 		if (fd == -1)
+// 			return (fd);
+// 		fd = ft_expand_heredoc(fd, stru, 0);
+// 		if (fd == -1)
+// 			return (-1);
+// 	}
+// 	if (head->fd_out_put1 != -2 && head->here == -2)
+// 	{
+// 		dup2(head->fd_out_put1, STDOUT_FILENO);
+// 		close(head->fd_out_put1);
+// 		// head->fd_out_put1 = -2;
+// 	}
+// 	if (head->fd_out_put2 != -2 && head->here == -2)
+// 	{
+// 		dup2(head->fd_out_put2, STDOUT_FILENO);
+// 		close(head->fd_out_put2);
+// 		// head->fd_out_put2 = -2;
+// 	}
+// 	if (head->fd_int_put != -2)
+// 	{
+// 		dup2(head->fd_int_put, STDIN_FILENO);
+// 		close(head->fd_int_put);
+// 		// head->fd_int_put = -2;
+// 	}
+// 	return (fd);
+// }
 
 // void	ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd)
 // {

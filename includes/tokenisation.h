@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 11:00:46 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 14:01:03 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ typedef struct s_fd
 	int				fd_out_put2;
 	int				fd_int_put;
 }					t_fd;
-
 
 typedef struct s_split
 {
@@ -164,7 +163,6 @@ typedef struct s_export
 	t_env			**local;
 }					t_export;
 
-
 typedef struct s_shell
 {
 	t_cmd			*commande;
@@ -178,7 +176,5 @@ typedef struct s_shell
 	int				should_exit;
 	int				hdc_interrupted;
 }					t_shell;
-
-
 
 #endif

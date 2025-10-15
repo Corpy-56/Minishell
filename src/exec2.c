@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_exec2.c                                         :+:      :+:    :+:   */
+/*   exec2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/14 17:03:42 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/15 14:23:08 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_cmd	*ft_test_heredoc_pipes(t_cmd *cmds, t_shell *sh)
 			p_actuel->here = ft_setup_heredoc(p_actuel, sh);
 			if (p_actuel->here == -1)
 				return (cmds);
-			p_actuel->here = ft_expand_heredoc(p_actuel->here, sh);
+			p_actuel->here = ft_expand_heredoc(p_actuel->here, sh, 0);
 		}
 		p_actuel = p_actuel->next;
 	}

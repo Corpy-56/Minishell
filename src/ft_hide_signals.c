@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_hide_signals.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/14 16:36:09 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/15 13:52:43 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,6 @@
 
 static struct termios	g_orig_termios;
 struct termios			g_saved_term;
-
-char	*join_three_char(char *a, char *b, char *c)
-{
-	char	*ab;
-	char	*abc;
-
-	ab = ft_strjoin(a, b);
-	if (ab)
-		abc = ft_strjoin(ab, c);
-	else
-		abc = NULL;
-	free(ab);
-	return (abc);
-}
-
-t_shell	*static_struct(t_shell *stru)
-{
-	static t_shell	*tmp = NULL;
-
-	if (stru)
-		tmp = stru;
-	return (tmp);
-}
 
 void	disable_echoctl(void)
 {

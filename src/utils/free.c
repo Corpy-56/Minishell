@@ -6,32 +6,11 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 14:50:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/07 12:19:35 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 11:50:45 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	free_env(t_env **env)
-{
-	t_env	*current;
-	t_env	*next;
-
-	if (!env || !*env)
-		return ;
-	current = *env;
-	while (current)
-	{
-		next = current->next;
-		free(current->name);
-		free(current->value);
-		free_doublechar(current->path);
-		free(current->str);
-		free(current);
-		current = next;
-	}
-	*env = NULL;
-}
 
 void	free_tokens(t_tokens *token)
 {

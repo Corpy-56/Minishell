@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 15:23:24 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/13 13:44:39 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 14:14:27 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,64 +24,6 @@ int	count_nodes(t_env *list)
 	}
 	return (count);
 }
-
-// int	ft_quote(char *rl)
-// {
-// 	size_t	i;
-
-// 	i = 0;
-// 	while (rl[i])
-// 	{
-// 		if (rl[i] == '\'')
-// 		{
-// 			i++;
-// 			while (rl[i] && rl[i] != '\'')
-// 				i++;
-// 			if (rl[i] == '\0')
-// 				return (1);
-// 		}
-// 		else if (rl[i] == '\"')
-// 		{
-// 			i++;
-// 			while (rl[i] && rl[i] != '\"')
-// 				i++;
-// 			if (rl[i] == '\0')
-// 				return (1);
-// 		}
-// 		i++;
-// 	}
-// 	return (0);
-// }
-
-// int	ft_quote(char *rl, int i)
-// {
-// 	int	quote1;
-
-// 	quote1 = 0;
-// 	while (rl[i])
-// 	{
-// 		if (quote1 == 0 && rl[i] == '\'')
-// 		{
-// 			i++;
-// 			while (rl[i] != '\'' && rl[i])
-// 				i++;
-// 			if (rl[i] == '\0')
-// 				quote1++;
-// 		}
-// 		else if (quote1 == 0 && rl[i] == '\"')
-// 		{
-// 			i++;
-// 			while (rl[i] != '\"' && rl[i])
-// 				i++;
-// 			if (rl[i] == '\0')
-// 				quote1++;
-// 		}
-// 		i++;
-// 	}
-// 	if (quote1 != 0)
-// 		return (ft_error(1, "Problem with quote\n", NULL));
-// 	return (0);
-// }
 
 int	ft_quote(char *rl, int i)
 {
@@ -154,4 +96,22 @@ int	white_space(char *str, int i)
 	else if (str[i] == '\0')
 		return (-1);
 	return (0);
+}
+
+char	*join_cmd(char *rep, char *name)
+{
+	char	*tmp;
+	char	*base;
+	char	*chosen_path;
+
+	if (rep && *rep)
+		base = rep;
+	else
+		base = ".";
+	tmp = ft_strjoin(base, "/");
+	if (!tmp)
+		return (NULL);
+	chosen_path = ft_strjoin(tmp, name);
+	free(tmp);
+	return (chosen_path);
 }
