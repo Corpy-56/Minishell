@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/14 18:47:00 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 11:43:20 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void		run_pipes(t_cmd *head, t_shell *sh);
 
 /* ********* main ********* */
 int			main(int argc, char **argv, char **env);
-t_shell		*static_struct(t_shell *stru);
+
 
 
 /* ******************************** UTILS ********************************** */
@@ -223,10 +223,16 @@ void		init_expand(t_expand *exp, t_tokens *tk, size_t i);
 void		init_shell(t_shell *stru);
 void		init_export(t_export *exp, t_env **env, t_env **local);
 
-
-
-
+/* ********* hide signals ********* */
+void		restore_termios(void);
+void		save_termios(void);
+void		disable_echoctl(void);
+t_shell		*static_struct(t_shell *stru);
 void		save_termios1(void);
+char		*join_three_char(char *a, char *b, char *c);
 
+/* ********* utils tokenisations ********* */
+void		ft_test_minishell(t_tokens *a_debut);
+int			ft_init_tokenisation(char *rl, int i);
 
 #endif

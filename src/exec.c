@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/14 18:45:32 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 11:14:25 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,9 @@ static void	run_one_cmd(t_exec *exec, t_shell *stru)
 		return ;
 	if (is_builtin(exec->head))
 	{
+		exec->fd_stdin = dup(STDIN_FILENO);
+		exec->fd_stdout = dup(STDOUT_FILENO);
+		ft_signal();
 		apply_cmd_redirs_in_child(exec->head);
 		builtins = ft_exec_builtins(exec->head, stru, true);
 		stru->last_status = builtins;
@@ -145,8 +148,7 @@ void	exec_cmd_line(t_shell *stru)
 
 	reconstruct_path_dirs(stru);
 	init_exec(&exec, stru);
-	exec.fd_stdin = dup(STDIN_FILENO);
-	exec.fd_stdout = dup(STDOUT_FILENO);
+
 	if (exec.n == 0)
 	{
 		end_of_line_restore(&exec.fd_stdin, &exec.fd_stdout);

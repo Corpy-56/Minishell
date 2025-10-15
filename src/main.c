@@ -6,22 +6,11 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/13 15:54:48 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 11:42:08 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-
-t_shell	*static_struct(t_shell *stru)
-{
-	static t_shell	*tmp = NULL;
-
-	if (stru)
-		tmp = stru;
-	return (tmp);
-}
-
 
 int	ft_exec_builtins(t_cmd *commande, t_shell *stru, bool cmd_seule)
 {

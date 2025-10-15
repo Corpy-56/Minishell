@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/14 14:49:53 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 11:25:57 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,19 +178,19 @@ int	ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru)
 	{
 		dup2(head->fd_out_put1, STDOUT_FILENO);
 		close(head->fd_out_put1);
-		head->fd_out_put1 = -2;
+		// head->fd_out_put1 = -2;
 	}
 	if (head->fd_out_put2 != -2 && head->here == -2)
 	{
 		dup2(head->fd_out_put2, STDOUT_FILENO);
 		close(head->fd_out_put2);
-		head->fd_out_put2 = -2;
+		// head->fd_out_put2 = -2;
 	}
 	if (head->fd_int_put != -2)
 	{
 		dup2(head->fd_int_put, STDIN_FILENO);
 		close(head->fd_int_put);
-		head->fd_int_put = -2;
+		// head->fd_int_put = -2;
 	}
 	return (fd);
 }
@@ -234,27 +234,31 @@ void	ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd)
 
 void apply_cmd_redirs_in_child(t_cmd *cmd)
 {
-	if (cmd->here >= 0)
+	if (cmd != NULL && cmd->here >= 0)
 	{
 		dup2(cmd->here, 0);
 		close(cmd->here);
 		cmd->here = -1;
 	}
-	if (cmd->fd_int_put >= 0)
+	//printf("%d\n", cmd->fd_int_put);
+	if (cmd != NULL && cmd->fd_int_put >= 0)
 	{
-		dup2(cmd->fd_int_put, 0);
+		dup2(cmd->fd_int_put, cmd->fd_dup_1);
 		close(cmd->fd_int_put);
 		cmd->fd_int_put = -2;
 	}
-	if (cmd->fd_out_put1 >= 0)
+	//printf("%d\n", cmd->fd_out_put1);
+	if (cmd != NULL && cmd->fd_out_put1 >= 0)
 	{
-		dup2(cmd->fd_out_put1, 1);
+		printf("A\n");
+		dup2(cmd->fd_out_put1, cmd->fd_dup_0);
 		close(cmd->fd_out_put1);
 		cmd->fd_out_put1 = -2;
 	}
-	if (cmd->fd_out_put2 >= 0)
+	//printf("%d\n", cmd->fd_out_put2);
+	if (cmd != NULL && cmd->fd_out_put2 >= 0)
 	{
-		dup2(cmd->fd_out_put2, 2);
+		dup2(cmd->fd_out_put2, cmd->fd_dup_0);
 		close(cmd->fd_out_put2);
 		cmd->fd_out_put2 = -2;
 	}

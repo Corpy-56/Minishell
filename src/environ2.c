@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:52:31 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/13 10:30:07 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 11:41:40 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,20 +91,6 @@ static void	update_env3(t_env **head, t_env *new, char *name, t_shell *stru)
 		else
 			stru->path_dirs = NULL;
 	}
-}
-
-char	*join_three_char(char *a, char *b, char *c)
-{
-	char	*ab;
-	char	*abc;
-
-	ab = ft_strjoin(a, b);
-	if (ab)
-		abc = ft_strjoin(ab, c);
-	else
-		abc = NULL;
-	free(ab);
-	return (abc);
 }
 
 int	rebuild_str(t_env *node)

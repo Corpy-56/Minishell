@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/14 18:41:48 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 11:45:21 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,33 +133,24 @@ void	exec_external(t_cmd *cmd, t_shell *stru)
 		handle_exec_error(&ext, stru, errno);
 }
 
-void	disable_echoctl1(void)
-{
-	struct termios	term;
-
-	if (tcgetattr(STDIN_FILENO, &term) == -1)
-		return ;
-	orig_termios1 = term;
-	term.c_lflag &= ~(ECHOCTL);
-	tcsetattr(STDIN_FILENO, TCSANOW, &term);
-}
 
 void	save_termios1(void)
 {
 	tcgetattr(STDIN_FILENO, &saved_term1);
-}
-void	restore_termios1(void)
-{
-	tcsetattr(STDIN_FILENO, TCSANOW, &saved_term1);
 }
 
 static int	collect_status(pid_t pid, t_shell *stru)
 {
 	int	status;
 
-	(void)stru;
+	//(void)stru;
 	status = 0;
 	waitpid(pid, &status, 0);
+	if ((WIFSIGNALED(status) && WTERMSIG(status) == SIGINT))
+	{
+		if (stru != NULL && stru->exec != NULL && stru->exec->head != NULL)
+			apply_cmd_redirs_in_child(stru->exec->head);
+	}
 	// restore_termios1();
 	// stru->last_status = extract_exit_status(status);
 	return (status);
