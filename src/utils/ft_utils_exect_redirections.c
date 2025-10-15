@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils_exect_redirections.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 14:21:38 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 17:01:11 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,6 @@ char	*ft_end_expand(size_t start, char *str, char *line, size_t i)
 	}
 	return (str);
 }
-
-//static int	expand_exit_status(t_shell *stru, char **str)
-//{
-//	char	*status_str;
-
-//	status_str = ft_itoa(stru->last_status);
-//	append_str(str, status_str);
-//	free(status_str);
-//	return (2);
-//}
 
 char	*ft_expand_heredoc2(char *l, t_shell *sh, size_t i, size_t start)
 {
@@ -97,130 +87,37 @@ int	ft_expand_heredoc(int fd, t_shell *stru, int new_fd)
 	return (-1);
 }
 
-// int	ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru)
-// {
-// 	if (head->heredoc != NULL && (fd == -2 || fd == 0))
-// 	{
-// 		fd = ft_setup_heredoc(head, stru);
-// 		if (fd == -1)
-// 			return (fd);
-// 		fd = ft_expand_heredoc(fd, stru);
-// 	}
-// 	if (head->fd_out_put1 != -2 && head->here == -2 )
-// 	{
-// 		dup2(head->fd_out_put1, STDOUT_FILENO);
-// 		close(head->fd_out_put1);
-// 	}
-// 	if (head->fd_out_put2 != -2 && head->here == -2)
-// 	{
-// 		dup2(head->fd_out_put2, STDOUT_FILENO);
-// 		close(head->fd_out_put2);
-// 	}
-// 	if (head->fd_int_put != -2)
-// 	{
-// 		dup2(head->fd_int_put, STDIN_FILENO);
-// 		close(head->fd_int_put);
-// 	}
-// 	return (fd);
-// }
-
-// int	ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru)
-// {
-// 	if (head->heredoc != NULL && (fd == -2 || fd == 0))
-// 	{
-// 		fd = ft_setup_heredoc(head, stru);
-// 		if (fd == -1)
-// 			return (fd);
-// 		fd = ft_expand_heredoc(fd, stru, 0);
-// 		if (fd == -1)
-// 			return (-1);
-// 	}
-// 	if (head->fd_out_put1 != -2 && head->here == -2)
-// 	{
-// 		dup2(head->fd_out_put1, STDOUT_FILENO);
-// 		close(head->fd_out_put1);
-// 		// head->fd_out_put1 = -2;
-// 	}
-// 	if (head->fd_out_put2 != -2 && head->here == -2)
-// 	{
-// 		dup2(head->fd_out_put2, STDOUT_FILENO);
-// 		close(head->fd_out_put2);
-// 		// head->fd_out_put2 = -2;
-// 	}
-// 	if (head->fd_int_put != -2)
-// 	{
-// 		dup2(head->fd_int_put, STDIN_FILENO);
-// 		close(head->fd_int_put);
-// 		// head->fd_int_put = -2;
-// 	}
-// 	return (fd);
-// }
-
-// void	ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd)
-// {
-// 	(void)head;
-
-// 	if (fd >= 0)
-// 		close(fd);
-// 	if (fd_stdout >= 0)
-// 	{
-// 		dup2(fd_stdout, 1);
-// 		close(fd_stdout);
-// 	}
-// 	if (fd_stdin >= 0)
-// 	{
-// 		dup2(fd_stdin, 0);
-// 		close(fd_stdin);
-// 	}
-// }
-
-void	ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd)
+void	apply_cmd_redirs_in_child(t_cmd *cmd, t_shell *shell)
 {
-	if (head->heredoc != NULL && isatty(fd) == 1)
-	{
-		//dup2(fd_stdin, 0);
-		close(fd);
-	}
-	if (head->fd_out_put1 != -2 || head->fd_out_put2 != -2)
-	{
-		dup2(fd_stdout, 1);
-		close(fd_stdout);
-	}
-	if (head->fd_int_put != -2)
-	{
-		dup2(fd_stdin, 0);
-		close(fd_stdin);
-	}
-}
-
-void apply_cmd_redirs_in_child(t_cmd *cmd)
-{
-	if (cmd != NULL && cmd->here >= 0)
+	if (cmd->here)
 	{
 		dup2(cmd->here, 0);
 		close(cmd->here);
 		cmd->here = -1;
 	}
-	//printf("%d\n", cmd->fd_int_put);
-	if (cmd != NULL && cmd->fd_int_put >= 0)
+	if (cmd->fd_int_put >= 0)
 	{
-		dup2(cmd->fd_int_put, cmd->fd_dup_1);
+		dup2(shell->dup_0, 0);
 		close(cmd->fd_int_put);
-		cmd->fd_int_put = -2;
+		close(shell->dup_0);
+		shell->dup_0 = -1;
+		cmd->fd_int_put = -1;
 	}
-	//printf("%d\n", cmd->fd_out_put1);
-	if (cmd != NULL && cmd->fd_out_put1 >= 0)
+	if (cmd->fd_out_put1 >= 0)
 	{
-		printf("A\n");
-		dup2(cmd->fd_out_put1, cmd->fd_dup_0);
+		dup2(shell->dup_1, 1);
 		close(cmd->fd_out_put1);
-		cmd->fd_out_put1 = -2;
+		close(shell->dup_1);
+		shell->dup_1 = -1;
+		//close(shell->dup_0);
+		cmd->fd_out_put1 = -1;
 	}
-	//printf("%d\n", cmd->fd_out_put2);
-	if (cmd != NULL && cmd->fd_out_put2 >= 0)
+	if (cmd->fd_out_put2 >= 0)
 	{
-		dup2(cmd->fd_out_put2, cmd->fd_dup_0);
+		dup2(shell->dup_1, 1);
 		close(cmd->fd_out_put2);
-		cmd->fd_out_put2 = -2;
+	//	close(shell->dup_1);
+		shell->dup_1 = -1;
+		cmd->fd_out_put2 = -1;
 	}
 }

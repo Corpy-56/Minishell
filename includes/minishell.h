@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 17:00:11 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 18:03:08 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,7 @@ char		*ft_expand_heredoc2(char *l, t_shell *sh, size_t i, size_t start);
 int			ft_expand_heredoc(int fd, t_shell *stru, int new_fd);
 int			ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru);
 void		ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd);
-void		apply_cmd_redirs_in_child(t_cmd *cmd);
+void		apply_cmd_redirs_in_child(t_cmd *cmd, t_shell *stru);
 
 /* ********* utils pipes ********* */
 void		ignore_sigpipe_once(void);

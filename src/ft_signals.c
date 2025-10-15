@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/15 17:54:57 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 18:07:35 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,15 @@ void	signal_handler1(int signum)
 	(void)signum;
 	if (g_shell)
 		g_shell->last_status = 130;
+	//shell = static_struct(shell);
+	//if (shell != NULL && shell->exec != NULL && shell->exec->head != NULL)
+	//{
+	//	while (shell->exec->head != NULL)
+	//	{
+	//		apply_cmd_redirs_in_child(shell->exec->head, shell);
+	//		shell->exec->head = shell->exec->head->next;
+	//	}
+	//}
 	// shell = static_struct(shell);
 	// if (shell != NULL && shell->exec != NULL && shell->exec->head != NULL)
 	// {
@@ -40,6 +49,8 @@ void	signal_handler1(int signum)
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
+	shell = static_struct(shell);
+	clean_all(shell);
 	shell = static_struct(shell);
 	clean_all(shell);
 }

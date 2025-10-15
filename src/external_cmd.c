@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/15 17:42:40 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 18:00:17 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,12 +100,13 @@ int	collect_status(pid_t pid, t_shell *stru)
 {
 	int	status;
 
+	(void)stru;
 	status = 0;
 	waitpid(pid, &status, 0);
-	if ((WIFSIGNALED(status) && WTERMSIG(status) == SIGINT))
-	{
-		if (stru != NULL && stru->exec != NULL && stru->exec->head != NULL)
-			apply_cmd_redirs_in_child(stru->exec->head);
-	}
+	//if ((WIFSIGNALED(status) && WTERMSIG(status) == SIGINT))
+	//{
+	//	if (stru != NULL && stru->exec != NULL && stru->exec->head != NULL)
+	//		apply_cmd_redirs_in_child(stru->exec->head, stru);
+	//}
 	return (status);
 }
