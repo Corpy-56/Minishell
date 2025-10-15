@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 14:23:08 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 18:35:15 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,16 @@ void	ft_first_ft_redirections2(t_cmd *head)
 	if (head->fd_out_put1 != -2)
 	{
 		dup2(head->fd_out_put1, STDOUT_FILENO);
-		close(head->fd_out_put1);
+		close_fds(&head->fd_out_put1);
 	}
 	if (head->fd_out_put2 != -2)
 	{
 		dup2(head->fd_out_put2, STDOUT_FILENO);
-		close(head->fd_out_put2);
+		close_fds(&head->fd_out_put2);
 	}
 	if (head->fd_int_put != -2)
 	{
 		dup2(head->fd_int_put, STDIN_FILENO);
-		close(head->fd_int_put);
+		close_fds(&head->fd_int_put);
 	}
 }

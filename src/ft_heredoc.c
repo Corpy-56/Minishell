@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_heredoc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/15 16:32:58 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/15 19:06:09 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ int	ft_heredoc(t_cmd *commande, int pidfd, int i, char *line)
 {
 	while (1)
 	{
-		if (pidfd == -1)
-			pidfd = open(".files", O_CREAT | O_RDWR | O_TRUNC, 0600);
 		line = readline("> ");
 		if (line == NULL)
 			return (-1);
@@ -42,36 +40,36 @@ int	ft_heredoc(t_cmd *commande, int pidfd, int i, char *line)
 
 void	signal_handler(int signum, siginfo_t *info, void *context)
 {
-	int		j;
+	//int		j;
 	t_shell	*shell;
 
 	shell = NULL;
 	(void)signum;
 	(void)info;
 	(void)context;
-	j = access(".files", F_OK);
-	if (j == 0)
-		unlink(".files");
+	//j = access(".files", F_OK);
+	//if (j == 0)
+	//	unlink(".files");
 	shell = static_struct(shell);
 	clean_heredoc(shell);
-	close(0);
+	close_fds(0);
 	exit(130);
 }
 
-void	ft_child_heredoc(t_cmd *commande, t_shell *stru, int j)
+void	ft_child_heredoc(t_cmd *commande, t_shell *stru, int j, int pidfd)
 {
 	struct sigaction	signale;
-	int					pidfd;
 	t_cmd				*temp;
 	int					i;
 
 	i = 0;
-	pidfd = -1;
 	temp = commande;
 	while (temp->heredoc[i] != NULL)
 		i++;
 	i--;
 	disable_echoctl();
+	if (pidfd == -1)
+		exit (0);
 	signal(SIGQUIT, SIG_IGN);
 	signale.sa_sigaction = signal_handler;
 	sigemptyset(&signale.sa_mask);
@@ -82,12 +80,12 @@ void	ft_child_heredoc(t_cmd *commande, t_shell *stru, int j)
 		printf("warning: here-document delimited by end-of-file (wanted `%s')\n",
 			temp->heredoc[i]);
 	clean_heredoc(stru);
-	if (isatty(pidfd) == 1)
-		close (pidfd);
+	if (pidfd >= 0)
+		close(pidfd);
 	exit (0);
 }
 
-int	parent_heredoc(pid_t pid, struct sigaction old_s, int fd, t_shell *sh)
+int	parent_heredoc(pid_t pid, struct sigaction old_s, int fd, t_shell *sh, int pidfd)
 {
 	int					exit_code;
 	int					status;
@@ -99,10 +97,11 @@ int	parent_heredoc(pid_t pid, struct sigaction old_s, int fd, t_shell *sh)
 	if ((WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 		|| (WIFEXITED(status) && exit_code == 130))
 	{
+		close(pidfd);
 		unlink(".files");
 		sh->last_status = 130;
 		write(1, "^C\n", 5);
-		close(0);
+		close_fds(0);
 		return (-1);
 	}
 	if (WIFEXITED(status) && exit_code == 0)
@@ -122,21 +121,23 @@ int	ft_setup_heredoc(t_cmd *commande, t_shell *stru)
 	int					fd;
 	struct sigaction	new_signale;
 	struct sigaction	old_signale;
+	int					pidfd;
 
 	fd = 0;
 	sigemptyset(&new_signale.sa_mask);
 	new_signale.sa_handler = SIG_IGN;
 	new_signale.sa_flags = 0;
 	sigaction(SIGINT, &new_signale, &old_signale);
+	pidfd = open(".files", O_CREAT | O_RDWR | O_TRUNC, 0600);
 	save_termios();
 	pid = fork();
 	if (pid == -1)
 		return (-1);
 	if (pid == 0)
-		ft_child_heredoc(commande, stru, 0);
+		ft_child_heredoc(commande, stru, 0, pidfd);
 	else if (pid > 0)
 	{
-		fd = parent_heredoc(pid, old_signale, 0, stru);
+		fd = parent_heredoc(pid, old_signale, 0, stru, pidfd);
 		if (fd == -1)
 			stru->last_status = 130;
 	}

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:56:23 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/15 13:48:06 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 18:33:05 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_tokens	*ft_test_stdout(t_cmd *cmd, t_tokens *p_temp)
 	if (ft_strncmp(p_a->str, ">", 2) == 0)
 	{
 		if (cmd->fd_out_put1 != -2)
-			close(cmd->fd_out_put1);
+			close_fds(&cmd->fd_out_put1);
 		if (p_a->next->str != NULL)
 			cmd->fd_out_put1 = open(p_a->next->str,
 					O_CREAT | O_WRONLY | O_TRUNC, 0644);
@@ -30,7 +30,7 @@ t_tokens	*ft_test_stdout(t_cmd *cmd, t_tokens *p_temp)
 	else if (ft_strncmp(p_a->str, ">>", 3) == 0)
 	{
 		if (cmd->fd_out_put2 != -2)
-			close(cmd->fd_out_put2);
+			close_fds(&cmd->fd_out_put2);
 		if (p_a->next->str != NULL)
 			cmd->fd_out_put2 = open(p_a->next->str, O_CREAT
 					| O_WRONLY | O_APPEND, 0644);
@@ -46,7 +46,7 @@ t_tokens	*ft_test_stdin(t_cmd *commande, t_tokens *p_actuel)
 
 	j = -2;
 	if (commande->fd_int_put != -2)
-		close(commande->fd_int_put);
+		close_fds(&commande->fd_int_put);
 	if (p_actuel->next->str != NULL)
 	{
 		j = access(p_actuel->next->str, F_OK);

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:56:23 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/15 12:26:05 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 18:45:41 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ void	bad_fork(t_pipes *pipes, t_shell *sh)
 	{
 		if (pipes->current->next)
 		{
-			close(pipes->fd[0]);
-			close(pipes->fd[1]);
+			close_fds(&pipes->fd[0]);
+			close_fds(&pipes->fd[1]);
 		}
 		if (pipes->prev_read != -1)
-			close(pipes->prev_read);
+			close_fds(&pipes->prev_read);
 		sh->last_status = 1;
 		return ;
 	}

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 11:25:27 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 18:08:26 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 18:51:12 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,22 +49,22 @@ static void	child_setup(t_pipes *pipes)
 		if (dup2(cmd->here, STDIN_FILENO) == -1)
 			_exit(1);
 		if (cmd->fd_int_put != -2)
-			close(cmd->here);
+			close_fds(&cmd->here);
 	}
 	if (pipes->prev_read != -1)
 	{
 		if (dup2(pipes->prev_read, STDIN_FILENO) == -1)
 			_exit(1);
-		close(pipes->prev_read);
+		close_fds(&pipes->prev_read);
 	}
 	if (cmd->next)
 	{
 		if (dup2(pipes->fd[1], STDOUT_FILENO) == -1)
 			_exit(1);
 		if (pipes->fd[0] != -1)
-			close(pipes->fd[0]);
+			close_fds(&pipes->fd[0]);
 		if (pipes->fd[1] != -1)
-			close(pipes->fd[1]);
+			close_fds(&pipes->fd[1]);
 	}
 }
 
@@ -100,10 +100,10 @@ void	parent_after_fork(t_pipes *pipes)
 {
 	pipes->n++;
 	if (pipes->prev_read != -1)
-		close(pipes->prev_read);
+		close_fds(&pipes->prev_read);
 	if (pipes->current->next)
 	{
-		close(pipes->fd[1]);
+		close_fds(&pipes->fd[1]);
 		pipes->prev_read = pipes->fd[0];
 	}
 	else
@@ -145,7 +145,7 @@ void	run_pipes(t_cmd *head, t_shell *sh)
 		if (pipes.current->next && pipe(pipes.fd) == -1)
 		{
 			if (pipes.prev_read != -1)
-				close (pipes.prev_read);
+				close_fds (&pipes.prev_read);
 			sh->last_status = 1;
 			break ;
 		}
@@ -156,7 +156,7 @@ void	run_pipes(t_cmd *head, t_shell *sh)
 		parent_after_fork(&pipes);
 	}
 	if (pipes.prev_read != -1)
-		close(pipes.prev_read);
+		close_fds(&pipes.prev_read);
 	wait_children(&pipes);
 	sh->last_status = pipes.last_status;
 }

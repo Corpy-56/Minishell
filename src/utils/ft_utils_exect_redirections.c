@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils_exect_redirections.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 17:01:11 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/15 18:45:11 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ int	ft_expand_heredoc(int fd, t_shell *stru, int new_fd)
 		line = get_next_line(fd);
 		if (line == NULL)
 		{
-			close(fd);
-			close(new_fd);
+			close_fds(&fd);
+			close_fds(&new_fd);
 			new_fd = open(".files_expand", O_CREAT | O_RDWR, 0600);
 			unlink(".files_expand");
 			return (new_fd);
@@ -83,7 +83,7 @@ int	ft_expand_heredoc(int fd, t_shell *stru, int new_fd)
 		free(temp);
 		free(line);
 	}
-	(close(new_fd), unlink(".files_expand"));
+	(close_fds(&new_fd), unlink(".files_expand"));
 	return (-1);
 }
 
@@ -92,31 +92,31 @@ void	apply_cmd_redirs_in_child(t_cmd *cmd, t_shell *shell)
 	if (cmd->here)
 	{
 		dup2(cmd->here, 0);
-		close(cmd->here);
+		close_fds(&cmd->here);
 		cmd->here = -1;
 	}
 	if (cmd->fd_int_put >= 0)
 	{
 		dup2(shell->dup_0, 0);
-		close(cmd->fd_int_put);
-		close(shell->dup_0);
+		close_fds(&cmd->fd_int_put);
+		close_fds(&shell->dup_0);
 		shell->dup_0 = -1;
 		cmd->fd_int_put = -1;
 	}
 	if (cmd->fd_out_put1 >= 0)
 	{
 		dup2(shell->dup_1, 1);
-		close(cmd->fd_out_put1);
-		close(shell->dup_1);
+		close_fds(&cmd->fd_out_put1);
+		close_fds(&shell->dup_1);
 		shell->dup_1 = -1;
-		//close(shell->dup_0);
+		//close_fds(shell->dup_0);
 		cmd->fd_out_put1 = -1;
 	}
 	if (cmd->fd_out_put2 >= 0)
 	{
 		dup2(shell->dup_1, 1);
-		close(cmd->fd_out_put2);
-	//	close(shell->dup_1);
+		close_fds(&cmd->fd_out_put2);
+	//	close_fds(shell->dup_1);
 		shell->dup_1 = -1;
 		cmd->fd_out_put2 = -1;
 	}

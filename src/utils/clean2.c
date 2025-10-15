@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 14:32:46 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 14:41:08 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/15 18:47:42 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	clean_heredoc(t_shell *stru)
 t_cmd	*ft_dup_out(t_cmd *head)
 {
 	dup2(head->fd_out_put1, STDOUT_FILENO);
-	close(head->fd_out_put1);
+	close_fds(&head->fd_out_put1);
 	//head->fd_out_put1 = -2;
 	return (head);
 }
@@ -42,13 +42,13 @@ int	ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru)
 	if (head->fd_out_put2 != -2 && head->here == -2)
 	{
 		dup2(head->fd_out_put2, STDOUT_FILENO);
-		close(head->fd_out_put2);
+		close_fds(&head->fd_out_put2);
 		// head->fd_out_put2 = -2;
 	}
 	if (head->fd_int_put != -2)
 	{
 		dup2(head->fd_int_put, STDIN_FILENO);
-		close(head->fd_int_put);
+		close_fds(&head->fd_int_put);
 		// head->fd_int_put = -2;
 	}
 	return (fd);
