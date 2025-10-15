@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 17:05:14 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/15 18:00:58 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,6 @@ static void	run_one_cmd(t_exec *exec, t_shell *stru)
 		return ;
 	if (is_builtin(exec->head))
 	{
-		//exec->fd_stdin = dup(STDIN_FILENO);
-		//exec->fd_stdout = dup(STDOUT_FILENO);
-		//ft_signal();
 		apply_cmd_redirs_in_child(exec->head, stru);
 		builtins = ft_exec_builtins(exec->head, stru, true);
 		stru->last_status = builtins;
