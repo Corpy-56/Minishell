@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/15 14:10:42 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 17:12:50 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,26 @@ int main(int argc, char **argv, char **env)
 	(void)argv;
 	ft_bzero(&stru, sizeof(stru));
 	init_shell(&stru, env);
-	// stru.environ = ft_duplicate_env(env, &stru);
 	update_shlvl(stru.environ, &stru);
 	save_termios1();
-	// init_shell(&stru);
 	ft_tty(&stru);
 	set_shell(&stru);
+	stru.dup_0 = 0;
 	while (!stru.should_exit)
 	{
 		ft_signal();
+		if (isatty(stru.dup_1) != 1 && stru.dup_1 == -1)
+			stru.dup_1 = dup(STDOUT_FILENO);
+		printf("%d\n", stru.dup_0);
+		if (isatty(stru.dup_0) != 1 && stru.dup_0 == -1)
+		{
+			printf("T\n");
+			fprintf(stderr, "dup_0 = %d, fd_int_put = %d\n", stru.dup_0, STDIN_FILENO);
+			stru.dup_0 = dup(0);//stdin est ferme
+			fprintf(stderr, "dup_0 = %d, fd_int_put = %d\n", stru.dup_0, STDIN_FILENO);
+		}
+		//if (isatty(stru.dup_1) != 1)
+		//	stru.dup_1 = dup(STDOUT_FILENO);
 		rl = readline("\033[32mMinishell : \033[0m");
 		if (!rl)
 		{
@@ -81,6 +92,7 @@ int main(int argc, char **argv, char **env)
 				break ;
 			}
 		}
+		//printf("D\n");
 		clean_cmd(&stru);
 	}
 	status = stru.last_status;

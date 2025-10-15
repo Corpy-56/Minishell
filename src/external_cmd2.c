@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_cmd2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/15 14:14:56 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 14:55:00 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,13 @@ static void	run_child(t_cmd *cmd, t_shell *stru, int f)
 		close(f);
 		f = -1;
 	}
-	apply_cmd_redirs_in_child(cmd);
+	//apply_cmd_redirs_in_child(cmd, stru);
+	if (cmd->fd_out_put1 != -2)
+		close(cmd->fd_out_put1);
+	if(cmd->fd_out_put2 != -2)
+		close(cmd->fd_out_put2);
+	if (cmd->fd_int_put != -2)
+		close(cmd->fd_int_put);
 	exec_external(cmd, stru);
 	clean_children(stru);
 	_exit(stru->last_status);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 16:37:09 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 13:59:34 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 16:15:36 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ void	ft_initialization_commande(t_cmd *commande)
 	commande->next = NULL;
 	commande->fd_out_put1 = -2;
 	commande->fd_out_put2 = -2;
-	commande->fd_dup_0 = dup(STDIN_FILENO);
-	if (commande->fd_dup_0 == -1)
-	{
-		printf("A");
-		commande->fd_dup_0 = 0;
-	}
+	//commande->fd_dup_0 = dup(STDIN_FILENO);
+	//if (commande->fd_dup_0 == -1)
+	//{
+	//	printf("A");
+	//	commande->fd_dup_0 = 0;
+	//}
 	commande->next = NULL;
 	return ;
 }

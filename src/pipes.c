@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 11:25:27 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 13:52:58 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 14:36:44 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	child_exec(t_pipes *pipes, t_shell *stru)
 		clean_children(stru);
 		_exit(1);
 	}
-	apply_cmd_redirs_in_child(cmd);
+	apply_cmd_redirs_in_child(cmd, stru);
 	if (is_builtin(cmd))
 	{
 		pipes->builtins = ft_exec_builtins(cmd, stru, false);

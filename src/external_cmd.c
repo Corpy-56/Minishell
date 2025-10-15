@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/15 14:15:10 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 14:52:09 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,13 +100,13 @@ int	collect_status(pid_t pid, t_shell *stru)
 {
 	int	status;
 
-	//(void)stru;
+	(void)stru;
 	status = 0;
 	waitpid(pid, &status, 0);
-	if ((WIFSIGNALED(status) && WTERMSIG(status) == SIGINT))
-	{
-		if (stru != NULL && stru->exec != NULL && stru->exec->head != NULL)
-			apply_cmd_redirs_in_child(stru->exec->head);
-	}
+	//if ((WIFSIGNALED(status) && WTERMSIG(status) == SIGINT))
+	//{
+	//	if (stru != NULL && stru->exec != NULL && stru->exec->head != NULL)
+	//		apply_cmd_redirs_in_child(stru->exec->head, stru);
+	//}
 	return (status);
 }

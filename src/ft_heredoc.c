@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_heredoc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/15 11:48:09 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/15 16:32:58 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int	parent_heredoc(pid_t pid, struct sigaction old_s, int fd, t_shell *sh)
 	{
 		unlink(".files");
 		sh->last_status = 130;
-		write(1, "\n^C\n", 5);
+		write(1, "^C\n", 5);
 		close(0);
 		return (-1);
 	}
