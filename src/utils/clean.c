@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 14:32:46 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/16 16:21:47 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/16 19:43:51 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	clean_all(t_shell *stru)
 		free_env(&stru->local);
 		stru->local = NULL;
 	}
-	if (stru->dup_0 >= 0) // akjout
+	if (stru->dup_0 >= 0)
 		close (stru->dup_0);
 	clean_gnl();
 	clear_history();

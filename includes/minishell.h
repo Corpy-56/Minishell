@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/16 16:22:19 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/16 20:39:12 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 # include <signal.h>
 # include <sys/wait.h>
 # include <errno.h>
-# include <termios.h>
 
 # define MINISHELL "\001\033[1;32m\002Minishell : \001\033[0m\002"
 
@@ -85,8 +84,6 @@ void		handle_exec_error(t_ext *ext, t_shell *stru, int error);
 void		exec_external(t_cmd *cmd, t_shell *stru);
 int			collect_status(pid_t pid, t_shell *stru);
 int			run_external(t_cmd *cmd, t_shell *stru, int f);
-void		save_termios1(void);
-void		restore_termios1(void);
 
 /* ********* exec ********* */
 int			count_maillons(t_cmd *cmd);
@@ -96,7 +93,7 @@ void		ft_first_ft_redirections2(t_cmd *head);
 
 /* ********* ft_heredocs ********* */
 int			ft_setup_heredoc(t_cmd *commande, t_shell *stru);
-void		ft_child_heredoc(t_cmd *commande, t_shell *stru, int j);
+void		ft_child_heredoc(t_cmd *commande, t_shell *stru, int j, int i);
 int			ft_heredoc(t_cmd *commande, int pidfd, int i, char *line);
 void		signal_handler(int signum, siginfo_t *info, void *context);
 
@@ -105,11 +102,6 @@ void		ft_signal(void);
 void		signal_handler1(int signum);
 void		set_shell(t_shell *shell);
 void		ft_ignore_signal(void);
-
-/* ********* hide signals ********* */
-void		restore_termios(void);
-void		save_termios(void);
-void		disable_echoctl(void);
 
 /* ********* fields_splitting ********* */
 size_t		count_fields(const char *str, const char *ifs);
@@ -230,7 +222,7 @@ void		init_exec(t_exec *exec, t_shell *stru);
 void		init_cd(t_cd *cd, t_shell *stru);
 void		init_ext(t_ext *ext, t_cmd *cmd);
 void		init_expand(t_expand *exp, t_tokens *tk, size_t i);
-void		init_shell(t_shell *stru, char **env);
+void		init_shell(t_shell *stru, char **env, int argc, char **argv);
 void		init_export(t_export *exp, t_env **env, t_env **local);
 
 /* ********* utils tokenisations ********* */
@@ -238,9 +230,12 @@ void		ft_test_minishell(t_tokens *a_debut);
 int			ft_init_tokenisation(char *rl, int i);
 
 void		close_fds(int *fd);
-void 	minishell_exit(t_shell *s, t_exec *e, int status);
-void	ft_fd_test(void);
-void	close_fd(t_cmd *cmd);
+void		minishell_exit(t_shell *s, t_exec *e, int status);
+void		ft_fd_test(void);
+void		close_fd(t_cmd *cmd);
 
+/* ********* utils pipes ********* */
+int			ft_dup_stdin(t_cmd *cmd);
+t_cmd		*child_exec_setup(t_pipes *pipes);
 
 #endif

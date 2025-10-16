@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:01:37 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 18:31:43 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/16 19:46:21 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,5 @@ int	ft_exit(t_shell *stru, char **args, bool cmd_seule)
 	if (stru->last_status < 0)
 		stru->last_status += 256;
 	exit_fin(stru, cmd_seule);
-	// minishell_exit(stru, stru->exec, 0);
 	return (stru->last_status);
 }

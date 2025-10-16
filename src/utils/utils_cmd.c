@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 16:59:00 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/14 18:40:02 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/16 18:55:13 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_cmd	*suppr_empty_cmd(t_cmd *head)
 	current = head;
 	while (current)
 	{
-		if (current->cmd == NULL)
+		if (current == NULL)
 		{
 			next = current->next;
 			if (prev)

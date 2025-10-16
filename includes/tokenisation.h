@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 19:21:03 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/16 20:38:52 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define TOKENISATION_H
 
 # include <signal.h>
-# include <termios.h>
 
 typedef struct s_redir
 {
