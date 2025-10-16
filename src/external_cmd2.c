@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/15 18:35:46 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/16 16:11:13 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ static void	run_child(t_cmd *cmd, t_shell *stru, int f)
 	if (cmd->fd_int_put != -2)
 		close_fds(&cmd->fd_int_put);
 	// apply_cmd_redirs_in_child(cmd);
+	// close_fd(cmd); ajout amandine recent
 	exec_external(cmd, stru);
 	clean_children(stru);
 	_exit(stru->last_status);
@@ -105,6 +106,8 @@ int	run_external(t_cmd *cmd, t_shell *stru, int f)
 	if (pid == 0)
 		run_child(cmd, stru, f);
 	status = collect_status(pid, stru);
+	if (cmd->heredoc != NULL && f >= 0) //amandine
+		close_fds(&f);
 	restore_termios1();
 	ft_signal();
 	return (status);

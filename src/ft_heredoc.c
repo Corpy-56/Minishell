@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/15 19:47:41 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/16 16:08:30 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,23 @@ int	ft_heredoc(t_cmd *commande, int pidfd, int i, char *line)
 
 void	signal_handler(int signum, siginfo_t *info, void *context)
 {
-	//int		j;
 	t_shell	*shell;
 
 	shell = NULL;
 	(void)signum;
 	(void)info;
 	(void)context;
-	// j = access(".files", F_OK);
-	// if (j == 0)
-	// 	unlink(".files");
 	shell = static_struct(shell);
 	clean_heredoc(shell);
-	close_fds(0);
+	if (shell->fd >= 0)
+		close(shell->fd);
+	if (shell->dup_0 >= 0)
+		close(shell->dup_0);
+	// close_fds(0);
 	exit(130);
 }
 
-void	ft_child_heredoc(t_cmd *commande, t_shell *stru, int j, int pidfd)
+void	ft_child_heredoc(t_cmd *commande, t_shell *stru, int j)
 {
 	struct sigaction	signale;
 	t_cmd				*temp;
@@ -68,24 +68,26 @@ void	ft_child_heredoc(t_cmd *commande, t_shell *stru, int j, int pidfd)
 		i++;
 	i--;
 	disable_echoctl();
-	if (pidfd == -1)
+	if (stru->fd == -1)
 		exit (0);
 	signal(SIGQUIT, SIG_IGN);
 	signale.sa_sigaction = signal_handler;
 	sigemptyset(&signale.sa_mask);
 	signale.sa_flags = 0;
 	sigaction(SIGINT, &signale, NULL);
-	j = ft_heredoc(commande, pidfd, 0, NULL);
+	j = ft_heredoc(commande, stru->fd, 0, NULL);
 	if (j == -1)
 		printf("warning: here-document delimited by end-of-file (wanted `%s')\n",
 			temp->heredoc[i]);
 	clean_heredoc(stru);
-	if (pidfd >= 0)
-		close(pidfd);
+	if (stru->fd >= 0)
+		close(stru->fd);	
+	if (stru->dup_0 >= 0)
+		close (stru->dup_0);
 	exit (0);
 }
 
-int	parent_heredoc(pid_t pid, struct sigaction old_s, int fd, t_shell *sh, int pidfd)
+int	parent_heredoc(pid_t pid, struct sigaction old_s, int fds, t_shell *sh)
 {
 	int					exit_code;
 	int					status;
@@ -93,22 +95,24 @@ int	parent_heredoc(pid_t pid, struct sigaction old_s, int fd, t_shell *sh, int p
 	waitpid(pid, &status, 0);
 	restore_termios();
 	sigaction(SIGINT, &old_s, NULL);
+	if (sh->fd >= 0)  // ajoute
+		close(sh->fd); // ajoute
 	exit_code = WEXITSTATUS(status);
 	if ((WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 		|| (WIFEXITED(status) && exit_code == 130))
 	{
-		close(pidfd);
+		// close(sh->fd); pas chez amandine
 		unlink(".files");
 		sh->last_status = 130;
 		write(1, "^C\n", 5);
-		close_fds(0);
+	//	close_fds(0);
 		return (-1);
 	}
 	if (WIFEXITED(status) && exit_code == 0)
 	{
-		fd = open(".files", O_RDONLY);
+		fds = open(".files", O_RDONLY);
 		unlink(".files");
-		return (fd);
+		return (fds);
 	}
 	unlink(".files");
 	sh->last_status = 1;
@@ -121,23 +125,22 @@ int	ft_setup_heredoc(t_cmd *commande, t_shell *stru)
 	int					fd;
 	struct sigaction	new_signale;
 	struct sigaction	old_signale;
-	int					pidfd;
 
 	fd = 0;
 	sigemptyset(&new_signale.sa_mask);
 	new_signale.sa_handler = SIG_IGN;
 	new_signale.sa_flags = 0;
 	sigaction(SIGINT, &new_signale, &old_signale);
-	pidfd = open(".files", O_CREAT | O_RDWR | O_TRUNC, 0600);
+	stru->fd = open(".files", O_CREAT | O_RDWR | O_TRUNC, 0600);
 	save_termios();
 	pid = fork();
 	if (pid == -1)
 		return (-1);
 	if (pid == 0)
-		ft_child_heredoc(commande, stru, 0, pidfd);
+		ft_child_heredoc(commande, stru, 0);
 	else if (pid > 0)
 	{
-		fd = parent_heredoc(pid, old_signale, 0, stru, pidfd);
+		fd = parent_heredoc(pid, old_signale, 0, stru);
 		if (fd == -1)
 			stru->last_status = 130;
 	}

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 19:43:46 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/16 16:18:23 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,6 @@ int	ft_expand_heredoc(int fd, t_shell *stru, int new_fd)
 			write(new_fd, "\n", 1);
 		free(temp);
 		free(line);
-		(close_fds(&new_fd), unlink(".files_expand"));
-
 	}
 	(close_fds(&new_fd), unlink(".files_expand"));
 	return (-1);
@@ -101,7 +99,7 @@ void	apply_cmd_redirs_in_child(t_cmd *cmd, t_shell *shell)
 	{
 		dup2(shell->dup_0, 0);
 		close_fds(&cmd->fd_int_put);
-		close_fds(&shell->dup_0);
+		close(shell->dup_0);
 		shell->dup_0 = -1;
 		cmd->fd_int_put = -1;
 	}
@@ -109,17 +107,16 @@ void	apply_cmd_redirs_in_child(t_cmd *cmd, t_shell *shell)
 	{
 		dup2(shell->dup_1, 1);
 		close_fds(&cmd->fd_out_put1);
-		close_fds(&shell->dup_1);
+		close(shell->dup_1);
 		shell->dup_1 = -1;
-		//close_fds(shell->dup_0);
 		cmd->fd_out_put1 = -1;
 	}
 	if (cmd->fd_out_put2 >= 0)
 	{
 		dup2(shell->dup_1, 1);
 		close_fds(&cmd->fd_out_put2);
-	//	close_fds(shell->dup_1);
 		shell->dup_1 = -1;
 		cmd->fd_out_put2 = -1;
 	}
 }
+

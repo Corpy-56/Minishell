@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 12:32:05 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/13 10:30:58 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/16 16:14:17 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,11 @@ void	parse_args(char *args, char **name, char **value)
 	{
 		*name = ft_substr(args, 0, pos);
 		*value = ft_strdup(args + pos + 1);
-		printf("Name: %s, Value: %s\n", *name, *value);
 	}
 	else
 	{
 		*name = ft_strdup(args);
 		*value = NULL;
-		printf("Name: %s, Value: NULL\n", *name);
 	}
 }
 

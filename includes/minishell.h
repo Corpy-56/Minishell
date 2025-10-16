@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 19:46:27 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/16 16:22:19 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void		ft_first_ft_redirections2(t_cmd *head);
 
 /* ********* ft_heredocs ********* */
 int			ft_setup_heredoc(t_cmd *commande, t_shell *stru);
-void		ft_child_heredoc(t_cmd *commande, t_shell *stru, int j, int pidfd);
+void		ft_child_heredoc(t_cmd *commande, t_shell *stru, int j);
 int			ft_heredoc(t_cmd *commande, int pidfd, int i, char *line);
 void		signal_handler(int signum, siginfo_t *info, void *context);
 
@@ -238,7 +238,9 @@ void		ft_test_minishell(t_tokens *a_debut);
 int			ft_init_tokenisation(char *rl, int i);
 
 void		close_fds(int *fd);
-void minishell_exit(t_shell *s, t_exec *e, int status);
+void 	minishell_exit(t_shell *s, t_exec *e, int status);
+void	ft_fd_test(void);
+void	close_fd(t_cmd *cmd);
 
 
 #endif

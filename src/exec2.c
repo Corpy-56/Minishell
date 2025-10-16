@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 18:35:15 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/16 14:21:35 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_cmd	*ft_test_heredoc_pipes(t_cmd *cmds, t_shell *sh)
 		{
 			p_actuel->here = ft_setup_heredoc(p_actuel, sh);
 			if (p_actuel->here == -1)
-				return (cmds);
+				return (NULL);
 			p_actuel->here = ft_expand_heredoc(p_actuel->here, sh, 0);
 		}
 		p_actuel = p_actuel->next;
