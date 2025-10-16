@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 11:25:27 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/16 16:56:52 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/16 18:05:08 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,6 @@ void	child_setup(t_pipes *pipes)
 	t_cmd	*cmd;
 
 	cmd = pipes->current;
-	// if (cmd->here != -2)
-	// {
-	// 	if (dup2(cmd->here, STDIN_FILENO) == -1)
-	// 		_exit(1);
-	// 	// if (cmd->fd_int_put != -2) // a voir
-	// 	// 	close_fds(&cmd->here);
-	// }
 	if (pipes->prev_read != -1)
 	{
 		if (dup2(pipes->prev_read, STDIN_FILENO) == -1)
@@ -60,6 +53,8 @@ void	child_exec(t_pipes *pipes, t_shell *stru)
 {
 	t_cmd	*cmd;
 
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	cmd = pipes->current;
 	child_setup(pipes);
 	cmd->here = ft_first_ft_redirections(cmd, cmd->here, stru);

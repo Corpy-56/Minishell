@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:50:15 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/16 12:40:55 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/16 18:06:47 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	init_shell(t_shell *stru, char **env)
 	stru->commande = NULL;
 	stru->fd = -2;
 	update_shlvl(stru->environ, stru);
-	save_termios1();
+	// save_termios1();
 	ft_tty(stru);
 	set_shell(stru);
 	static_struct(stru);

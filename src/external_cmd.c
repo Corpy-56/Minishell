@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/15 18:00:17 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/16 18:03:14 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,6 @@ void	exec_external(t_cmd *cmd, t_shell *stru)
 		ft_putstr_fd("No envp\n", 2);
 		_exit (1);
 	}
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_IGN);
 	if (execve(ext.chosen_path, ext.argv, ext.envp) == -1)
 		handle_exec_error(&ext, stru, errno);
 }

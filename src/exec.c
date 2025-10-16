@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/16 16:12:49 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/16 18:14:09 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,10 @@ void	status_signals(t_shell *stru, int status)
 		{
 			apply_cmd_redirs_in_child(stru->commande, stru);
 			end_of_line_restore(&stru->dup_0, &stru->dup_1);
-			write(1, "^C\n", 3);
 		}
+		write(1, "\n", 1);
 	}
-	ft_signal();
+	// ft_signal();
 	stru->last_status = extract_exit_status(status);
 }
 

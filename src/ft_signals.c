@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/16 12:15:56 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/16 18:14:40 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	signal_handler1(int signum)
 	rl_on_new_line();
 	rl_redisplay();
 	shell = static_struct(shell);
-	clean_all(shell);
+	// clean_all(shell);
 }
 
 void	ft_signal(void)
