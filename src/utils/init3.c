@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:50:15 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/16 18:06:47 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/16 19:27:56 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,12 @@ void	init_export(t_export *exp, t_env **env, t_env **local)
 {
 	exp->env = env;
 	exp->local = local;
+}
+
+void	init_unset(t_unset *u, t_shell *stru, char *var)
+{
+	u->prev = NULL;
+	u->node = stru->environ;
+	u->next = NULL;
+	u->size_var = ft_strlen(var);
 }

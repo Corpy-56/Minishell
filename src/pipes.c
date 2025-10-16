@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 11:25:27 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/16 18:05:08 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/16 19:52:15 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,14 @@ void	child_exec(t_pipes *pipes, t_shell *stru)
 	cmd->here = ft_first_ft_redirections(cmd, cmd->here, stru);
 	if (cmd->here == -1)
 	{
-		clean_children(stru);
 		apply_cmd_redirs_in_child(cmd, stru);
+		// clean_children(stru);
 		_exit(1);
 	}
 	if (is_builtin(cmd))
 	{
 		pipes->builtins = ft_exec_builtins(cmd, stru, false);
-		clean_children(stru);
+		// clean_children(stru);
 		apply_cmd_redirs_in_child(cmd, stru);
 		_exit(pipes->builtins);
 	}
@@ -75,8 +75,8 @@ void	child_exec(t_pipes *pipes, t_shell *stru)
 	{
 	//	close_fd(cmd);
 		exec_external(cmd, stru);
-		clean_children(stru);
 		apply_cmd_redirs_in_child(cmd, stru); // ajoute
+		// clean_children(stru);
 		_exit(127);
 	}
 	apply_cmd_redirs_in_child(cmd, stru); // ajoute
@@ -99,7 +99,7 @@ void	parent_after_fork(t_pipes *pipes)
 	pipes->current = pipes->current->next;
 }
 
-void	wait_children(t_pipes *pipes)
+static void	wait_children(t_pipes *pipes, t_shell *sh)
 {
 	pipes->i = 0;
 	pipes->status = 0;
@@ -119,6 +119,7 @@ void	wait_children(t_pipes *pipes)
 			printf("\n");
 		pipes->i++;
 	}
+	clean_children(sh);
 }
 
 void	run_pipes(t_cmd *head, t_shell *sh)
@@ -149,7 +150,7 @@ void	run_pipes(t_cmd *head, t_shell *sh)
 	}
 	if (pipes.prev_read != -1)
 		close_fds(&pipes.prev_read);
-	wait_children(&pipes);
+	wait_children(&pipes, sh);
 	sh->last_status = pipes.last_status;
 }
 

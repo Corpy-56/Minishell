@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenisation.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 19:21:03 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/16 19:25:59 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,15 @@ typedef struct s_export
 	t_env			**env;
 	t_env			**local;
 }					t_export;
+
+typedef struct s_unset
+{
+	t_env			*prev;
+	t_env			*node;
+	t_env			*next;
+	int				size_var;
+}					t_unset;
+
 
 typedef struct s_shell
 {

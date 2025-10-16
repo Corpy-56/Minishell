@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/16 18:14:09 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/16 20:21:12 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,22 @@ void	reconstruct_path_dirs(t_shell *stru)
 			stru->path_dirs = ft_split(path_val, ':');
 	}
 }
+
+// void	reconstruct_path_dirs(t_shell *stru)
+// {
+// 	char	*path_val;
+
+// 	path_val = NULL;
+// 	if (stru->path_dirs)
+// 	{
+// 		free_doublechar(stru->path_dirs);
+// 		stru->path_dirs = NULL;
+// 	}
+// 	path_val = get_env_value(stru->environ, "PATH");
+// 	if (!path_val || *path_val == '\0')
+// 		return ;
+// 	stru->path_dirs = ft_split(path_val, ':');
+// }
 
 void	end_of_line_restore(int *saved_in, int *saved_out)
 {

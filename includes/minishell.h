@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/16 16:22:19 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/16 20:11:57 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,6 +232,8 @@ void		init_ext(t_ext *ext, t_cmd *cmd);
 void		init_expand(t_expand *exp, t_tokens *tk, size_t i);
 void		init_shell(t_shell *stru, char **env);
 void		init_export(t_export *exp, t_env **env, t_env **local);
+void		init_unset(t_unset *u, t_shell *stru, char *var);
+
 
 /* ********* utils tokenisations ********* */
 void		ft_test_minishell(t_tokens *a_debut);

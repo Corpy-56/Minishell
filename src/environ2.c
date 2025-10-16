@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:52:31 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/15 11:41:40 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/16 20:12:11 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static void	update_env3(t_env **head, t_env *new, char *name, t_shell *stru)
 		stru->path_node = new;
 		if (stru->path_dirs)
 			free_doublechar(stru->path_dirs);
-		if (new->value)
+		if (new->value && new->value[0] != '\0')
 			stru->path_dirs = ft_split(new->value, ':');
 		else
 			stru->path_dirs = NULL;
