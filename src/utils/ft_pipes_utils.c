@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 11:25:27 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/16 20:12:17 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/17 11:34:35 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	child_setup(t_pipes *pipes)
 			close_fds(&pipes->fd[1]);
 	}
 	if (cmd->here != -2 || cmd->fd_int_put != -2)
-		ft_dup_stdin(cmd);
+		i = ft_dup_stdin(cmd);
 	if (i == -1)
 		_exit(1);
 }

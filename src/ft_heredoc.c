@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/16 20:24:26 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/17 11:37:10 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,10 +93,10 @@ int	parent_heredoc(pid_t pid, struct sigaction old_s, int fds, t_shell *sh)
 	if (sh->fd >= 0)
 		close(sh->fd);
 	exit_code = WEXITSTATUS(status);
-	unlink(".files");
 	if ((WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 		|| (WIFEXITED(status) && exit_code == 130))
 	{
+		unlink(".files");
 		sh->last_status = 130;
 		write(1, "\n", 1);
 		return (-1);
@@ -105,9 +105,9 @@ int	parent_heredoc(pid_t pid, struct sigaction old_s, int fds, t_shell *sh)
 	{
 		fds = open(".files", O_RDONLY);
 		unlink(".files");
-		write(1, "\n", 1);
 		return (fds);
 	}
+	unlink(".files");
 	sh->last_status = 1;
 	return (-1);
 }
