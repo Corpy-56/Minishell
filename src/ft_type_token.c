@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:56:23 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/16 16:04:04 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 11:29:22 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,28 +131,25 @@ t_tokens	*ft_type_token_2(t_tokens *p_actuel, t_cmd *comm, t_shell *stru)
 
 t_cmd	*ft_type_token(t_cmd *commande, t_tokens *b_debut, t_shell *stru)
 {
-	t_tokens	*p_actuel;
-	int			i;
+	t_type	t;
 
-	auto t_cmd * a_debut = NULL, *fin = NULL;
-	i = 0;
-	p_actuel = b_debut;
-	while (p_actuel)
+	init_type(&t, b_debut);
+	while (t.p_actuel)
 	{
-		if (i == 0 || ft_strncmp(p_actuel->str, "|", 2) == 0)
+		if (t.i == 0 || ft_strncmp(t.p_actuel->str, "|", 2) == 0)
 		{
 			commande = ft_creat_token2();
-			if (a_debut == NULL)
-				a_debut = commande;
+			if (t.a_debut == NULL)
+				t.a_debut = commande;
 			else
-				fin->next = commande;
-			fin = commande;
-			i++;
+				t.fin->next = commande;
+			t.fin = commande;
+			t.i++;
 		}
-		p_actuel = ft_type_token_2(p_actuel, commande, stru);
-		p_actuel = p_actuel->next;
+		t.p_actuel = ft_type_token_2(t.p_actuel, commande, stru);
+		t.p_actuel = t.p_actuel->next;
 	}
-	commande = a_debut;
+	commande = t.a_debut;
 	commande = ft_test_no_errors(commande);
 	return (commande);
 }

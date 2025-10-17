@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/16 18:17:52 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 14:42:02 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	run_child(t_cmd *cmd, t_shell *stru, int f)
 	//apply_cmd_redirs_in_child(cmd, stru);
 	if (cmd->fd_out_put1 != -2)
 		close_fds(&cmd->fd_out_put1);
-	if(cmd->fd_out_put2 != -2)
+	if	(cmd->fd_out_put2 != -2)
 		close_fds(&cmd->fd_out_put2);
 	if (cmd->fd_int_put != -2)
 		close_fds(&cmd->fd_int_put);

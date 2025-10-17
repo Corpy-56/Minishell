@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:52:31 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/16 20:12:25 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 15:23:13 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,31 +42,30 @@ t_env	*create_env_node(char *str)
 
 t_env	*ft_duplicate_env(char **env, t_shell *stru)
 {
-	int	i;
+	t_dupenv	d;
 
-	auto t_env * fin = NULL, *a_debut = NULL, *new;
-	i = 0;
+	init_dupenv(&d);
 	stru->path_node = NULL;
 	stru->path_dirs = NULL;
-	while (env[i])
+	while (env[d.i])
 	{
-		new = create_env_node(env[i]);
-		if (!new)
+		d.new = create_env_node(env[d.i]);
+		if (!d.new)
 			return (NULL);
-		if (a_debut == NULL)
-			a_debut = new;
+		if (d.a_debut == NULL)
+			d.a_debut = d.new;
 		else
-			fin->next = new;
-		fin = new;
+			d.fin->next = d.new;
+		d.fin = d.new;
 		if (stru->path_node == NULL
-			&& ft_strncmp(new->name, "PATH", 5) == 0 && new->value != NULL )
+			&& ft_strncmp(d.new->name, "PATH", 5) == 0 && d.new->value != NULL )
 		{
-			stru->path_node = new;
-			stru->path_dirs = ft_split(new->value, ':');
+			stru->path_node = d.new;
+			stru->path_dirs = ft_split(d.new->value, ':');
 		}
-		i++;
+		d.i++;
 	}
-	return (a_debut);
+	return (d.a_debut);
 }
 
 void	update_shlvl(t_env *env, t_shell *stru)

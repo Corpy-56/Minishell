@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 14:32:46 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/16 16:21:47 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 16:33:01 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@ void	clean_cmd(t_shell *stru)
 	{
 		free_tokens(stru->tokens);
 		stru->tokens = NULL;
+	}
+	if (stru->exec)
+	{
+		free(stru->exec);
+		stru->exec = NULL;
 	}
 	if (stru->path_dirs)
 	{
@@ -47,7 +52,7 @@ void	clean_all(t_shell *stru)
 		free_env(&stru->local);
 		stru->local = NULL;
 	}
-	if (stru->dup_0 >= 0) // akjout
+	if (stru->dup_0 >= 0)
 		close (stru->dup_0);
 	clean_gnl();
 	clear_history();
@@ -72,7 +77,7 @@ void	clean_env(t_shell *stru)
 void	clean_children(t_shell *stru)
 {
 	if (!stru)
-		return ;
+		_exit(1);
 	if (stru->commande)
 	{
 		free_cmds(stru->commande);
@@ -90,6 +95,27 @@ void	clean_children(t_shell *stru)
 	}
 	stru->path_node = NULL;
 	clean_env(stru);
+}
+
+void	clean_after_parent(t_shell *stru)
+{
+	if (!stru)
+		return ;
+	if (stru->commande)
+	{
+		free_cmds(stru->commande);
+		stru->commande = NULL;
+	}
+	if (stru->tokens)
+	{
+		free_tokens(stru->tokens);
+		stru->tokens = NULL;
+	}
+	if (stru->path_dirs)
+	{
+		free_doublechar(stru->path_dirs);
+		stru->path_dirs = NULL;
+	}
 }
 
 void	clean_gnl(void)

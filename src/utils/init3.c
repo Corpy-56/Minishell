@@ -6,22 +6,23 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:50:15 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/16 19:27:56 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 16:04:20 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	init_shell(t_shell *stru, char **env)
+void	init_shell(t_shell *stru, char **env, int argc, char **argv)
 {
+	(void)argc;
+	(void)argv;
 	stru->should_exit = 0;
-	stru->hdc_interrupted = 0;
 	stru->environ = ft_duplicate_env(env, stru);
 	stru->tokens = NULL;
 	stru->commande = NULL;
 	stru->fd = -2;
+	stru->dup_0 = dup(0);
 	update_shlvl(stru->environ, stru);
-	// save_termios1();
 	ft_tty(stru);
 	set_shell(stru);
 	static_struct(stru);
@@ -39,4 +40,21 @@ void	init_unset(t_unset *u, t_shell *stru, char *var)
 	u->node = stru->environ;
 	u->next = NULL;
 	u->size_var = ft_strlen(var);
+}
+
+void	init_type(t_type *t, t_tokens *b_debut)
+{
+	t->a_debut = NULL;
+	t->fin = NULL;
+	t->i = 0;
+	t->p_actuel = b_debut;
+}
+
+void	init_dupenv(t_dupenv *d)
+{
+
+	d->a_debut = NULL;
+	d->fin = NULL;
+	d->new = NULL;
+	d->i = 0;
 }

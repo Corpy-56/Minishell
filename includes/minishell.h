@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/16 20:11:57 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 16:34:28 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void		ft_first_ft_redirections2(t_cmd *head);
 
 /* ********* ft_heredocs ********* */
 int			ft_setup_heredoc(t_cmd *commande, t_shell *stru);
-void		ft_child_heredoc(t_cmd *commande, t_shell *stru, int j);
+void		ft_child_heredoc(t_cmd *commande, t_shell *stru, int j, int i);
 int			ft_heredoc(t_cmd *commande, int pidfd, int i, char *line);
 void		signal_handler(int signum, siginfo_t *info, void *context);
 
@@ -206,6 +206,8 @@ void		clean_children(t_shell *stru);
 void		clean_gnl(void);
 void		clean_heredoc(t_shell *stru);
 void		clean_env(t_shell *stru);
+void		clean_after_parent(t_shell *stru);
+
 
 /* ********* error msg ********* */
 void		err_msg_cmd(char **argv, t_shell *stru);
@@ -230,9 +232,11 @@ void		init_exec(t_exec *exec, t_shell *stru);
 void		init_cd(t_cd *cd, t_shell *stru);
 void		init_ext(t_ext *ext, t_cmd *cmd);
 void		init_expand(t_expand *exp, t_tokens *tk, size_t i);
-void		init_shell(t_shell *stru, char **env);
+void		init_shell(t_shell *stru, char **env, int argc, char **argv);
 void		init_export(t_export *exp, t_env **env, t_env **local);
 void		init_unset(t_unset *u, t_shell *stru, char *var);
+void		init_type(t_type *t, t_tokens *b_debut);
+void		init_dupenv(t_dupenv *d);
 
 
 /* ********* utils tokenisations ********* */
@@ -240,9 +244,12 @@ void		ft_test_minishell(t_tokens *a_debut);
 int			ft_init_tokenisation(char *rl, int i);
 
 void		close_fds(int *fd);
-void 	minishell_exit(t_shell *s, t_exec *e, int status);
-void	ft_fd_test(void);
-void	close_fd(t_cmd *cmd);
+void		minishell_exit(t_shell *s, t_exec *e, int status);
+void		ft_fd_test(void);
+void		close_fd(t_cmd *cmd);
 
+/* ********* utils pipes ********* */
+int			ft_dup_stdin(t_cmd *cmd);
+t_cmd		*child_exec_setup(t_pipes *pipes);
 
 #endif

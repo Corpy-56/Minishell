@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/16 19:25:59 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 16:50:09 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,6 @@
 # include <signal.h>
 # include <termios.h>
 
-typedef struct s_redir
-{
-	int				type;
-	char			*target;
-	struct s_redir	*next;
-}					t_redir;
-
 typedef struct s_cmd
 {
 	char			*cmd;
@@ -31,7 +24,6 @@ typedef struct s_cmd
 	int				fd_out_put2;
 	int				fd_int_put;
 	char			**heredoc;
-	t_redir			*redirs;
 	int				is_builtin;
 	int				here;
 	int				fd_dup_0;
@@ -57,16 +49,6 @@ typedef struct s_tokens
 	int				type_i;
 	struct s_tokens	*next;	
 }					t_tokens;
-
-typedef struct s_fd
-{
-	int				fd;
-	int				fd_out;
-	int				fd_in;
-	int				fd_out_put1;
-	int				fd_out_put2;
-	int				fd_int_put;
-}					t_fd;
 
 typedef struct s_split
 {
@@ -171,6 +153,22 @@ typedef struct s_unset
 	t_env			*next;
 	int				size_var;
 }					t_unset;
+
+typedef struct s_type
+{
+	t_tokens		*p_actuel;
+	t_cmd			*a_debut;
+	t_cmd			*fin;
+	int				i;
+}					t_type;
+
+typedef struct s_dupenv
+{
+	int				i;
+	t_env			*fin;
+	t_env			*a_debut;
+	t_env			*new;
+}					t_dupenv;
 
 
 typedef struct s_shell

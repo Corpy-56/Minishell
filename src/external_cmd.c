@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/16 18:03:14 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 16:34:41 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	handle_exec_error(t_ext *ext, t_shell *stru, int error)
 	free_doublechar(ext->envp);
 	if (ext->chosen_path != ext->argv[0])
 		free(ext->chosen_path);
-	clean_children(stru);
+	clean_after_parent(stru);
 	if (error == ENOENT)
 		_exit(127);
 	else

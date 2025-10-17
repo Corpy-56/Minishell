@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/16 18:06:40 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 15:56:15 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	read_and_tokenise(t_shell *stru)
 	if (isatty(stru->dup_1) != 1 && stru->dup_1 == -1)
 		stru->dup_1 = dup(STDOUT_FILENO);
 	if (isatty(stru->dup_0) != 1 && stru->dup_0 == -1)
-		stru->dup_0 = dup(0);//stdin est ferme
+		stru->dup_0 = dup(0);
 	rl = readline(MINISHELL);
 	if (!rl)
 		exit_with_status(stru);
@@ -75,12 +75,8 @@ int	main(int argc, char **argv, char **env)
 	t_shell	stru;
 	int		status;
 
-	(void)argc;
-	(void)argv;
 	ft_bzero(&stru, sizeof(stru));
-	init_shell(&stru, env);
-	// save_termios1();
-	stru.dup_0 = dup(0);
+	init_shell(&stru, env, argc, argv);
 	while (!stru.should_exit)
 	{
 		if (!read_and_tokenise(&stru))
