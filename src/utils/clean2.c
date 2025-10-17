@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 14:32:46 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 20:02:26 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/17 16:52:58 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,26 @@ int	ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru)
 		// head->fd_int_put = -2;
 	}
 	return (fd);
+}
+
+
+void	clean_after_parent(t_shell *stru)
+{
+	if (!stru)
+		return ;
+	if (stru->commande)
+	{
+		free_cmds(stru->commande);
+		stru->commande = NULL;
+	}
+	if (stru->tokens)
+	{
+		free_tokens(stru->tokens);
+		stru->tokens = NULL;
+	}
+	if (stru->path_dirs)
+	{
+		free_doublechar(stru->path_dirs);
+		stru->path_dirs = NULL;
+	}
 }

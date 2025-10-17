@@ -6,27 +6,11 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/17 15:04:13 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 16:55:27 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// void	reconstruct_path_dirs(t_shell *stru)
-// {
-// 	char	*path_val;
-
-// 	path_val = NULL;
-// 	if (!stru->path_dirs)
-// 	{
-// 		if (stru->path_node && stru->path_node->value)
-// 			path_val = stru->path_node->value;
-// 		else
-// 			path_val = get_env_value(stru->environ, "PATH");
-// 		if (path_val)
-// 			stru->path_dirs = ft_split(path_val, ':');
-// 	}
-// }
 
 void	reconstruct_path_dirs(t_shell *stru)
 {

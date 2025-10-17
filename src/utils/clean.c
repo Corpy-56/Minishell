@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 14:32:46 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/17 16:33:01 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 16:52:54 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,27 +95,6 @@ void	clean_children(t_shell *stru)
 	}
 	stru->path_node = NULL;
 	clean_env(stru);
-}
-
-void	clean_after_parent(t_shell *stru)
-{
-	if (!stru)
-		return ;
-	if (stru->commande)
-	{
-		free_cmds(stru->commande);
-		stru->commande = NULL;
-	}
-	if (stru->tokens)
-	{
-		free_tokens(stru->tokens);
-		stru->tokens = NULL;
-	}
-	if (stru->path_dirs)
-	{
-		free_doublechar(stru->path_dirs);
-		stru->path_dirs = NULL;
-	}
 }
 
 void	clean_gnl(void)
