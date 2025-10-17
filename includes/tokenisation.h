@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/17 16:50:09 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 17:02:57 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,6 @@ typedef struct s_dupenv
 	t_env			*a_debut;
 	t_env			*new;
 }					t_dupenv;
-
 
 typedef struct s_shell
 {

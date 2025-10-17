@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 11:25:27 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/17 16:37:39 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 17:05:56 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ void	parent_after_fork(t_pipes *pipes)
 	}
 	else
 		pipes->prev_read = -1;
+	if (isatty(pipes->current->here) == 1)
+		close(pipes->current->here);
 	pipes->last_pid = pipes->pid;
 	pipes->current = pipes->current->next;
 }
@@ -83,7 +85,9 @@ static void	wait_children(t_pipes *pipes, t_shell *sh)
 void	run_pipes(t_cmd *head, t_shell *sh)
 {
 	t_pipes	pipes;
+	int i;
 
+	i = 0;
 	init_pipes(&pipes, head);
 	pipes.current = ft_test_heredoc_pipes(pipes.current, sh);
 	if (pipes.current == NULL)
@@ -97,10 +101,16 @@ void	run_pipes(t_cmd *head, t_shell *sh)
 			sh->last_status = 1;
 			break ;
 		}
+		if (pipes.current->here >= 0)
+			i = pipes.current->here;
 		pipes.pid = fork();
 		bad_fork(&pipes, sh);
 		if (pipes.pid == 0)
+		{
+			if (i > 0 && pipes.current->here < 0)
+				close(i);
 			child_exec(&pipes, sh);
+		}
 		parent_after_fork(&pipes);
 	}
 	if (pipes.prev_read != -1)
@@ -108,4 +118,3 @@ void	run_pipes(t_cmd *head, t_shell *sh)
 	wait_children(&pipes, sh);
 	sh->last_status = pipes.last_status;
 }
-

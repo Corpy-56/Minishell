@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:50:15 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/17 16:04:20 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 17:01:22 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	init_shell(t_shell *stru, char **env, int argc, char **argv)
 	stru->commande = NULL;
 	stru->fd = -2;
 	stru->dup_0 = dup(0);
+	stru->dup_1 = dup(1);
 	update_shlvl(stru->environ, stru);
 	ft_tty(stru);
 	set_shell(stru);

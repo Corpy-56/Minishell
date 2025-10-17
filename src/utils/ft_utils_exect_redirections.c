@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils_exect_redirections.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/16 16:18:23 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 16:48:53 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 char	*ft_end_expand(size_t start, char *str, char *line, size_t i)
 {
@@ -87,14 +86,22 @@ int	ft_expand_heredoc(int fd, t_shell *stru, int new_fd)
 	return (-1);
 }
 
-void	apply_cmd_redirs_in_child(t_cmd *cmd, t_shell *shell)
+void	apply_cmd_redirs_in_child2(t_cmd *cmd)
 {
-	if (cmd->here)
+	if (cmd->here >= 0)
 	{
 		dup2(cmd->here, 0);
 		close_fds(&cmd->here);
+		//close(shell->dup_0);// a tester
+		//shell->dup_0 = -1;
 		cmd->here = -1;
 	}
+}
+
+void	apply_cmd_redirs_in_child(t_cmd *cmd, t_shell *shell)
+{
+	if (cmd->here >= 0)
+		apply_cmd_redirs_in_child2(cmd);
 	if (cmd->fd_int_put >= 0)
 	{
 		dup2(shell->dup_0, 0);
@@ -113,10 +120,11 @@ void	apply_cmd_redirs_in_child(t_cmd *cmd, t_shell *shell)
 	}
 	if (cmd->fd_out_put2 >= 0)
 	{
+		//printf("B");
 		dup2(shell->dup_1, 1);
 		close_fds(&cmd->fd_out_put2);
+		close(shell->dup_1);
 		shell->dup_1 = -1;
 		cmd->fd_out_put2 = -1;
 	}
 }
-

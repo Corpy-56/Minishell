@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 16:52:31 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/17 15:23:13 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 17:03:10 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,6 @@ t_env	*create_env_node(char *str)
 		new->name = ft_strdup(str);
 		new->value = NULL;
 	}
-	// if (ft_strncmp(new->name, "PATH", 5) == 0 && new->value != NULL)
-	// 	new->path = ft_split(new->value, ':');
-	// else
-	// 	new->path = NULL;
 	new->next = NULL;
 	return (new);
 }

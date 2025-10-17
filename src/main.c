@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/17 15:56:15 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 18:32:36 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,11 @@ int	read_and_tokenise(t_shell *stru)
 		exit_with_status(stru);
 	if (*rl)
 		add_history(rl);
+	if(ft_strlen(rl) > 1000)
+	{
+		ft_putstr_fd("minishell: line too long\n", 2);
+		return (0);
+	}
 	stru->tokens = ft_tokenisation(rl, stru->tokens, 0);
 	free(rl);
 	if (!stru->tokens)
@@ -94,80 +99,9 @@ int	main(int argc, char **argv, char **env)
 	}
 	if (stru.dup_0 >= 0)
 		close (stru.dup_0);
+	if (stru.dup_1 >= 0)
+		close (stru.dup_1);
 	status = stru.last_status;
 	clean_all(&stru);
 	exit (status);
 }
-
-
-// int main(int argc, char **argv, char **env)
-// {
-// 	char	*rl;
-// 	t_shell	stru;
-// 	int		syntax;
-// 	int		status;
-
-// 	(void)argc;
-// 	(void)argv;
-// 	ft_bzero(&stru, sizeof(stru));
-// 	init_shell(&stru, env);
-// 	update_shlvl(stru.environ, &stru);
-// 	save_termios1();
-// 	ft_tty(&stru);
-// 	set_shell(&stru);
-// 	stru.dup_0 = dup(0);
-// 	while (!stru.should_exit)
-// 	{
-// 		ft_signal();
-// 		if (isatty(stru.dup_1) != 1 && stru.dup_1 == -1)
-// 			stru.dup_1 = dup(STDOUT_FILENO);
-// 		if (isatty(stru.dup_0) != 1 && stru.dup_0 == -1)
-// 			stru.dup_0 = dup(0);//stdin est ferme
-// 		rl = readline("\033[32mMinishell : \033[0m");
-// 		if (!rl)
-// 		{
-// 			status = stru.last_status;
-// 			write(1, "exit\n", 5);
-// 			clean_all(&stru);
-// 			exit(status);
-// 		}
-// 		if (*rl)
-// 			add_history(rl);
-// 		stru.tokens = ft_tokenisation(rl, stru.tokens, 0);
-// 		free(rl);
-// 		if (!stru.tokens)
-// 			continue ;
-// 		main_expand(&stru);
-// 		split_all_tokens(&stru.tokens, &stru);
-// 		unquote_tokens(stru.tokens);
-// 		if (stru.tokens != NULL)
-// 		{
-// 			syntax = ft_valid_syntax(stru.tokens);
-// 			if (syntax != 0)
-// 			{
-// 				stru.last_status = 2;
-// 				clean_cmd(&stru);
-// 				continue ;
-// 			}
-// 			stru.commande = ft_type_token(stru.commande, stru.tokens, &stru);
-// 			stru.commande = suppr_empty_cmd(stru.commande);
-// 			if (stru.commande == NULL)
-// 			{
-// 				clean_cmd(&stru);
-// 				continue ;
-// 			}
-// 			exec_cmd_line(&stru);
-// 			if (stru.should_exit)
-// 			{
-// 				clean_cmd(&stru);
-// 				break ;
-// 			}
-// 		}
-// 		clean_cmd(&stru);
-// 	}
-// 	if (stru.dup_0 >= 0)
-// 		close (stru.dup_0);
-// 	status = stru.last_status;
-// 	clean_all(&stru);
-// 	exit (status);
-// }

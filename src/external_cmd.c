@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/17 16:34:41 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 16:58:48 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void	exec_external(t_cmd *cmd, t_shell *stru)
 		ft_putstr_fd("No envp\n", 2);
 		_exit (1);
 	}
+	close_fd(cmd);
 	if (execve(ext.chosen_path, ext.argv, ext.envp) == -1)
 		handle_exec_error(&ext, stru, errno);
 }
@@ -101,10 +102,5 @@ int	collect_status(pid_t pid, t_shell *stru)
 	(void)stru;
 	status = 0;
 	waitpid(pid, &status, 0);
-	//if ((WIFSIGNALED(status) && WTERMSIG(status) == SIGINT))
-	//{
-	//	if (stru != NULL && stru->exec != NULL && stru->exec->head != NULL)
-	//		apply_cmd_redirs_in_child(stru->exec->head, stru);
-	//}
 	return (status);
 }

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/17 16:34:28 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 17:02:45 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 # include <signal.h>
 # include <sys/wait.h>
 # include <errno.h>
-# include <termios.h>
 
 # define MINISHELL "\001\033[1;32m\002Minishell : \001\033[0m\002"
 
@@ -85,8 +84,6 @@ void		handle_exec_error(t_ext *ext, t_shell *stru, int error);
 void		exec_external(t_cmd *cmd, t_shell *stru);
 int			collect_status(pid_t pid, t_shell *stru);
 int			run_external(t_cmd *cmd, t_shell *stru, int f);
-void		save_termios1(void);
-void		restore_termios1(void);
 
 /* ********* exec ********* */
 int			count_maillons(t_cmd *cmd);
@@ -105,11 +102,6 @@ void		ft_signal(void);
 void		signal_handler1(int signum);
 void		set_shell(t_shell *shell);
 void		ft_ignore_signal(void);
-
-/* ********* hide signals ********* */
-void		restore_termios(void);
-void		save_termios(void);
-void		disable_echoctl(void);
 
 /* ********* fields_splitting ********* */
 size_t		count_fields(const char *str, const char *ifs);
@@ -208,7 +200,6 @@ void		clean_heredoc(t_shell *stru);
 void		clean_env(t_shell *stru);
 void		clean_after_parent(t_shell *stru);
 
-
 /* ********* error msg ********* */
 void		err_msg_cmd(char **argv, t_shell *stru);
 void		err_msg_export(char *argv);
@@ -237,7 +228,6 @@ void		init_export(t_export *exp, t_env **env, t_env **local);
 void		init_unset(t_unset *u, t_shell *stru, char *var);
 void		init_type(t_type *t, t_tokens *b_debut);
 void		init_dupenv(t_dupenv *d);
-
 
 /* ********* utils tokenisations ********* */
 void		ft_test_minishell(t_tokens *a_debut);

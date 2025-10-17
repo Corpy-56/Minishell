@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:56:23 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/17 11:29:22 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 17:04:21 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,26 +40,6 @@ t_tokens	*ft_test_stdout(t_cmd *cmd, t_tokens *p_temp)
 	return (p_temp->next);
 }
 
-//t_tokens	*ft_test_stdin(t_cmd *commande, t_tokens *p_actuel)
-//{
-//	int	j;
-
-//	j = -2;
-//	if (commande->fd_int_put != -2)
-//		close_fds(&commande->fd_int_put);
-//	if (p_actuel->next->str != NULL)
-//	{
-//		j = access(p_actuel->next->str, F_OK);
-//		if (j != 0)
-//			ft_error(1, ": No such file or directory\n", p_actuel->next->str);
-//		if (j == 0)
-//			commande->fd_int_put = open(p_actuel->next->str, O_RDONLY, 0777);
-//		if (commande->fd_int_put == -1)
-//			ft_error(1, ": Permission denied\n", p_actuel->next->str);
-//	}
-//	return (p_actuel->next);
-//}
-
 t_tokens	*ft_test_stdin(t_cmd *commande, t_tokens *p_actuel)
 {
 	int	j;
@@ -71,13 +51,16 @@ t_tokens	*ft_test_stdin(t_cmd *commande, t_tokens *p_actuel)
 	{
 		j = access(p_actuel->next->str, F_OK);
 		if (j != 0)
+		{
 			ft_error(1, ": No such file or directory\n", p_actuel->next->str);
+			commande->fd_int_put = -1;
+			return (p_actuel->next);
+		}
 		if (j == 0)
 			commande->fd_int_put = open(p_actuel->next->str, O_RDONLY, 0777);
 		if (commande->fd_int_put == -1)
 			ft_error(1, ": Permission denied\n", p_actuel->next->str);
 	}
-	//close_fds(&commande->fd_int_put);
 	return (p_actuel->next);
 }
 
