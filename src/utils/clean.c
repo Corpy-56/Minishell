@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 14:32:46 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/16 19:43:51 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/17 14:45:58 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ void	clean_all(t_shell *stru)
 	}
 	if (stru->dup_0 >= 0)
 		close (stru->dup_0);
+	if (stru->dup_1 >= 0)
+		close (stru->dup_1);
 	clean_gnl();
 	clear_history();
 }

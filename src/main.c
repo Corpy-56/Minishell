@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/16 20:38:48 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/17 15:23:26 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,13 @@ int	read_and_tokenise(t_shell *stru)
 
 	ft_signal();
 	if (isatty(stru->dup_1) != 1 && stru->dup_1 == -1)
+	{
+//		printf("Z\n");
+//		printf("stru->dup_1 avant dup : %d\n", stru->dup_1);
 		stru->dup_1 = dup(STDOUT_FILENO);
+		//printf("%d\n", stru->dup_1);
+		//printf("G%d\n", STDOUT_FILENO);
+	}
 	if (isatty(stru->dup_0) != 1 && stru->dup_0 == -1)
 		stru->dup_0 = dup(0);
 	rl = readline(MINISHELL);
@@ -94,6 +100,8 @@ int	main(int argc, char **argv, char **env)
 	}
 	if (stru.dup_0 >= 0)
 		close (stru.dup_0);
+	if (stru.dup_1 >= 0)
+		close (stru.dup_1);
 	status = stru.last_status;
 	clean_all(&stru);
 	exit (status);

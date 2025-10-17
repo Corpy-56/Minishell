@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/16 19:52:13 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/17 16:48:53 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ void	apply_cmd_redirs_in_child2(t_cmd *cmd)
 	{
 		dup2(cmd->here, 0);
 		close_fds(&cmd->here);
+		//close(shell->dup_0);// a tester
+		//shell->dup_0 = -1;
 		cmd->here = -1;
 	}
 }
@@ -118,8 +120,10 @@ void	apply_cmd_redirs_in_child(t_cmd *cmd, t_shell *shell)
 	}
 	if (cmd->fd_out_put2 >= 0)
 	{
+		//printf("B");
 		dup2(shell->dup_1, 1);
 		close_fds(&cmd->fd_out_put2);
+		close(shell->dup_1);
 		shell->dup_1 = -1;
 		cmd->fd_out_put2 = -1;
 	}

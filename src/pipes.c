@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 11:25:27 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/17 11:37:22 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/17 16:49:18 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,22 @@ void	child_exec(t_pipes *pipes, t_shell *stru)
 	cmd->here = ft_first_ft_redirections(cmd, cmd->here, stru);
 	if (cmd->here == -1)
 	{
-		clean_children(stru);
 		apply_cmd_redirs_in_child(cmd, stru);
+		clean_children(stru);
 		_exit(1);
 	}
 	if (is_builtin(cmd))
 	{
 		pipes->builtins = ft_exec_builtins(cmd, stru, false);
-		clean_children(stru);
 		apply_cmd_redirs_in_child(cmd, stru);
+		clean_children(stru);
 		_exit(pipes->builtins);
 	}
 	else
 	{
 		exec_external(cmd, stru);
-		clean_children(stru);
 		apply_cmd_redirs_in_child(cmd, stru);
+		clean_children(stru);
 		_exit(127);
 	}
 	apply_cmd_redirs_in_child(cmd, stru);
@@ -53,6 +53,8 @@ void	parent_after_fork(t_pipes *pipes)
 	}
 	else
 		pipes->prev_read = -1;
+	if(isatty(pipes->current->here) == 1)
+		close(pipes->current->here);
 	pipes->last_pid = pipes->pid;
 	pipes->current = pipes->current->next;
 }
@@ -82,7 +84,9 @@ void	wait_children(t_pipes *pipes)
 void	run_pipes(t_cmd *head, t_shell *sh)
 {
 	t_pipes	pipes;
+	int i;
 
+	i = 0;
 	init_pipes(&pipes, head);
 	pipes.current = ft_test_heredoc_pipes(pipes.current, sh);
 	if (pipes.current == NULL)
@@ -96,10 +100,16 @@ void	run_pipes(t_cmd *head, t_shell *sh)
 			sh->last_status = 1;
 			break ;
 		}
+		if (pipes.current->here >= 0)
+			i = pipes.current->here;
 		pipes.pid = fork();
 		bad_fork(&pipes, sh);
 		if (pipes.pid == 0)
+		{
+			if (i > 0 && pipes.current->here < 0)
+				close(i);
 			child_exec(&pipes, sh);
+		}
 		parent_after_fork(&pipes);
 	}
 	if (pipes.prev_read != -1)
