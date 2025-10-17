@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/17 18:32:36 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 22:51:22 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ int	read_and_tokenise(t_shell *stru)
 	char	*rl;
 
 	ft_signal();
-	if (isatty(stru->dup_1) != 1 && stru->dup_1 == -1)
-		stru->dup_1 = dup(STDOUT_FILENO);
+	if (isatty(stru->dup_1) != 1)// && stru->dup_1 == -1)
+		stru->dup_1 = dup(1);
 	if (isatty(stru->dup_0) != 1 && stru->dup_0 == -1)
 		stru->dup_0 = dup(0);
 	rl = readline(MINISHELL);

@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 16:30:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 10:30:18 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/17 19:46:35 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	ft_init_tokenisation(char *rl, int i)
 	i = white_space(rl, i);
 	if (i < 0)
 		return (-1);
-	k = ft_quote(rl, i);
+	k = ft_quote(rl, 0);
 	if (k == -1)
 		return (-1);
 	return (0);

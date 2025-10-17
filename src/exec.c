@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/17 17:03:58 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 22:06:13 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,6 @@ void	run_one_cmd(t_exec *exec, t_shell *stru, int builtins)
 	if (exec->head->args == NULL)
 	{
 		stru->last_status = 0;
-		if (exec->fd >= 0)
-			close(exec->fd); // pas sur
 		apply_cmd_redirs_in_child(exec->head, stru);
 		end_of_line_restore(&exec->fd_stdin, &exec->fd_stdout);
 		return ;

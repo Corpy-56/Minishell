@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenisation.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/17 17:02:57 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 20:09:49 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,14 @@ typedef struct s_split
 	t_tokens		*last;
 }					t_split;
 
+typedef struct s_fd_opens_childs
+{
+	int				fd_here;
+	int				fd_int;
+	int				fd_out1;
+	int				fd_out2;
+}					t_fd_opens;
+
 typedef struct s_pipes
 {
 	int				fd[2];
@@ -78,6 +86,7 @@ typedef struct s_pipes
 	pid_t			wait_child;
 	pid_t			pid;
 	pid_t			last_pid;
+	t_fd_opens		f;
 }					t_pipes;
 
 typedef struct s_copy

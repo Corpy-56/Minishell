@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 11:25:27 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/17 17:05:56 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 23:13:30 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	parent_after_fork(t_pipes *pipes)
 	}
 	else
 		pipes->prev_read = -1;
-	if (isatty(pipes->current->here) == 1)
+	if (isatty(pipes->current->here) == 1 && pipes->current->here >= 0)
 		close(pipes->current->here);
 	pipes->last_pid = pipes->pid;
 	pipes->current = pipes->current->next;
@@ -82,12 +82,37 @@ static void	wait_children(t_pipes *pipes, t_shell *sh)
 	clean_after_parent(sh);
 }
 
+t_pipes	close_fd_child(t_pipes pipes)
+{
+	if (pipes.current->here >= 0)
+		pipes.f.fd_here = pipes.current->here;
+	if (pipes.current->fd_int_put >= 0)
+		pipes.f.fd_int = pipes.current->fd_int_put;
+	if (pipes.current->fd_out_put1 >= 0)
+		pipes.f.fd_out1 = pipes.current->fd_out_put1;
+	if (pipes.current->fd_out_put2 >= 0)
+		pipes.f.fd_out2 = pipes.current->fd_out_put2;
+	return (pipes);
+}
+
+t_pipes	ft_close_fd_test(t_pipes pipes)
+{
+	if (pipes.f.fd_here > 0 && pipes.current->here < 0)
+		close(pipes.f.fd_here);
+	if (pipes.current->fd_int_put >= 0 && pipes.f.fd_int < 0)
+		close(pipes.f.fd_int);
+	if (pipes.current->fd_out_put1 >= 0 && pipes.f.fd_out1 < 0)
+		close(pipes.f.fd_out1);
+	if (pipes.current->fd_out_put2 < 0 && pipes.f.fd_out2 >= 0)
+		close(pipes.f.fd_out2);
+	ft_fd_test();
+	return (pipes);
+}
+
 void	run_pipes(t_cmd *head, t_shell *sh)
 {
-	t_pipes	pipes;
-	int i;
+	t_pipes		pipes;
 
-	i = 0;
 	init_pipes(&pipes, head);
 	pipes.current = ft_test_heredoc_pipes(pipes.current, sh);
 	if (pipes.current == NULL)
@@ -101,14 +126,12 @@ void	run_pipes(t_cmd *head, t_shell *sh)
 			sh->last_status = 1;
 			break ;
 		}
-		if (pipes.current->here >= 0)
-			i = pipes.current->here;
+		pipes = close_fd_child(pipes);
 		pipes.pid = fork();
 		bad_fork(&pipes, sh);
 		if (pipes.pid == 0)
 		{
-			if (i > 0 && pipes.current->here < 0)
-				close(i);
+			pipes = ft_close_fd_test(pipes);
 			child_exec(&pipes, sh);
 		}
 		parent_after_fork(&pipes);

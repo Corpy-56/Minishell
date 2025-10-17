@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tokenisation.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:07:35 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/15 12:30:27 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 19:46:47 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,8 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token, int i)
 	a_debut = NULL;
 	fin = NULL;
 	i = ft_init_tokenisation(rl, i);
+	if (i == -1)
+		return (NULL);
 	while (i != -1 && rl[i])
 	{
 		token = ft_creat_token(rl, i);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_type_token.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:56:23 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/17 17:04:21 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 19:16:07 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_tokens	*ft_test_stdout(t_cmd *cmd, t_tokens *p_temp)
 	p_a = p_temp;
 	if (ft_strncmp(p_a->str, ">", 2) == 0)
 	{
-		if (cmd->fd_out_put1 != -2)
+		if (cmd->fd_out_put1 >= 0)
 			close_fds(&cmd->fd_out_put1);
 		if (p_a->next->str != NULL)
 			cmd->fd_out_put1 = open(p_a->next->str,
@@ -29,7 +29,7 @@ t_tokens	*ft_test_stdout(t_cmd *cmd, t_tokens *p_temp)
 	}
 	else if (ft_strncmp(p_a->str, ">>", 3) == 0)
 	{
-		if (cmd->fd_out_put2 != -2)
+		if (cmd->fd_out_put2 >= 0)
 			close_fds(&cmd->fd_out_put2);
 		if (p_a->next->str != NULL)
 			cmd->fd_out_put2 = open(p_a->next->str, O_CREAT

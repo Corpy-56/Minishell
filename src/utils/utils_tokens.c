@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_tokens.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 15:23:24 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 17:44:44 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 19:48:14 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,23 +34,27 @@ int	ft_quote(char *rl, int i)
 	q = 0;
 	if (!rl)
 		return (0);
-	if (i < 0)
-		i = 0;
 	while (rl[i])
 	{
 		if (quote1 == 0 && (rl[i] == '\'' || rl[i] == '\"'))
 		{
 			q = rl[i];
 			i++;
-			while (rl[i] != '\'' && rl[i] != q)
+			while (rl[i] != '\0' && rl[i] != q)
 				i++;
 			if (rl[i] == '\0')
+			{
 				quote1++;
+				i--;
+			}
 		}
 		i++;
 	}
 	if (quote1 != 0)
-		return (ft_error(1, "Problem with quote\n", NULL));
+	{
+		ft_putstr_fd("Minishell : Problem with quote\n", 2);
+		return (-1);
+	}
 	return (0);
 }
 
