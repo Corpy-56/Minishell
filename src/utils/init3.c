@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:50:15 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/17 17:01:22 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 20:03:42 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	init_shell(t_shell *stru, char **env, int argc, char **argv)
 {
 	(void)argc;
 	(void)argv;
+	stru->status = 0;
 	stru->should_exit = 0;
 	stru->environ = ft_duplicate_env(env, stru);
 	stru->tokens = NULL;
@@ -23,6 +24,8 @@ void	init_shell(t_shell *stru, char **env, int argc, char **argv)
 	stru->fd = -2;
 	stru->dup_0 = dup(0);
 	stru->dup_1 = dup(1);
+	if (stru->dup_0 == -1 || stru->dup_1 == -1)
+		return ;
 	update_shlvl(stru->environ, stru);
 	ft_tty(stru);
 	set_shell(stru);
@@ -53,7 +56,6 @@ void	init_type(t_type *t, t_tokens *b_debut)
 
 void	init_dupenv(t_dupenv *d)
 {
-
 	d->a_debut = NULL;
 	d->fin = NULL;
 	d->new = NULL;

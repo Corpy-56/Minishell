@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 14:32:46 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/17 17:00:39 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 19:55:01 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ int	ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru)
 	}
 	return (fd);
 }
-
 
 void	clean_after_parent(t_shell *stru)
 {

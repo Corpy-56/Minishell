@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/17 17:02:45 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 19:23:05 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ char		**env_list_to_envp(t_env *env);
 t_env		*add_to_local(t_env *local, char *name, char *value);
 t_env		*create_local_var(char *args, t_env *local, t_shell *stru);
 void		move_var_to_env(t_env **env, t_env **local, t_env *var);
-int			main_variables(t_shell *stru);
 
 /* ********* expansion ********* */
 char		*expand_var(t_tokens *token, t_shell *stru, size_t i);

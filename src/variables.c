@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:09:43 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/12 15:04:27 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 19:33:07 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,28 +99,4 @@ t_env	*create_local_var(char *args, t_env *local, t_shell *stru)
 	free(name);
 	free(value);
 	return (local);
-}
-
-int	main_variables(t_shell *stru)
-{
-	int		i;
-
-	i = 0;
-	if (stru->commande->args[0] && is_assignment_word(stru->commande->args[0]))
-	{
-		while (stru->commande->args[i]
-			&& is_assignment_word(stru->commande->args[i]))
-		{
-			stru->local = create_local_var(stru->commande->args[i],
-					stru->local, stru);
-			i++;
-		}
-		if (stru->commande->args[i] == NULL)
-		{
-			free(stru->commande);
-			stru->commande = NULL;
-			return (1);
-		}
-	}
-	return (0);
 }

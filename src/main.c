@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/17 18:32:36 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 20:02:41 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	exit_with_status(t_shell *stru)
 	int	status;
 
 	status = stru->last_status;
+	dup2(stru->dup_0, STDIN_FILENO);
+	dup2(stru->dup_1, STDOUT_FILENO);
 	write(1, "exit\n", 5);
 	clean_all(stru);
 	exit (status);
@@ -45,7 +47,7 @@ int	read_and_tokenise(t_shell *stru)
 		exit_with_status(stru);
 	if (*rl)
 		add_history(rl);
-	if(ft_strlen(rl) > 1000)
+	if (ft_strlen(rl) > 1000)
 	{
 		ft_putstr_fd("minishell: line too long\n", 2);
 		return (0);
@@ -78,7 +80,6 @@ int	parse_cmds(t_shell *stru)
 int	main(int argc, char **argv, char **env)
 {
 	t_shell	stru;
-	int		status;
 
 	ft_bzero(&stru, sizeof(stru));
 	init_shell(&stru, env, argc, argv);
@@ -101,7 +102,6 @@ int	main(int argc, char **argv, char **env)
 		close (stru.dup_0);
 	if (stru.dup_1 >= 0)
 		close (stru.dup_1);
-	status = stru.last_status;
-	clean_all(&stru);
-	exit (status);
+	stru.status = stru.last_status;
+	(clean_all(&stru), exit (stru.status));
 }

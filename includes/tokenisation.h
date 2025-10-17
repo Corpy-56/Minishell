@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/17 17:02:57 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 19:59:56 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,7 @@ typedef struct s_shell
 	int				dup_0;
 	int				dup_1;
 	int				fd;
+	int				status;
 }					t_shell;
 
 #endif
