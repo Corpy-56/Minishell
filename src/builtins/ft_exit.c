@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:01:37 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/18 10:20:54 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/18 13:00:31 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	ft_exit(t_shell *stru, char **args, bool cmd_seule)
 			stru->should_exit = 1;
 		return (stru->last_status);
 	}
-	if (str_to_long(args[1], &out))
+	if (str_to_long(args[1], &out, 0))
 		return (exit_badnum(stru, args, cmd_seule));
 	if (args[2])
 		return (exit_too_many(stru, cmd_seule));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils_tokenisation.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 16:30:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 10:30:18 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/18 12:02:51 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	ft_test_minishell(t_tokens *a_debut)
 	}
 }
 
-int	ft_init_tokenisation(char *rl, int i)
+int	ft_init_tokenisation(char *rl, int i, t_shell *stru)
 {
 	int	k;
 
@@ -45,8 +45,11 @@ int	ft_init_tokenisation(char *rl, int i)
 	i = white_space(rl, i);
 	if (i < 0)
 		return (-1);
-	k = ft_quote(rl, i);
+	k = ft_quote(rl, 0);
 	if (k == -1)
+	{
+		stru->last_status = 2;
 		return (-1);
+	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/18 10:20:05 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/18 13:00:06 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int			ft_pwd(char **args, t_shell *stru);
 int			ft_unset(t_shell *stru, char **args);
 
 /* ********* exit - 2 - ********* */
-int			str_to_long(const char *str, long *out);
+int			str_to_long(const char *str, long *out, int i);
 void		print_exit(bool cmd_seule);
 
 /* ******************************** SOURCES ******************************** */
@@ -50,7 +50,7 @@ void		print_exit(bool cmd_seule);
 char		*ft_one_token_extra(char *rl, int i, t_tokens *token);
 int			ft_token_redirection(char *rl, int i, t_tokens *token);
 int			ft_one_token(char *rl, int i, t_tokens *token);
-t_tokens	*ft_tokenisation(char *rl, t_tokens *token, int i);
+t_tokens	*ft_tokenisation(char *rl, t_tokens *token, int i, t_shell *stru);
 
 /* ********* environ ********* */
 t_env		*ft_duplicate_env(char **env, t_shell *stru);
@@ -72,8 +72,8 @@ void		main_expand(t_shell *stru);
 /* ********* token_type ********* */
 t_cmd		*ft_type_token(t_cmd *commande, t_tokens *b_debut, t_shell *stru);
 t_tokens	*ft_type_token_2(t_tokens *p_actuel, t_cmd *cmd, t_shell *stru);
-t_tokens	*ft_test_stdout(t_cmd *cmd, t_tokens *p_temp);
-t_tokens	*ft_test_stdin(t_cmd *commande, t_tokens *p_actuel);
+t_tokens	*ft_test_stdout(t_cmd *cmd, t_tokens *p_temp, t_shell *stru);
+t_tokens	*ft_test_stdin(t_cmd *commande, t_tokens *p_actuel, t_shell *stru);
 t_tokens	*ft_heredoc_lexer(t_tokens *p_actuel, t_cmd *commande);
 
 /* ********* extenal cmds ********* */
@@ -116,7 +116,7 @@ void		ft_tty(t_shell *stru);
 /* ******************************** UTILS ********************************** */
 
 /* ********* utils ********* */
-int			ft_error(int i, char *str, char *str2);
+int			ft_error(int i, char *str, char *str2, t_shell *sh);
 bool		is_operator(char *op);
 bool		is_local_var(char *str);
 int			append_char(char **result, char c);
@@ -151,7 +151,7 @@ void		unquote_tokens(t_tokens *head);
 /* ********* type_toke_utils ********* */
 void		ft_initialization_commande(t_cmd *commande);
 t_cmd		*ft_creat_token2(void);
-t_cmd		*lexer_cmd(t_cmd *commande, t_tokens *p_actuel);
+t_cmd		*lexer_cmd(t_cmd *commande, t_tokens *p_actuel, int i, int j);
 int			ft_nb_tokens(t_tokens *p_actuel);
 int			ft_valid_syntax(t_tokens *token);
 
@@ -171,6 +171,7 @@ int			ft_expand_heredoc(int fd, t_shell *stru, int new_fd);
 int			ft_first_ft_redirections(t_cmd *head, int fd, t_shell *stru);
 void		ft_close_fd(t_cmd *head, int fd_stdin, int fd_stdout, int fd);
 void		apply_cmd_redirs_in_child(t_cmd *cmd, t_shell *stru);
+void		close_fd(t_cmd *cmd);
 
 /* ********* utils pipes ********* */
 void		ignore_sigpipe_once(void);
@@ -189,6 +190,9 @@ void		free_cmds(t_cmd *cmd);
 void		free_doublechar(char **to_free);
 void		free_fields(char **fields, size_t i);
 char		*ft_free_str(char *str);
+void		close_fds(int *fd);
+void		ft_fd_test(void);
+void		free_one_cmd(t_cmd *cmd);
 
 /* ********* clean ********* */
 void		clean_cmd(t_shell *stru);
@@ -227,18 +231,16 @@ void		init_export(t_export *exp, t_env **env, t_env **local);
 void		init_unset(t_unset *u, t_shell *stru, char *var);
 void		init_type(t_type *t, t_tokens *b_debut);
 void		init_dupenv(t_dupenv *d);
+void		init_quote(t_quote *q);
 
 /* ********* utils tokenisations ********* */
 void		ft_test_minishell(t_tokens *a_debut);
-int			ft_init_tokenisation(char *rl, int i);
-
-void		close_fds(int *fd);
-void		minishell_exit(t_shell *s, t_exec *e, int status);
-void		ft_fd_test(void);
-void		close_fd(t_cmd *cmd);
+int			ft_init_tokenisation(char *rl, int i, t_shell *stru);
 
 /* ********* utils pipes ********* */
 int			ft_dup_stdin(t_cmd *cmd);
 t_cmd		*child_exec_setup(t_pipes *pipes);
+void		child_exec(t_pipes *pipes, t_shell *stru);
+void		parent_after_fork(t_pipes *pipes);
 
 #endif

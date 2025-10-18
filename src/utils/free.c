@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 14:50:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/17 17:00:52 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/18 12:38:06 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,16 @@ void	free_cmds(t_cmd *cmd)
 		free(cmd);
 		cmd = next;
 	}
+}
+
+void	free_one_cmd(t_cmd *cmd)
+{
+	free_doublechar(cmd->args);
+	free(cmd->cmd);
+	if (cmd->heredoc)
+		free_doublechar(cmd->heredoc);
+	close_fd(cmd);
+	free(cmd);
 }
 
 void	free_doublechar(char **to_free)

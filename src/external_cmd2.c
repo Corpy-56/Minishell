@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_cmd2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/17 16:59:11 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 19:17:09 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	run_child(t_cmd *cmd, t_shell *stru, int f)
 		close_fds(&f);
 		f = -1;
 	}
-	else if (isatty(cmd->here) == 1)
+	else if (isatty(cmd->here) == 1 && cmd->here >= 0)
 		close(cmd->here);
 	if (cmd->fd_out_put1 != -2)
 		close_fds(&cmd->fd_out_put1);

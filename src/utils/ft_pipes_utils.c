@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipes_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 11:25:27 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/17 11:34:35 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/18 10:52:49 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,51 @@ t_cmd	*child_exec_setup(t_pipes *pipes)
 	cmd = pipes->current;
 	child_setup(pipes);
 	return (cmd);
+}
+
+void	child_exec(t_pipes *pipes, t_shell *stru)
+{
+	t_cmd	*cmd;
+
+	cmd = child_exec_setup(pipes);
+	cmd->here = ft_first_ft_redirections(cmd, cmd->here, stru);
+	if (cmd->here == -1)
+	{
+		apply_cmd_redirs_in_child(cmd, stru);
+		clean_children(stru);
+		_exit(1);
+	}
+	if (is_builtin(cmd))
+	{
+		pipes->builtins = ft_exec_builtins(cmd, stru, false);
+		apply_cmd_redirs_in_child(cmd, stru);
+		clean_children(stru);
+		_exit(pipes->builtins);
+	}
+	else
+	{
+		exec_external(cmd, stru);
+		apply_cmd_redirs_in_child(cmd, stru);
+		clean_children(stru);
+		_exit(127);
+	}
+	apply_cmd_redirs_in_child(cmd, stru);
+}
+
+void	parent_after_fork(t_pipes *pipes)
+{
+	pipes->n++;
+	if (pipes->prev_read != -1)
+		close_fds(&pipes->prev_read);
+	if (pipes->current->next)
+	{
+		close_fds(&pipes->fd[1]);
+		pipes->prev_read = pipes->fd[0];
+	}
+	else
+		pipes->prev_read = -1;
+	if (isatty(pipes->current->here) == 1 && pipes->current->here >= 0)
+		close(pipes->current->here);
+	pipes->last_pid = pipes->pid;
+	pipes->current = pipes->current->next;
 }

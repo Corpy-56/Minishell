@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:21:04 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/17 12:10:20 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/18 12:06:55 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,13 @@
 // 	return (-1);
 // }
 
-int	ft_error(int i, char *str, char *str2)
+int	ft_error(int i, char *str, char *str2, t_shell *sh)
 {
 	if (str2)
 		write (i, str2, ft_strlen(str2));
 	if (str)
 		write (i, str, ft_strlen(str));
+	sh->last_status = 1;
 	return (-1);
 }
 

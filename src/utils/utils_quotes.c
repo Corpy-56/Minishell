@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 11:49:46 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/30 15:17:31 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/18 10:59:55 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,10 @@ void	unquote_tokens(t_tokens *head)
 		}
 		head = head->next;
 	}
+}
+
+void	init_quote(t_quote *q)
+{
+	q->q = 0;
+	q->quote1 = 0;
 }

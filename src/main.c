@@ -6,10 +6,9 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/18 10:19:41 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/18 13:02:22 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell.h"
 
@@ -39,8 +38,8 @@ int	read_and_tokenise(t_shell *stru)
 	char	*rl;
 
 	ft_signal();
-	if (isatty(stru->dup_1) != 1 && stru->dup_1 == -1)
-		stru->dup_1 = dup(STDOUT_FILENO);
+	if (isatty(stru->dup_1) != 1)
+		stru->dup_1 = dup(1);
 	if (isatty(stru->dup_0) != 1 && stru->dup_0 == -1)
 		stru->dup_0 = dup(0);
 	rl = readline(MINISHELL);
@@ -53,7 +52,7 @@ int	read_and_tokenise(t_shell *stru)
 		ft_putstr_fd("minishell: line too long\n", 2);
 		return (0);
 	}
-	stru->tokens = ft_tokenisation(rl, stru->tokens, 0);
+	stru->tokens = ft_tokenisation(rl, stru->tokens, 0, stru);
 	free(rl);
 	if (!stru->tokens)
 		return (0);

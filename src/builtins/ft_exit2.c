@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 14:01:37 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 10:41:22 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/18 11:56:45 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,30 +20,35 @@ int	is_overflowing(long res, long neg, long digit)
 		return (res > (-(LONG_MIN + digit)) / 10);
 }
 
-void	str_not_digit(const char *str, long neg, int i)
+int	str_not_digit(const char *str, long neg, int i)
 {
 	(void)neg;
-	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
-		i++;
 	if (str[i] == '+' || str[i] == '-')
 	{
 		if (str[i] == '-')
 			neg = -1;
+		if (str[i] == '+')
+			neg = 2;
 		i++;
 	}
+	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
+		i++;
+	return (neg);
 }
 
-int	str_to_long(const char *str, long *out)
+int	str_to_long(const char *str, long *out, int i)
 {
-	int			i;
 	long		neg;
 	long		res;
 	long		digit;
 
-	i = 0;
 	neg = 1;
 	res = 0;
-	str_not_digit(str, neg, i);
+	neg = str_not_digit(str, neg, i);
+	if (neg == -1 || neg == 2)
+		i++;
+	if (neg == 2)
+		neg = 1;
 	if (!str[i])
 		return (1);
 	while (str[i] >= '0' && str[i] <= '9')
