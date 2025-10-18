@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 11:49:46 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/23 15:16:49 by skuor            ###   ########.fr       */
+/*   Updated: 2025/09/30 15:17:31 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ bool	is_quote(char quote)
 void	skip_quoted(const char *str, size_t *i)
 {
 	char	quote;
-	
+
 	quote = str[*i];
 	(*i)++;
 	while (str[*i])
@@ -54,20 +54,12 @@ char	*remove_quotes(const char *str)
 		{
 			quote = str[i++];
 			while (str[i] && str[i] != quote)
-			{
-				res[j] = str[i];
-				j++;
-				i++;
-			}
+				res[j++] = str[i++];
 			if (str[i] == quote)
 				i++;
 		}
 		else
-		{
-			res[j] = str[i];
-			j++;
-			i++;
-		}
+			res[j++] = str[i++];
 	}
 	res[j] = '\0';
 	return (res);
@@ -76,12 +68,12 @@ char	*remove_quotes(const char *str)
 void	unquote_tokens(t_tokens *head)
 {
 	char	*tmp;
-	
+
 	while (head)
 	{
 		if (head->str)
 		{
-			tmp = remove_quotes(head->str);	
+			tmp = remove_quotes(head->str);
 			if (tmp)
 			{
 				free(head->str);

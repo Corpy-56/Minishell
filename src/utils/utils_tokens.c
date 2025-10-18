@@ -3,61 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   utils_tokens.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 15:23:24 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/06 15:46:17 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/18 10:21:54 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	count_tokens(t_tokens *token)
+int	count_nodes(t_env *list)
 {
 	int	count;
 
 	count = 0;
-	while (token)
+	while (list)
 	{
 		count++;
-		token = token->next;
+		list = list->next;
 	}
 	return (count);
 }
 
-void	ft_initialization_commande(t_cmd *commande)
+int	ft_quote(char *rl, int i)
 {
-	commande->args = NULL;
-	commande->cmd = NULL;
-	commande->heredoc = NULL;
-	commande->here = -2;
-	commande->fd_int_put = -2;
-	commande->next = NULL;
-	commande->fd_out_put1 = -2;
-	commande->fd_out_put2 = -2;
-	commande->next = NULL;
-	return ;
-}
-
-void	ft_quote(char *rl, int i)
-{
-	int	quote1;
+	int		quote1;
+	char	q;
 
 	quote1 = 0;
+	q = 0;
+	if (!rl)
+		return (0);
+	if (i < 0)
+		i = 0;
 	while (rl[i])
 	{
-		if (quote1 == 0 && rl[i] == '\'')
+		if (quote1 == 0 && (rl[i] == '\'' || rl[i] == '\"'))
 		{
+			q = rl[i];
 			i++;
-			while (rl[i] != '\'' && rl[i])
-				i++;
-			if (rl[i] == '\0')
-				quote1++;
-		}
-		else if (quote1 == 0 && rl[i] == '\"')
-		{
-			i++;
-			while (rl[i] != '\"' && rl[i])
+			while (rl[i] != '\'' && rl[i] != q)
 				i++;
 			if (rl[i] == '\0')
 				quote1++;
@@ -65,7 +50,8 @@ void	ft_quote(char *rl, int i)
 		i++;
 	}
 	if (quote1 != 0)
-		ft_error(1, "", NULL);// faire un autre message derreur ?? 
+		return (ft_error(1, "Problem with quote\n", NULL));
+	return (0);
 }
 
 char	*ft_strjoin_char(char *str, const char c)
@@ -112,3 +98,20 @@ int	white_space(char *str, int i)
 	return (0);
 }
 
+char	*join_cmd(char *rep, char *name)
+{
+	char	*tmp;
+	char	*base;
+	char	*chosen_path;
+
+	if (rep && *rep)
+		base = rep;
+	else
+		base = ".";
+	tmp = ft_strjoin(base, "/");
+	if (!tmp)
+		return (NULL);
+	chosen_path = ft_strjoin(tmp, name);
+	free(tmp);
+	return (chosen_path);
+}

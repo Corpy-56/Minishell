@@ -3,110 +3,106 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/03 15:39:05 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/18 10:19:41 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "minishell.h"
 
-t_fd	*fd = NULL;
+void	ft_tty(t_shell *stru)
+{
+	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
+	{
+		clean_all(stru);
+		exit (1);
+	}
+}
 
-int	ft_test_bultins(t_cmd *commande, t_shell *stru)
+void	exit_with_status(t_shell *stru)
 {
 	int	status;
 
-	status = 0;
-	if (ft_strncmp(commande->cmd, "pwd", 4) == 0)
-		status = ft_pwd(commande->args);
-	else if (ft_strncmp(commande->cmd, "cd", 3) == 0)
-		status = ft_cd(commande->args);
-	else if (ft_strncmp(commande->cmd, "echo", 5) == 0)
-		status = ft_echo(commande->args);
-	else if (ft_strncmp(commande->cmd, "env", 4) == 0)
-		status = ft_env(stru->environ);
-	else if (ft_strncmp(commande->cmd, "exit", 5) == 0)
-		status = ft_exit(stru, commande->args);
-	else if (ft_strncmp(commande->cmd, "unset", 5) == 0)
-		status = ft_unset(stru, commande->args);
-	else if (ft_strncmp(commande->cmd, "export", 5) == 0)
-		status = ft_export(commande->args, &stru->environ, &stru->local);
-	else
-		return (1);
-	stru->last_status = status;
-	return (0);
-}
-
-void 	ft_init_fd1(void)
-{
-	fd = ft_calloc(1, sizeof(t_fd));
-	fd->fd_in = dup(0);
-	fd->fd_out = dup (1);
-	fd->fd = 5;
-	fd->fd_out_put1 = -2;
-	fd->fd_out_put2 = -2;
-	fd->fd_int_put = -2;
-}
-
-int main(int argc, char **argv, char **env)
-{
-	char 	*rl;
-	t_shell	*stru;
-	int		syntax;
-	int		status;
-
-	(void)argc;
-	(void)argv;
-	stru = ft_calloc(1, sizeof(t_shell));
-	if (stru == NULL)
-		return (0);
-	stru->environ = ft_duplicate_env(env, stru);
-	ft_init_fd1();
-	while (!stru->should_exit)
-	{
-		ft_signal();
-		rl = readline("\033[32mMinishell : \033[0m");
-		if (!rl)
-		{
-			write(1, "exit\n", 5);
-			stru->should_exit = 1;
-			break ;
-		}
-		if (*rl)
-			add_history(rl);
-		stru->tokens = ft_tokenisation(rl, stru->tokens);
-		free(rl);
-		if (!stru->tokens)
-			continue ;
-		main_expand(stru);
-		split_all_tokens(stru->tokens, stru);
-		unquote_tokens(stru->tokens);
-		if (stru->tokens != NULL)
-		{
-			syntax = ft_valid_syntax(stru->tokens);
-			if (syntax != 0)
-			{
-				stru->last_status = 2;
-				clean_cmd(stru);
-				continue ;
-			}
-			stru->commande = ft_type_token(stru->commande, stru->tokens, stru);
-			stru->commande = suppr_empty_cmd(stru->commande);
-			if (stru->commande == NULL)
-			{
-				clean_cmd(stru);
-				continue ;
-			}
-			exec_cmd_line(stru, env);
-		}
-		clean_cmd(stru);
-	}
 	status = stru->last_status;
-	rl_clear_history ();
+	dup2(stru->dup_0, STDIN_FILENO);
+	dup2(stru->dup_1, STDOUT_FILENO);
+	write(1, "exit\n", 5);
 	clean_all(stru);
-	free(stru);
 	exit (status);
+}
+
+int	read_and_tokenise(t_shell *stru)
+{
+	char	*rl;
+
+	ft_signal();
+	if (isatty(stru->dup_1) != 1 && stru->dup_1 == -1)
+		stru->dup_1 = dup(STDOUT_FILENO);
+	if (isatty(stru->dup_0) != 1 && stru->dup_0 == -1)
+		stru->dup_0 = dup(0);
+	rl = readline(MINISHELL);
+	if (!rl)
+		exit_with_status(stru);
+	if (*rl)
+		add_history(rl);
+	if (ft_strlen(rl) > 1000)
+	{
+		ft_putstr_fd("minishell: line too long\n", 2);
+		return (0);
+	}
+	stru->tokens = ft_tokenisation(rl, stru->tokens, 0);
+	free(rl);
+	if (!stru->tokens)
+		return (0);
+	main_expand(stru);
+	split_all_tokens(&stru->tokens, stru);
+	unquote_tokens(stru->tokens);
+	return (1);
+}
+
+int	parse_cmds(t_shell *stru)
+{
+	int	syntax;
+
+	syntax = ft_valid_syntax(stru->tokens);
+	if (syntax != 0)
+	{
+		stru->last_status = 2;
+		return (0);
+	}
+	stru->commande = ft_type_token(stru->commande, stru->tokens, stru);
+	stru->commande = suppr_empty_cmd(stru->commande);
+	return (stru->commande != NULL);
+}
+
+int	main(int argc, char **argv, char **env)
+{
+	t_shell	stru;
+
+	ft_bzero(&stru, sizeof(stru));
+	init_shell(&stru, env, argc, argv);
+	while (!stru.should_exit)
+	{
+		if (!read_and_tokenise(&stru))
+		{
+			clean_cmd(&stru);
+			continue ;
+		}
+		if (!parse_cmds(&stru))
+		{
+			clean_cmd(&stru);
+			continue ;
+		}
+		exec_cmd_line(&stru);
+		clean_cmd(&stru);
+	}
+	if (stru.dup_0 >= 0)
+		close (stru.dup_0);
+	if (stru.dup_1 >= 0)
+		close (stru.dup_1);
+	stru.status = stru.last_status;
+	(clean_all(&stru), exit (stru.status));
 }

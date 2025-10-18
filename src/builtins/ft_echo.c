@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 19:34:55 by skuor             #+#    #+#             */
-/*   Updated: 2025/08/05 11:56:43 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 18:57:25 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ int	ft_echo(char **args)
 	}
 	while (args[i])
 	{
-		printf("%s", args[i]);
+		ft_printf("%s", args[i]);
 		if (args[i + 1])
-			printf(" ");
+			ft_printf(" ");
 		i++;
 	}
 	if (!no_newline)
-		printf("\n");
+		ft_printf("\n");
 	return (0);
 }

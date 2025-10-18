@@ -6,18 +6,17 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/23 14:20:54 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/23 16:52:55 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/09 16:13:05 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
 size_t	count_fields(const char *str, const char *ifs)
 {
 	size_t	i;
 	size_t	n_fields;
-	
+
 	i = 0;
 	n_fields = 0;
 	if (!str || !*str)
@@ -40,126 +39,89 @@ size_t	count_fields(const char *str, const char *ifs)
 	return (n_fields);
 }
 
-char	**split_by_ifs(const char *str, const char *ifs)
+void	no_fields(t_split *split, t_tokens **head)
 {
-	size_t	i;
-	size_t	j;
-	size_t	n_fields;
-	size_t	start;
-	char	**fields = NULL;
+	t_tokens	*curr;
+	t_tokens	*next;
 
-	i = 0;
-	j = 0;
-	if (str == NULL)
-	{
-		fields = ft_calloc(1, sizeof(char*));
-		return (fields);
-	}
-	if (!ifs || !*ifs)
-		ifs = " \t\n";
-	else if (!ifs[0])
-	{
-		fields = ft_calloc(1, sizeof(char *));
-		if (fields == NULL)
-			return (NULL);
-		return (fields);
-	}
-	n_fields = count_fields(str, ifs);
-	fields = ft_calloc(n_fields + 1, sizeof(char *));
-	if (!fields)
-		return (NULL);
-	while (str[i])
-	{
-		if (str[i] && is_ifs(str[i], ifs))
-			i++;
-		if (!str[i])
-			break ;
-		start = i;
-		while(str[i] && !is_ifs(str[i], ifs))
-		{
-			if (is_quote(str[i]))
-				skip_quoted(str, &i);
-			else
-				i++;
-		}
-		fields[j] = ft_substr(str, start, (i - start));
-		if(!fields[j])
-		{
-			free_fields(fields, j);
-			return (NULL);
-		}
-		j++;
-	}
-	fields[j] = NULL;
-	return (fields);
+	curr = split->current;
+	next = curr->next;
+	if (split->prev == NULL)
+		*head = next;
+	else
+		split->prev->next = next;
+	free(curr->str);
+	free(curr);
+	free_doublechar(split->fields);
+	split->current = next;
 }
 
-
-void	split_all_tokens(t_tokens *head, t_shell *stru)
+int	while_fields(t_split *split)
 {
-	char		*ifs;
-	char		**fields;
-	t_tokens	*prev;
-	t_tokens	*current;
-	t_tokens	*next;
-	t_tokens	*last;
 	t_tokens	*new;
-	size_t		i;
-	
-	ifs = get_env_value(stru->environ, "IFS");
-	if (!ifs || !*ifs)
-		ifs = " \t\n";
-	prev = NULL;
-	current = head;
-	while (current)
+
+	while (split->fields[split->i])
 	{
-		if (is_operator(current->str))
+		new = ft_calloc(1, sizeof(*new));
+		if (!new)
 		{
-			prev = current;
-			current = current->next;
+			free_doublechar(split->fields);
+			split->fields = NULL;
+			return (-1);
+		}
+		new->str = ft_strdup(split->fields[split->i]);
+		if (!new->str)
+		{
+			free(new);
+			free_doublechar(split->fields);
+			split->fields = NULL;
+			return (-1);
+		}
+		new->next = split->last->next;
+		split->last->next = new;
+		split->last = new;
+		split->i++;
+	}
+	return (0);
+}
+
+static void	split_all_tokens2(t_split *split)
+{
+	free(split->current->str);
+	split->current->str = split->new_field;
+	split->last = split->current;
+	split->i = 1;
+	if (while_fields(split) < 0)
+		return ;
+	free_doublechar(split->fields);
+	split->prev = split->last;
+}
+
+void	split_all_tokens(t_tokens **head, t_shell *stru)
+{
+	t_split	split;
+
+	init_split(&split, head, stru);
+	while (split.current)
+	{
+		if (is_operator(split.current->str))
+		{
+			split.prev = split.current;
+			split.current = split.current->next;
 			continue ;
 		}
-		fields = split_by_ifs(current->str, ifs);
-		if (!fields)
+		split.fields = split_by_ifs(split.current->str, split.ifs);
+		if (!split.fields)
 			return ;
-		if (fields[0] == NULL)
+		if (split.fields[0] == NULL)
 		{
-			next = current->next;
-			free(current->str);
-			free(current);
-			if (prev == NULL)
-				head = next;
-			else
-				prev->next = next;
-			free_doublechar(fields);
-			current = next;
+			no_fields(&split, head);
 			continue ;
 		}
-		free(current->str);
-		current->str = ft_strdup(fields[0]);
-		if (!current->str)
-		{
-			free_doublechar(fields);
-			return ;
-		}
-		last = current;
-		i = 1;
-		while (fields[i])
-		{
-			new = ft_calloc(1, sizeof(*new));
-			if (!new)
-			{
-				free_doublechar(fields);
-				return ;
-			}
-			new->str = ft_strdup(fields[i]);
-			new->next = last->next;
-			last->next = new;
-			last = new;
-			i++;
-		}
-		free_doublechar(fields);
-		prev = last;
-		current = last->next;
+		split.new_field = ft_strdup(split.fields[0]);
+		if (!split.new_field)
+			return (free_doublechar(split.fields));
+		split_all_tokens2(&split);
+		split.current = split.last->next;
 	}
 }

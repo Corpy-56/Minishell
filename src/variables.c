@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   variables.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/05 12:09:43 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/01 17:32:55 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/18 10:23:09 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,33 +90,13 @@ t_env	*create_local_var(char *args, t_env *local, t_shell *stru)
 	}
 	var = find_var(local, name);
 	if (var)
-		update_value(var, ft_strdup(value));
+	{
+		if (update_value(var, value) == -1)
+			ft_putstr_fd("Error value\n", 2);
+	}
 	else
 		local = add_to_local(local, name, value);
 	free(name);
 	free(value);
 	return (local);
 }
-
-/* int	main_variables(t_shell *stru)
-{
-	int		i;
-
-	i = 0;
-	if (stru->tokens->args[0] && is_assignment_word(stru->tokens->args[0]))
-	{
-		while (stru->tokens->args[i]
-			&& is_assignment_word(stru->tokens->args[i]))
-		{
-			stru->local = create_local_var(stru->tokens->args[i], stru->local);
-			i++;
-		}
-		if (stru->tokens->args[i] == NULL)
-		{
-			free_tokens(stru->tokens);
-			stru->tokens = NULL;
-			return (1);
-		}
-	}
-	return (0);
-} */

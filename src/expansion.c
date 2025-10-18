@@ -3,56 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/27 18:16:15 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/25 14:58:47 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/18 10:22:18 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-size_t	expand_var2(t_shell *stru, char *args, size_t i, char **str)
-{
-	size_t	start;
-	size_t	len_str;
-	char	*name;
-	char	*value;
-	char	*dup;
-
-	start = i;
-	len_str = ft_strlen(args);
-	while (i < len_str && (ft_isalnum(args[i]) || args[i] == '_'))
-		i++;
-	if (i == start)
-	{
-		if (append_char(str, '$') < 0)
-			return (start);
-		return (start);
-	}
-	name = ft_substr(args, start, i - start);
-	value = get_env_value(stru->environ, name);
-	if (!value && stru->local)
-		value = get_env_value(stru->local, name);
-	if (value)
-		dup = ft_strdup(value);
-	else
-		dup = ft_strdup("");
-	if (!dup)
-	{
-		free(value);
-		return (start);
-	}
-	if (append_str(str, value) < 0)
-	{
-		free(dup);
-		free(name);
-		return (start);
-	}
-	free(dup);
-	free(name);
-	return (i);
-}
 
 static void	expand_exit_status(t_shell *stru, char **str)
 {
@@ -63,84 +21,107 @@ static void	expand_exit_status(t_shell *stru, char **str)
 	free(status_str);
 }
 
+static char	*free_and_null(char *out)
+{
+	free(out);
+	return (NULL);
+}
+
+static int	append_part(char **dst, char *src, size_t j, size_t i)
+{
+	while (j < i)
+	{
+		if (append_char(dst, src[j]) < 0)
+			return (-1);
+		j++;
+	}
+	return (0);
+}
+
+static int	handle_dollar(t_expand *exp, t_shell *stru, size_t *i)
+{
+	if (append_part(&exp->out, exp->str, exp->start, *i) < 0)
+		return (-1);
+	if (*i + 1 < exp->len_str && exp->str[*i + 1] == '?')
+	{
+		expand_exit_status(stru, &exp->out);
+		*i += 2;
+	}
+	else
+		*i = expand_var2(stru, exp->str, *i + 1, &exp->out);
+	exp->start = *i;
+	return (0);
+}
+
 char	*expand_var(t_tokens *token, t_shell *stru, size_t i)
 {
-	char	*str;
-	size_t	len_str;
-	size_t	start;
-	size_t	j;
+	t_expand	exp;
 
-	str = ft_calloc(1, 1);
-	if (!str)
+	init_expand(&exp, token, i);
+	if (!exp.out)
 		return (NULL);
-	len_str = ft_strlen(token->str);
-	start = i;
-	while (i < len_str)
+	while (i < exp.len_str)
 	{
-		if (token->str[i] == '$' && token->dollars >= 1)
+		if (exp.str[i] == '$' && token->dollars >= 1)
 		{
-			j = start;
-			while (j < i)
-			{
-				if (append_char(&str, token->str[j]) < 0)
-				{
-					free(str);
-					return (NULL);
-				}
-				j++;
-			}
-			if (i + 1 < len_str && token->str[i + 1] == '?')
-			{
-				expand_exit_status(stru, &str);
-				i += 2;
-			}
-			else
-				i = expand_var2(stru, token->str, i + 1, &str);
-			start = i;
+			if (handle_dollar(&exp, stru, &i) < 0)
+				return (free_and_null(exp.out));
 		}
 		else
 			i++;
 	}
-	j = start;
-	while (j < i)
-	{
-		if (append_char(&str, token->str[j]) < 0)
-		{
-			free(str);
-			return (NULL);
-		}
-		j++;
-	}
-	return (str);
+	if (append_part(&exp.out, exp.str, exp.start, i) < 0)
+		return (free_and_null(exp.out));
+	return (exp.out);
 }
 
-void	main_expand(t_shell *stru)
-{
-	t_tokens	*token;
-	char		*expanded;
+// char	*expand_var(t_tokens *token, t_shell *stru, size_t i)
+// {
+// 	char	*str;
+// 	size_t	len_str;
+// 	size_t	start;
+// 	size_t	j;
 
-	token = stru->tokens;
-	while (token)
-	{
-		if (token->str == NULL)
-			token = token->next;
-		else if (ft_strncmp(token->str, "<<", 3) == 0 && token->next != NULL)
-		{
-			token = token->next;
-			while(token->str == NULL && token->next != NULL)
-				token = token->next;
-			token = token->next;
-		}
-		else
-		{
-			expanded = expand_var(token, stru, 0);
-			if (expanded)
-			{
-				free(token->str);
-				token->str = expanded;
-			}
-			token = token->next;
-		}
-	}
-}
-
+// 	str = ft_calloc(1, 1);
+// 	if (!str)
+// 		return (NULL);
+// 	len_str = ft_strlen(token->str);
+// 	start = i;
+// 	while (i < len_str)
+// 	{
+// 		if (token->str[i] == '$' && token->dollars >= 1)
+// 		{
+// 			j = start;
+// 			while (j < i)
+// 			{
+// 				if (append_char(&str, token->str[j]) < 0)
+// 				{
+// 					free(str);
+// 					return (NULL);
+// 				}
+// 				j++;
+// 			}
+// 			if (i + 1 < len_str && token->str[i + 1] == '?')
+// 			{
+// 				expand_exit_status(stru, &str);
+// 				i += 2;
+// 			}
+// 			else
+// 				i = expand_var2(stru, token->str, i + 1, &str);
+// 			start = i;
+// 		}
+// 		else
+// 			i++;
+// 	}
+// 	j = start;
+// 	while (j < i)
+// 	{
+// 		if (append_char(&str, token->str[j]) < 0)
+// 		{
+// 			free(str);
+// 			return (NULL);
+// 		}
+// 		j++;
+// 	}
+// 	return (str);
+// }

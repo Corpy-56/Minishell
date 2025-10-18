@@ -6,34 +6,12 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/28 14:50:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/22 19:26:33 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 17:00:52 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_env(t_env **env)
-{
-	t_env	*current;
-	t_env	*next;
-
-	if (!env || !*env)
-		return ;
-	current = *env;
-	while (current)
-	{
-		next = current->next;
-		free(current->name);
-		free(current->value);
-		if (current->path)
-			free_doublechar(current->path);
-		free(current->str);
-		free(current);
-		current = next;
-	}
-	if (env)
-		*env = NULL;
-}
 void	free_tokens(t_tokens *token)
 {
 	t_tokens	*next;
@@ -57,6 +35,9 @@ void	free_cmds(t_cmd *cmd)
 		next = cmd->next;
 		free_doublechar(cmd->args);
 		free(cmd->cmd);
+		if (cmd->heredoc)
+			free_doublechar(cmd->heredoc);
+		close_fd(cmd);
 		free(cmd);
 		cmd = next;
 	}
@@ -80,7 +61,7 @@ void	free_doublechar(char **to_free)
 void	free_fields(char **fields, size_t i)
 {
 	size_t	j;
-	
+
 	j = 0;
 	while (j < i)
 	{
@@ -89,4 +70,3 @@ void	free_fields(char **fields, size_t i)
 	}
 	free(fields);
 }
-

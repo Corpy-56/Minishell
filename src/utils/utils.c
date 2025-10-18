@@ -3,23 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 12:21:04 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/22 14:53:05 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 12:10:20 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// int	ft_error(int i, char *str, char *str2)
+// {
+// 	(void)i;
+// 	if (str2 != NULL)
+// 		write(2, str2, (ft_strlen(str)));
+// 	write(2, str, (ft_strlen(str)));
+// 	return (-1);
+// }
+
 int	ft_error(int i, char *str, char *str2)
 {
-	(void)i;
-	if (str2 != NULL)
-		write(2, str2, (ft_strlen(str)));
-	write(2, str, (ft_strlen(str)));
+	if (str2)
+		write (i, str2, ft_strlen(str2));
+	if (str)
+		write (i, str, ft_strlen(str));
 	return (-1);
 }
+
 bool	is_local_var(char *s)
 {
 	int	i;

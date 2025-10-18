@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_type_token_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:42:37 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/01 16:18:19 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/18 10:21:18 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,13 @@ static int	error_chevrons(t_tokens *p_actuel)
 	else if (ft_strncmp(p_actuel->str, ">", 1) == 0
 		|| ft_strncmp(p_actuel->str, "<", 1) == 0)
 	{
-		if (p_actuel->next == NULL
-			|| ft_is_str_isprint(p_actuel->next->str) == 0)
+		if (p_actuel->next == NULL)
 			return (err_msg_syntax("newline"), 2);
-		else if (ft_strncmp(p_actuel->next->str, ">", 1) == 0)
-			return (err_msg_syntax(">"), 2);
+		if (p_actuel->next->str == NULL)
+			return (err_msg_syntax("newline"), 2);
+		else if (ft_strncmp(p_actuel->next->str, ">", 1) == 0
+			|| ft_strncmp(p_actuel->next->str, "<", 1) == 0)
+			return (err_msg_syntax(p_actuel->next->str), 2);
 	}
 	return (0);
 }

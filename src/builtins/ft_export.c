@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 11:51:21 by skuor             #+#    #+#             */
-/*   Updated: 2025/09/19 15:21:17 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/17 18:29:04 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,92 +25,79 @@ void	print_exported_var(t_env *env)
 	}
 }
 
-t_env	*add_to_env2(t_env *env, char *name, char *value, t_env *new_var)
-{
-	char	*tmp_str;
-	t_env	*last;
-
-	if (value)
-	{
-		tmp_str = ft_strjoin(name, "=");
-		new_var->str = ft_strjoin(tmp_str, value);
-		free(tmp_str);
-	}
-	else
-		new_var->str = ft_strdup(name);
-	new_var->next = NULL;
-	if (!env)
-		return (new_var);
-	last = env;
-	while (last->next)
-		last = last->next;
-	last->next = new_var;
-	return (new_var);
-}
-
-t_env	*add_to_env(t_env *env, char *name, char *value)
-{
-	t_env	*new_var;
-
-	new_var = ft_calloc(sizeof(t_env), 1);
-	if (!new_var)
-		return (env);
-	new_var->name = ft_strdup(name);
-	if (value)
-		new_var->value = ft_strdup(value);
-	else
-		new_var->value = NULL;
-	add_to_env2(env, name, value, new_var);
-	return (env);
-}
-
-static void	export2(t_env **env, t_env **local, char *name, char *value)
+static int	set_in_env(t_export *exp, char *name, char *val, t_shell *sh)
 {
 	t_env	*var;
 
-	var = find_var(*env, name);
-	if (var)
-		update_value(var, value);
-	else
-	{
-		var = find_var(*local, name);
-		if (var)
-		{
-			move_var_to_env(env, local, var);
-			if (value)
-				update_value(var, value);
-			update_str(var);
-		}
-		else
-			*env = add_to_env(*env, name, value);
-	}
+	var = find_var(*exp->env, name);
+	if (!var)
+		return (0);
+	if (val)
+		update_env(*exp->env, name, val, sh);
+	return (1);
 }
 
-int	ft_export(char **args, t_env **env, t_env **local)
+static int	set_from_local(t_export *exp, char *name, char *val, t_shell *stru)
 {
-	int		i;
+	t_env	*var;
+	char	*val_final;
+
+	var = find_var(*exp->local, name);
+	if (!var)
+		return (0);
+	if (val)
+		val_final = ft_strdup(val);
+	else if (var->value)
+		val_final = ft_strdup(var->value);
+	else
+		val_final = NULL;
+	move_var_to_env(exp->env, exp->local, var);
+	update_env(*exp->env, name, val_final, stru);
+	return (free(val_final), 1);
+}
+
+static int	export_one(t_export *exp, char *args, t_shell *stru)
+{
 	char	*name;
 	char	*value;
 
-	name = NULL;
-	if (!args[1])
-		return (print_exported_var(*env), 0);
-	i = 0;
-	while (args[++i])
+	parse_args(args, &name, &value);
+	if (!check_valid_var(name))
 	{
-		parse_args(args[i], &name, &value);
-		if (!check_valid_var(name))
-		{
-			err_msg_export(args[i]);
-			free(name);
-			free(value);
-			return (1);
-		}
-		if (args[i] && i > 8000)
-			ft_putstr_fd("minishell: /bin/ls/: Argument list too long\n", 2);
-		export2(env, local, name, value);
+		err_msg_export(args);
 		free(name);
 		free(value);
+		return (1);
+	}
+	if (set_in_env(exp, name, value, stru)
+		|| set_from_local(exp, name, value, stru))
+	{
+		free(name);
+		free(value);
+		return (0);
+	}
+	update_env(*exp->env, name, value, stru);
+	free(name);
+	free(value);
+	return (0);
+}
+
+int	ft_export(char **args, t_env **env, t_env **local, t_shell *stru)
+{
+	t_export	exp;
+	int			i;
+
+	init_export(&exp, env, local);
+	if (!args[1])
+		return (print_exported_var(*env), 0);
+	i = 1;
+	while (args[i])
+	{
+		if (args[i] && i > 8000)
+			ft_putstr_fd("minishell: /bin/ls/: Argument list too long\n", 2);
+		if (export_one(&exp, args[i], stru))
+			return (1);
+		i++;
 	}
 	return (0);
 }

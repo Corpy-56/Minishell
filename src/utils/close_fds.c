@@ -1,30 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_is_str_isprint.c                                :+:      :+:    :+:   */
+/*   close_fds.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/05 11:32:53 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/14 17:13:38 by skuor            ###   ########.fr       */
+/*   Created: 2025/10/15 18:23:30 by skuor             #+#    #+#             */
+/*   Updated: 2025/10/17 15:22:07 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_is_str_isprint(char *str)
+void	close_fds(int *fd)
 {
-	int	i;
-	int	j;
-
-	j = 1;
-	i = 0;
-	while (str[i] && j == 1)
+	if (!fd)
+		return ;
+	if (*fd >= 0)
 	{
-		j = ft_isprint(str[i]);
-		i++;
+		close(*fd);
+		*fd = -1;
 	}
-	if (j == 1)
-		return (1);
-	return (0);
 }
