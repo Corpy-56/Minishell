@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 11:42:44 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/17 19:59:56 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/18 11:13:34 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,14 @@ typedef struct s_split
 	t_tokens		*last;
 }					t_split;
 
+typedef struct s_fd_opens_childs
+{
+	int				fd_here;
+	int				fd_int;
+	int				fd_out1;
+	int				fd_out2;
+}					t_fd_opens;
+
 typedef struct s_pipes
 {
 	int				fd[2];
@@ -78,6 +86,7 @@ typedef struct s_pipes
 	pid_t			wait_child;
 	pid_t			pid;
 	pid_t			last_pid;
+	t_fd_opens		f;
 }					t_pipes;
 
 typedef struct s_copy
@@ -169,6 +178,12 @@ typedef struct s_dupenv
 	t_env			*a_debut;
 	t_env			*new;
 }					t_dupenv;
+
+typedef struct s_quote
+{
+	int				quote1;
+	char			q;
+}					t_quote;
 
 typedef struct s_shell
 {

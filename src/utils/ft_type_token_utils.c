@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/10 13:42:37 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/17 20:29:27 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/18 12:56:58 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,39 +75,43 @@ int	ft_nb_tokens(t_tokens *p_actuel)
 	return (i);
 }
 
-t_cmd	*ft_creat_token2(void)
+t_cmd	*ft_extra_lexer(t_tokens *p_actuel, t_cmd *commande, int j, int i)
 {
-	t_cmd	*commande;
-
-	commande = ft_calloc(sizeof(t_cmd), 1);
-	if (!commande)
+	commande->cmd = ft_strdup(p_actuel->str);
+	if (!commande->cmd)
+	{
+		free_one_cmd(commande);
 		return (NULL);
-	ft_initialization_commande(commande);
+	}
+	commande->args = ft_calloc(sizeof(char *), i);
+	commande->args[0] = ft_strdup(p_actuel->str);
+	if (!commande->args[0])
+	{
+		free_one_cmd(commande);
+		return (NULL);
+	}
+	j = 1;
+	commande->args[j] = NULL;
 	return (commande);
 }
 
-t_cmd	*lexer_cmd(t_cmd *commande, t_tokens *p_actuel)
+t_cmd	*lexer_cmd(t_cmd *commande, t_tokens *p_actuel, int i, int j)
 {
-	int	i;
-	int	j;
-
+	i = ft_nb_tokens(p_actuel);
 	if (commande->cmd == NULL && is_assignment_word(p_actuel->str))
 		return (commande);
-	i = ft_nb_tokens(p_actuel);
-	j = 0;
 	if (commande->cmd == NULL)
-	{
-		commande->cmd = ft_strdup(p_actuel->str);
-		commande->args = ft_calloc(sizeof(char *), i);
-		commande->args[0] = ft_strdup(p_actuel->str);
-		j = 1;
-		commande->args[j] = NULL;
-	}
+		commande = ft_extra_lexer(p_actuel, commande, j, i);
 	else if (commande->cmd != NULL)
 	{
 		while (commande->args[j] != NULL)
 			j++;
 		commande->args[j] = ft_strdup(p_actuel->str);
+		if (!commande->args[j])
+		{
+			free_one_cmd(commande);
+			return (NULL);
+		}
 		j++;
 		commande->args[j] = NULL;
 	}

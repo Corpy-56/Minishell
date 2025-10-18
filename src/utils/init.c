@@ -6,7 +6,7 @@
 /*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 16:37:09 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 19:47:53 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/17 21:52:05 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,10 @@ void	init_pipes(t_pipes *pipes, t_cmd *head)
 	pipes->wait_child = 0;
 	pipes->pid = 0;
 	pipes->last_pid = -1;
+	pipes->f.fd_here = -1;
+	pipes->f.fd_int = -1;
+	pipes->f.fd_out2 = -1;
+	pipes->f.fd_out1 = -1;
 }
 
 void	init_copy(t_copy *copy, t_env *var, char *new_value)

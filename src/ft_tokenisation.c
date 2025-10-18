@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 11:07:35 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/15 12:30:27 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/18 12:02:21 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,14 +98,16 @@ int	ft_one_token(char *rl, int i, t_tokens *token)
 	return (i);
 }
 
-t_tokens	*ft_tokenisation(char *rl, t_tokens *token, int i)
+t_tokens	*ft_tokenisation(char *rl, t_tokens *token, int i, t_shell *stru)
 {
 	t_tokens	*a_debut;
 	t_tokens	*fin;
 
 	a_debut = NULL;
 	fin = NULL;
-	i = ft_init_tokenisation(rl, i);
+	i = ft_init_tokenisation(rl, i, stru);
+	if (i == -1)
+		return (NULL);
 	while (i != -1 && rl[i])
 	{
 		token = ft_creat_token(rl, i);
@@ -122,6 +124,5 @@ t_tokens	*ft_tokenisation(char *rl, t_tokens *token, int i)
 		if (rl[i])
 			i++;
 	}
-	ft_test_minishell(a_debut);
-	return (a_debut);
+	return (ft_test_minishell(a_debut), a_debut);
 }

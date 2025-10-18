@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
+/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 16:59:00 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/17 12:17:55 by agouin           ###   ########.fr       */
+/*   Updated: 2025/10/18 12:57:06 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,17 @@ t_tokens	*ft_creat_token(char *rl, int i)
 		token->str = NULL;
 	token->dollars = 0;
 	return (token);
+}
+
+t_cmd	*ft_creat_token2(void)
+{
+	t_cmd	*commande;
+
+	commande = ft_calloc(sizeof(t_cmd), 1);
+	if (!commande)
+		return (NULL);
+	ft_initialization_commande(commande);
+	return (commande);
 }
 
 t_cmd	*ft_test_no_errors(t_cmd *commande)

@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/29 15:23:24 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 17:44:44 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/18 11:13:42 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,30 +27,30 @@ int	count_nodes(t_env *list)
 
 int	ft_quote(char *rl, int i)
 {
-	int		quote1;
-	char	q;
+	t_quote	q;
 
-	quote1 = 0;
-	q = 0;
-	if (!rl)
-		return (0);
-	if (i < 0)
-		i = 0;
+	init_quote(&q);
 	while (rl[i])
 	{
-		if (quote1 == 0 && (rl[i] == '\'' || rl[i] == '\"'))
+		if (q.quote1 == 0 && (rl[i] == '\'' || rl[i] == '\"'))
 		{
-			q = rl[i];
+			q.q = rl[i];
 			i++;
-			while (rl[i] != '\'' && rl[i] != q)
+			while (rl[i] != '\0' && rl[i] != q.q)
 				i++;
 			if (rl[i] == '\0')
-				quote1++;
+			{
+				q.quote1++;
+				i--;
+			}
 		}
 		i++;
 	}
-	if (quote1 != 0)
-		return (ft_error(1, "Problem with quote\n", NULL));
+	if (q.quote1 != 0)
+	{
+		ft_putstr_fd("Minishell : Problem with quote\n", 2);
+		return (-1);
+	}
 	return (0);
 }
 
