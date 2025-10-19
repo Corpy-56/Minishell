@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/18 12:57:20 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/19 17:16:10 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ t_env		*create_env_node(char *str);
 int			update_env(t_env *head, char *name, char *value, t_shell *stru);
 void		update_shlvl(t_env *env, t_shell *stru);
 char		**env_list_to_envp(t_env *env);
+void		empty_env(t_shell *stru);
+void		underscore_empty_env(t_cmd *cmd, t_shell *stru);
 
 /* ********* variables ********* */
 t_env		*add_to_local(t_env *local, char *name, char *value);

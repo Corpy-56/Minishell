@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 14:50:15 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/17 20:03:42 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/19 16:40:35 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	init_shell(t_shell *stru, char **env, int argc, char **argv)
 	stru->dup_1 = dup(1);
 	if (stru->dup_0 == -1 || stru->dup_1 == -1)
 		return ;
+	empty_env(stru);
 	update_shlvl(stru->environ, stru);
 	ft_tty(stru);
 	set_shell(stru);
