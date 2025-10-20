@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/18 10:22:26 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/20 13:18:34 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void	exec_external(t_cmd *cmd, t_shell *stru)
 	ext.chosen_path = exec_external2(ext.argv, cmd, stru);
 	if (!ext.chosen_path)
 		return ;
+	underscore_empty_env(cmd, stru);
 	ext.envp = env_list_to_envp(stru->environ);
 	if (!ext.envp)
 	{

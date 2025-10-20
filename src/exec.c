@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 16:33:30 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/18 13:01:03 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/20 13:18:42 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	run_one_cmd(t_exec *exec, t_shell *stru, int builtins)
 		return ;
 	if (is_builtin(exec->head))
 	{
+		underscore_empty_env(exec->head, stru);
 		builtins = ft_exec_builtins(exec->head, stru, true);
 		stru->last_status = builtins;
 		apply_cmd_redirs_in_child(exec->head, stru);
