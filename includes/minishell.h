@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/18 13:00:06 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/20 14:28:20 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void		ft_first_ft_redirections2(t_cmd *head);
 /* ********* ft_heredocs ********* */
 int			ft_setup_heredoc(t_cmd *commande, t_shell *stru);
 void		ft_child_heredoc(t_cmd *commande, t_shell *stru, int j, int i);
-int			ft_heredoc(t_cmd *commande, int pidfd, int i, char *line);
+int			ft_heredoc(char *heredoc, int pidfd, int i, char *line);
 void		signal_handler(int signum, siginfo_t *info, void *context);
 
 /* ********* ft_signals ********* */
@@ -241,6 +241,6 @@ int			ft_init_tokenisation(char *rl, int i, t_shell *stru);
 int			ft_dup_stdin(t_cmd *cmd);
 t_cmd		*child_exec_setup(t_pipes *pipes);
 void		child_exec(t_pipes *pipes, t_shell *stru);
-void		parent_after_fork(t_pipes *pipes);
+void		parent_after_fork(t_pipes *pipes, t_cmd *cmd);
 
 #endif

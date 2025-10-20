@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_heredoc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
+/*   By: agouin <agouin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 12:39:18 by agouin            #+#    #+#             */
-/*   Updated: 2025/10/18 10:22:33 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/20 14:20:07 by agouin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_heredoc(t_cmd *commande, int pidfd, int i, char *line)
+int	ft_heredoc(char *heredoc, int pidfd, int i, char *line)
 {
+	(void)i;
 	while (1)
 	{
 		line = readline("> ");
@@ -21,13 +22,11 @@ int	ft_heredoc(t_cmd *commande, int pidfd, int i, char *line)
 			return (-1);
 		if (line[ft_strlen(line)] == '\0')
 		{
-			if (ft_strcmp(line, commande->heredoc[i]) == 0)
+			if (ft_strcmp(line, heredoc) == 0)
 			{
 				if (line != NULL)
 					free(line);
-				if (commande->heredoc[++i] == NULL)
-					break ;
-				continue ;
+				break ;
 			}
 			write(pidfd, line, ft_strlen(line));
 			write(pidfd, "\n", 1);
@@ -61,9 +60,6 @@ void	ft_child_heredoc(t_cmd *commande, t_shell *stru, int j, int i)
 	t_cmd				*temp;
 
 	temp = commande;
-	while (temp->heredoc[i] != NULL)
-		i++;
-	i--;
 	if (stru->fd == -1)
 		exit (0);
 	signal(SIGQUIT, SIG_IGN);
@@ -71,15 +67,25 @@ void	ft_child_heredoc(t_cmd *commande, t_shell *stru, int j, int i)
 	sigemptyset(&signale.sa_mask);
 	signale.sa_flags = 0;
 	sigaction(SIGINT, &signale, NULL);
-	j = ft_heredoc(commande, stru->fd, 0, NULL);
-	if (j == -1)
-		printf("warning: here-document delimited by end-of-file (wanted `%s')\n",
-			temp->heredoc[i]);
+	while(temp->heredoc[i] != NULL)
+	{
+		if (stru->fd >= 0)
+			close(stru->fd);
+		stru->fd = open(".files", O_CREAT | O_RDWR | O_TRUNC, 0600);
+		j = ft_heredoc(temp->heredoc[i], stru->fd, 0, NULL);
+		if (j == -1)
+		{
+			printf("warning: here-document delimited by end-of-file (wanted `%s')\n",
+				temp->heredoc[i]);
+		}
+		i++;
+	}
 	clean_heredoc(stru);
 	if (stru->fd >= 0)
 		close(stru->fd);
 	if (stru->dup_0 >= 0)
 		close (stru->dup_0);
+	ft_fd_test();
 	exit (0);
 }
 
@@ -124,7 +130,6 @@ int	ft_setup_heredoc(t_cmd *commande, t_shell *stru)
 	new_signale.sa_handler = SIG_IGN;
 	new_signale.sa_flags = 0;
 	sigaction(SIGINT, &new_signale, &old_signale);
-	stru->fd = open(".files", O_CREAT | O_RDWR | O_TRUNC, 0600);
 	pid = fork();
 	if (pid == -1)
 		return (-1);
