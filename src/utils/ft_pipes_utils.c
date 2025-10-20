@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 11:25:27 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/19 17:30:43 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/20 14:38:19 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,10 @@ void	child_exec(t_pipes *pipes, t_shell *stru)
 	apply_cmd_redirs_in_child(cmd, stru);
 }
 
-void	parent_after_fork(t_pipes *pipes)
+void	parent_after_fork(t_pipes *pipes, t_cmd *cmd)
 {
 	pipes->n++;
+	close_fd(cmd);
 	if (pipes->prev_read != -1)
 		close_fds(&pipes->prev_read);
 	if (pipes->current->next)

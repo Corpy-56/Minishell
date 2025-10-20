@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 11:25:27 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/18 11:27:32 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/20 14:39:16 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,6 @@ static void	run_pipes2(t_pipes *pipes, t_shell *sh)
 			sh->last_status = 1;
 			break ;
 		}
-		if (pipes->current->here >= 0)
-			pipes->i = pipes->current->here;
 		pipes = close_fd_child(pipes);
 		pipes->pid = fork();
 		bad_fork(pipes, sh);
@@ -85,7 +83,7 @@ static void	run_pipes2(t_pipes *pipes, t_shell *sh)
 			child_exec(pipes, sh);
 		}
 		signal(SIGINT, SIG_IGN);
-		parent_after_fork(pipes);
+		parent_after_fork(pipes, sh->commande);
 	}
 }
 

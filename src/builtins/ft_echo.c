@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 19:34:55 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/19 15:24:58 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/20 14:39:34 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static	int	echo_n(char *args)
 	int	i;
 
 	i = 1;
-	if (!args || args[0] != '-' ||  args[1] == '\0')
+	if (!args || args[0] != '-' || args[1] == '\0')
 		return (0);
 	while (args[i])
 	{

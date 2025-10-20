@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:56:57 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/20 13:17:59 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/20 15:03:00 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <errno.h>
 
 # define MINISHELL "\001\033[1;32m\002Minishell : \001\033[0m\002"
+# define WARN "warning: here-document delimited by end-of-file (wanted `%s')\n"
 
 /* ******************************** BUILTINS ******************************** */
 
@@ -95,7 +96,7 @@ void		ft_first_ft_redirections2(t_cmd *head);
 /* ********* ft_heredocs ********* */
 int			ft_setup_heredoc(t_cmd *commande, t_shell *stru);
 void		ft_child_heredoc(t_cmd *commande, t_shell *stru, int j, int i);
-int			ft_heredoc(t_cmd *commande, int pidfd, int i, char *line);
+int			ft_heredoc(char *heredoc, int pidfd, int i, char *line);
 void		signal_handler(int signum, siginfo_t *info, void *context);
 
 /* ********* ft_signals ********* */
@@ -150,7 +151,7 @@ void		skip_quoted(const char *str, size_t *i);
 char		*remove_quotes(const char *str);
 void		unquote_tokens(t_tokens *head);
 
-/* ********* type_toke_utils ********* */
+/* ********* type_token_utils ********* */
 void		ft_initialization_commande(t_cmd *commande);
 t_cmd		*ft_creat_token2(void);
 t_cmd		*lexer_cmd(t_cmd *commande, t_tokens *p_actuel, int i, int j);
@@ -176,11 +177,11 @@ void		apply_cmd_redirs_in_child(t_cmd *cmd, t_shell *stru);
 void		close_fd(t_cmd *cmd);
 
 /* ********* utils pipes ********* */
-void		ignore_sigpipe_once(void);
 void		bad_fork(t_pipes *pipes, t_shell *sh);
 char		*join_three_char(char *a, char *b, char *c);
 t_shell		*static_struct(t_shell *stru);
 bool		is_exec_file(const char *chosen_path);
+void		clean_close_hd(t_shell *stru);
 
 /* ********* utils fields split ********* */
 char		**split_by_ifs(const char *str, const char *ifs);
@@ -243,6 +244,6 @@ int			ft_init_tokenisation(char *rl, int i, t_shell *stru);
 int			ft_dup_stdin(t_cmd *cmd);
 t_cmd		*child_exec_setup(t_pipes *pipes);
 void		child_exec(t_pipes *pipes, t_shell *stru);
-void		parent_after_fork(t_pipes *pipes);
+void		parent_after_fork(t_pipes *pipes, t_cmd *cmd);
 
 #endif

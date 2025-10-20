@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 14:10:14 by sarah             #+#    #+#             */
-/*   Updated: 2025/10/20 13:18:34 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/20 15:16:23 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,35 @@ void	handle_exec_error(t_ext *ext, t_shell *stru, int error)
 		_exit(126);
 }
 
+void	close_fd1(t_cmd *cmd)
+{
+	while (cmd != NULL)
+	{
+		if (cmd->fd_int_put >= 0)
+		{
+			close_fds(&cmd->fd_int_put);
+			cmd->fd_int_put = -2;
+		}
+		if (cmd->fd_out_put1 >= 0)
+		{
+			close_fds(&cmd->fd_out_put1);
+			cmd->fd_out_put1 = -2;
+		}
+		if (cmd->fd_out_put2 >= 0)
+		{
+			close_fds(&cmd->fd_out_put2);
+			cmd->fd_out_put2 = -2;
+		}
+		if (cmd->here >= 0)
+		{
+			close_fds(&cmd->here);
+			cmd->here = -2;
+		}
+		ft_fd_test();
+		cmd = cmd->next;
+	}
+}
+
 void	exec_external(t_cmd *cmd, t_shell *stru)
 {
 	t_ext		ext;
@@ -91,17 +120,7 @@ void	exec_external(t_cmd *cmd, t_shell *stru)
 		ft_putstr_fd("No envp\n", 2);
 		_exit (1);
 	}
-	close_fd(cmd);
+	close_fd1(cmd);
 	if (execve(ext.chosen_path, ext.argv, ext.envp) == -1)
 		handle_exec_error(&ext, stru, errno);
-}
-
-int	collect_status(pid_t pid, t_shell *stru)
-{
-	int	status;
-
-	(void)stru;
-	status = 0;
-	waitpid(pid, &status, 0);
-	return (status);
 }

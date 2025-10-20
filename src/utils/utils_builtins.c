@@ -6,7 +6,7 @@
 /*   By: skuor <skuor@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/13 17:02:46 by skuor             #+#    #+#             */
-/*   Updated: 2025/10/15 14:01:45 by skuor            ###   ########.fr       */
+/*   Updated: 2025/10/20 15:16:10 by skuor            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,15 @@ int	ft_exec_builtins(t_cmd *commande, t_shell *stru, bool cmd_seule)
 	else
 		return (1);
 	stru->last_status = status;
+	return (status);
+}
+
+int	collect_status(pid_t pid, t_shell *stru)
+{
+	int	status;
+
+	(void)stru;
+	status = 0;
+	waitpid(pid, &status, 0);
 	return (status);
 }
